@@ -437,3 +437,6 @@ let g:workspace_autosave_untrailspaces = 0
 " Vim markdown{{{
 let g:vim_markdown_folding_disabled = 1
 " }}}
+
+" Unmap malicious plugin bindings
+let g:colorizer_nomap = 1
