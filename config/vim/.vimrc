@@ -24,6 +24,12 @@ endif
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
+" Python docstrings
+Plug '~/.vim/plugged/python-gendoc'
+
+" Show function signatures in commandline
+Plug 'Shougo/echodoc.vim'
+
 " Vim session handling made easy
 Plug 'thaerkh/vim-workspace'
 
@@ -440,3 +446,7 @@ let g:vim_markdown_folding_disabled = 1
 
 " Unmap malicious plugin bindings
 let g:colorizer_nomap = 1
+
+
+" Python-gendoc
+let g:python_gendoc_style = 'google'

@@ -48,3 +48,4 @@ link "bash" $dotfiles_dir/config/bash/.bashrc $HOME/.bashrc
 link "emacs" $dotfiles_dir/config/emacs/.spacemacs $HOME/.spacemacs
 link "dircolors-gruvbox" $dotfiles_dir/config/dircolors-gruvbox.db $HOME/.config/dircolors-gruvbox.db
 link "dircolors-solarized" $dotfiles_dir/config/dircolors-solarized.db $HOME/.config/dircolors-solarized.db
+link "termite" $dotfiles_dir/config/termite/config $HOME/.config/termite/config
