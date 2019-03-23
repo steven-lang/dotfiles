@@ -3,8 +3,14 @@
 ![Screenshot](./scrot.png)
 
 Contains configs for
-* .zshrc
-* .vimrc
-* i3-config
-* i3status-config
+* Zsh
+* Vim
+* i3
+* Polybar
+* Ctags
+* Spacemacs
+* Rofi
+* dircolors
+* Xresources
+* Termite
 * ...
