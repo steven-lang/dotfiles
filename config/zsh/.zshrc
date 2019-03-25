@@ -96,6 +96,7 @@ export DOTFILES=$HOME/dotfiles
 
 # fzf
 export FZF_DEFAULT_OPTS='--height 40% --border'
+export FZF_DEFAULT_COMMAND='ag -g .'
 
 # Maven java server debugging
 #export MAVEN_OPTS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n

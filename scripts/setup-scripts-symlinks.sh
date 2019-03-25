@@ -39,3 +39,5 @@ link "gscrot" $dotfiles_dir/scripts/gscrot /usr/local/bin/gscrot
 link "gscrot-interactive" $dotfiles_dir/scripts/gscrot-interactive /usr/local/bin/gscrot-interactive
 link "keyboard-de" $dotfiles_dir/scripts/keyboard-de.sh /usr/local/bin/keyboard-de
 link "keyboard-us" $dotfiles_dir/scripts/keyboard-us.sh /usr/local/bin/keyboard-us
+link "systemd-sleep-script" $dotfiles_dir/scripts/systemd-suspend.sh /usr/lib/systemd/system-sleep/systemd-suspend.sh
+link "blacklist-webcam" $dotfiles_dir/scripts/nocam.conf /etc/modprobe.d/nocam.conf
