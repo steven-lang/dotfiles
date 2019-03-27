@@ -2,7 +2,7 @@ set hidden
 
 " Remove '-- INSERT --' line since it is shown in lighline anyway
 set noshowmode
-set clipboard=unnamed
+set clipboard=unnamedplus
 
 
 " Reload .vimrc on save
@@ -59,8 +59,11 @@ Plug 'ervandew/supertab'
 
 " Extract with <leader>ev
 Plug 'fvictorio/vim-extract-variable'
+
+" Gruvbox colorscheme
 Plug 'morhetz/gruvbox'
 
+" Enable multiple cursors with <C-n> in visual mode
 Plug 'terryma/vim-multiple-cursors'
 
 " Python autoimport
@@ -74,6 +77,7 @@ Plug 'takac/vim-hardtime'
 
 " Easier vim navigation
 Plug 'easymotion/vim-easymotion'
+Plug 'justinmk/vim-sneak'
 
 " Quoting/paranthesizing made simple
 Plug 'tpope/vim-surround'
@@ -318,7 +322,7 @@ let g:ale_fixers = ['black']
 let g:ale_fix_on_save = 1
 
 " Highlights
-let g:ale_set_highlights = 1
+let g:ale_set_highlights = 0
 
 " Check Python files with flake8 and pylint.
 let b:ale_linters = ['flake8']
@@ -363,16 +367,11 @@ augroup pythonbindings
   " Python import
   autocmd Filetype python nnoremap <buffer> <silent> <localleader>i     :ImportName<CR>
 
-  autocmd Filetype python nnoremap <buffer> <silent> <localleader>d :call InsertPydocs()<CR>
+  " autocmd Filetype python vnoremap <buffer> <silent> <localleader>d :'<,'>GenPyDoc<CR>
   " Function to insert python IPDB debug line
   function! InsertIPDB()
     let trace = expand("import ipdb; ipdb.set_trace(context=5)")
     execute "normal O".trace
-  endfunction
-
-  function! InsertPydocs()
-    let docs = "\"\"\"Description\n\nArgs:\n    param (type): Description.\n\nReturns:\n    type: Description.\n\n\"\"\""
-    execute "normal o".docs
   endfunction
 augroup end
 " }}}
@@ -450,3 +449,12 @@ let g:colorizer_nomap = 1
 
 " Python-gendoc
 let g:python_gendoc_style = 'google'
+
+" Vim sneak
+let g:sneak#label = 1
+
+" Preview markdown files with grip
+" display the rendered markdown in your browser
+if executable('grip')
+  nnoremap <buffer><space>m :Dispatch grip --pass $GRIP -b %<cr>
+endif
