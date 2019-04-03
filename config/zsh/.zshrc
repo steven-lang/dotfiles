@@ -160,6 +160,7 @@ alias xresourcesreload='xrdb -merge ~/.Xresources'
 alias gnome-screenshot='gnome-screenshot -a'
 
 alias envactivate='source ./env/bin/activate'
+alias find='ag -g'
 
 
 # Add dir colors
@@ -175,6 +176,8 @@ bindkey '^e' end-of-line
 
 bindkey '^P' up-line-or-search
 bindkey '^N' down-line-or-search
+bindkey '^h' backward-word
+bindkey '^l' forward-word
 
 
 

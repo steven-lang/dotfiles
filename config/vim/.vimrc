@@ -24,6 +24,12 @@ endif
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
+" Disable search highligh when done searching
+Plug 'romainl/vim-cool'
+
+" Additional targets
+Plug 'wellle/targets.vim'
+
 " Python docstrings
 Plug '~/.vim/plugged/python-gendoc'
 
@@ -284,9 +290,6 @@ if get(g:, 'elite_mode')
 endif
 
 
-" Clear search
-nnoremap <silent> <CR> :noh<CR><CR>
-
 " Jedi {{{
 let g:jedi#rename_command = "<leader>r"
 let g:jedi#auto_close_doc = 1
@@ -340,7 +343,7 @@ let g:polyglot_disabled = ['latex', 'markdown']
 
 
 " Deoplete {{{
-set pumheight=8
+set pumheight=12
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
 let g:deoplete#enable_smart_case = 1
@@ -421,6 +424,7 @@ nnoremap <silent> <Leader>t :BTags<CR>
 nnoremap <silent> <Leader>T :Tags<CR>
 nnoremap <silent> <Leader>f :Files<CR>
 nnoremap <silent> <Leader>h :History<CR>
+nnoremap <silent> <Leader>/ :Ag<CR>
 nnoremap <silent> <Leader><Tab> :b#<CR>
 
 " Move to word
@@ -428,7 +432,6 @@ map  <Leader>w <Plug>(easymotion-bd-w)
 " " Move to line
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
-map <Leader>l <Plug>(easymotion-bd-jk)
 " }}
 
 
@@ -458,3 +461,7 @@ let g:sneak#label = 1
 if executable('grip')
   nnoremap <buffer><space>m :Dispatch grip --pass $GRIP -b %<cr>
 endif
+
+" Vim cool{{{
+let g:CoolTotalMatches = 1
+" }}}
