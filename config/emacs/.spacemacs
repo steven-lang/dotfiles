@@ -66,7 +66,9 @@ This function should only modify configuration layer settings."
                       version-control-diff-tool 'diff-hl
                       version-control-global-margin t)
      themes-megapack
-     python
+     (python :variables
+             python-backend 'lsp)
+     lsp
      (gtags :variables gtags-enable-by-default t)
      (latex :variables latex-enable-auto-fill t)
      (julia :variables julia-mode-enable-lsp t)
@@ -527,9 +529,6 @@ before packages are loaded."
   (eval-after-load "company"
     '(add-to-list 'company-backends '(company-anaconda :with company-capf)))
 
-  ;; Atomic chrome 
-  (require 'atomic-chrome)
-  (atomic-chrome-start-server)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will

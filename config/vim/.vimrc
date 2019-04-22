@@ -1,7 +1,8 @@
 set hidden
+set noshowmode
+set cmdheight=1
 
 " Remove '-- INSERT --' line since it is shown in lighline anyway
-set noshowmode
 set clipboard=unnamedplus
 
 
@@ -33,6 +34,9 @@ Plug 'wellle/targets.vim'
 " Python docstrings
 Plug '~/.vim/plugged/python-gendoc'
 
+" Python semantic highlighting
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+
 " Show function signatures in commandline
 Plug 'Shougo/echodoc.vim'
 
@@ -40,7 +44,7 @@ Plug 'Shougo/echodoc.vim'
 Plug 'thaerkh/vim-workspace'
 
 " Python/Braceless language text objects
-Plug 'tweekmonster/braceless.vim'
+" Plug 'tweekmonster/braceless.vim'
 
 Plug 'Yggdroot/indentLine'
 
@@ -58,13 +62,9 @@ Plug 'zchee/deoplete-jedi'
 
 
 " Markdown support
-Plug 'shime/vim-livedown' " needs livedown: $ npm install -g livedown
 Plug 'tpope/vim-markdown'
 
 Plug 'ervandew/supertab'
-
-" Extract with <leader>ev
-Plug 'fvictorio/vim-extract-variable'
 
 " Gruvbox colorscheme
 Plug 'morhetz/gruvbox'
@@ -83,7 +83,6 @@ Plug 'takac/vim-hardtime'
 
 " Easier vim navigation
 Plug 'easymotion/vim-easymotion'
-Plug 'justinmk/vim-sneak'
 
 " Quoting/paranthesizing made simple
 Plug 'tpope/vim-surround'
@@ -114,9 +113,6 @@ Plug 'tpope/vim-sensible'
 " Bash support
 Plug 'vim-scripts/bash-support.vim'
 
-" Tagbar with <F8>
-" Plug 'majutsushi/tagbar'
-
 " CTag automation
 Plug 'ludovicchabant/vim-gutentags'
 
@@ -128,15 +124,9 @@ Plug 'sheerun/vim-polyglot'
 
 " Statusline
 Plug 'itchyny/lightline.vim'
-Plug 'maximbaz/lightline-ale'
 
 " Julia support
 Plug 'JuliaEditorSupport/julia-vim'
-
-" File tree with <C-n>
-" Plug 'scrooloose/nerdtree'
-" Plug 'Xuyuanp/nerdtree-git-plugin'
-
 
 " Hex color preview
 Plug 'lilydjwg/colorizer'
@@ -179,10 +169,10 @@ endif
 :let maplocalleader = ',' " Local leader key
 
 syntax on                 " Enable syntax highlighting
-set background=dark
 let g:gruvbox_italic=1
 let g:gruvbox_bold=1
 " let g:gruvbox_contrast_dark='soft'
+set background=dark
 colorscheme gruvbox
 set path=.,,**
 set expandtab
@@ -222,27 +212,12 @@ vnoremap > >gv
 let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'relativepath', 'modified' ] ],
-      \   'right' : [ ['lineinfo'], ['percent'], ['filetype'], [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]]
+      \   'right' : [ ['lineinfo'], ['percent'], ['filetype'] ]
       \ },
       \ 'colorscheme': 'gruvbox',
       \ 'component_function': {
-      \   'mode': 'LightlineMode',
       \   'gitbranch' : 'fugitive#head',
       \ }
-      \ }
-
-let g:lightline.component_expand = {
-      \  'linter_checking': 'lightline#ale#checking',
-      \  'linter_warnings': 'lightline#ale#warnings',
-      \  'linter_errors': 'lightline#ale#errors',
-      \  'linter_ok': 'lightline#ale#ok',
-      \ }
-
-let g:lightline.component_type = {
-      \     'linter_checking': 'left',
-      \     'linter_warnings': 'warning',
-      \     'linter_errors': 'error',
-      \     'linter_ok': 'left',
       \ }
 
 let g:lightline.separator = {
@@ -252,15 +227,6 @@ let g:lightline.subseparator = {
       \   'left': '', 'right': '' 
       \}
 
-
-function! LightlineMode()
-  return expand('%:t') ==# '__Tagbar__' ? 'Tagbar':
-        \ expand('%:t') ==# 'ControlP' ? 'CtrlP' :
-        \ &filetype ==# 'unite' ? 'Unite' :
-        \ &filetype ==# 'vimfiler' ? 'VimFiler' :
-        \ &filetype ==# 'vimshell' ? 'VimShell' :
-        \ lightline#mode()
-endfunction
 " }}}
 
 " FZF {{{
@@ -302,7 +268,7 @@ let g:jedi#auto_vim_configuration = 0
 let g:jedi#smart_auto_mappings = 0
 let g:jedi#popup_on_dot = 0
 let g:jedi#completions_command = ""
-let g:jedi#show_call_signatures = "1"
+let g:jedi#show_call_signatures = "2"
 let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
 " }}}
 
@@ -352,6 +318,8 @@ let g:jedi#completions_enabled = 0
 " set completeopt-=preview
 let g:python_host_prog = '/usr/bin/python'
 let g:python3_host_prog = '/usr/bin/python3'
+" let g:deoplete#auto_complete_delay = 100
+let g:deoplete#sources#jedi#show_docstring=1
 " }}}
 
 
@@ -459,9 +427,80 @@ let g:sneak#label = 1
 " Preview markdown files with grip
 " display the rendered markdown in your browser
 if executable('grip')
-  nnoremap <buffer><space>m :Dispatch grip --pass $GRIP -b %<cr>
+  nnoremap <space>m :Dispatch grip --pass $GRIP -b %<cr>
 endif
 
 " Vim cool{{{
 let g:CoolTotalMatches = 1
 " }}}
+
+
+
+" Custom semshi Highlights {{{
+function CustomSemshiHighlights()
+  hi semshiLocal           ctermfg=208 guifg=#fe8019
+  hi semshiGlobal          ctermfg=172 guifg=#d79921
+  hi semshiImported        ctermfg=172 guifg=#d79921 cterm=bold gui=bold
+  hi semshiParameter       ctermfg=109 guifg=#83a598
+  hi semshiParameterUnused ctermfg=108 guifg=#8ec07c cterm=underline gui=underline
+  hi semshiFree            ctermfg=176 guifg=#d3869b
+  hi semshiBuiltin         ctermfg=132 guifg=#b16286
+  hi semshiAttribute       ctermfg=108 guifg=#8ec07c
+  hi semshiSelf            ctermfg=248 guifg=#bdae93
+  hi semshiUnresolved      ctermfg=166 guifg=#d65d0e cterm=underline gui=underline
+  hi semshiSelected        ctermfg=230 guifg=#f9f5d7 ctermbg=237 guibg=#504945
+
+  hi semshiErrorSign       ctermfg=230 guifg=#f9f5d7 ctermbg=124 guibg=#cc241d
+  hi semshiErrorChar       ctermfg=230 guifg=#f9f5d7 ctermbg=124 guibg=#cc241d
+  sign define semshiError text=E> texthl=semshiErrorSign
+endfunction
+autocmd filetype python call CustomSemshiHighlights()
+" }}}
+
+
+" GRUVBOX color table https://github.com/morhetz/gruvbox-contrib/blob/master/color.table
+" GRUVCOLR         HEX       RELATV ALIAS   TERMCOLOR      RGB           ITERM RGB     OSX HEX
+"  --------------   -------   ------------   ------------   -----------   -----------   -------
+"  dark0_hard       #1d2021   [   ]  [   ]   234 [h0][  ]    29- 32- 33    22- 24- 25   #161819
+"  dark0            #282828   [bg0]  [fg0]   235 [ 0][  ]    40- 40- 40    30- 30- 30   #1e1e1e
+"  dark0_soft       #32302f   [   ]  [   ]   236 [s0][  ]    50- 48- 47    38- 36- 35   #262423
+"  dark1            #3c3836   [bg1]  [fg1]   237 [  ][15]    60- 56- 54    46- 42- 41   #2e2a29
+"  dark2            #504945   [bg2]  [fg2]   239 [  ][  ]    80- 73- 69    63- 57- 53   #3f3935
+"  dark3            #665c54   [bg3]  [fg3]   241 [  ][  ]   102- 92- 84    83- 74- 66   #534a42
+"  dark4            #7c6f64   [bg4]  [fg4]   243 [  ][ 7]   124-111-100   104- 92- 81   #685c51
+
+"  gray_245         #928374   [gray] [   ]   245 [ 8][  ]   146-131-116   127-112- 97   #7f7061
+"  gray_244         #928374   [   ] [gray]   244 [  ][ 8]   146-131-116   127-112- 97   #7f7061
+
+"  light0_hard      #f9f5d7   [   ]  [   ]   230 [  ][h0]   249-245-215   248-244-205   #f8f4cd
+"  light0           #fbf1c7   [fg0]  [bg0]   229 [  ][ 0]   251-241-199   250-238-187   #faeebb
+"  light0_soft      #f2e5bc   [   ]  [   ]   228 [  ][s0]   242-229-188   239-223-174   #efdfae
+"  light1           #ebdbb2   [fg1]  [bg1]   223 [15][  ]   235-219-178   230-212-163   #e6d4a3
+"  light2           #d5c4a1   [fg2]  [bg2]   250 [  ][  ]   213-196-161   203-184-144   #cbb890
+"  light3           #bdae93   [fg3]  [bg3]   248 [  ][  ]   189-174-147   175-159-129   #af9f81
+"  light4           #a89984   [fg4]  [bg4]   246 [ 7][  ]   168-153-132   151-135-113   #978771
+
+"  bright_red       #fb4934   [red]   [  ]   167 [ 9][  ]   251- 73- 52   247- 48- 40   #f73028
+"  bright_green     #b8bb26   [green] [  ]   142 [10][  ]   184-187- 38   170-176- 30   #aab01e
+"  bright_yellow    #fabd2f   [yellow][  ]   214 [11][  ]   250-189- 47   247-177- 37   #f7b125
+"  bright_blue      #83a598   [blue]  [  ]   109 [12][  ]   131-165-152   113-149-134   #719586
+"  bright_purple    #d3869b   [purple][  ]   175 [13][  ]   211-134-155   199-112-137   #c77089
+"  bright_aqua      #8ec07c   [aqua]  [  ]   108 [14][  ]   142-192-124   125-182-105   #7db669
+"  bright_orange    #fe8019   [orange][  ]   208 [  ][  ]   254-128- 25   251-106- 22   #fb6a16
+
+"  neutral_red      #cc241d   [   ]  [   ]   124 [ 1][ 1]   204- 36- 29   190- 15- 23   #be0f17
+"  neutral_green    #98971a   [   ]  [   ]   106 [ 2][ 2]   152-151- 26   134-135- 21   #868715
+"  neutral_yellow   #d79921   [   ]  [   ]   172 [ 3][ 3]   215-153- 33   204-136- 26   #cc881a
+"  neutral_blue     #458588   [   ]  [   ]    66 [ 4][ 4]    69-133-136    55-115-117   #377375
+"  neutral_purple   #b16286   [   ]  [   ]   132 [ 5][ 5]   177- 98-134   160- 75-115   #a04b73
+"  neutral_aqua     #689d6a   [   ]  [   ]    72 [ 6][ 6]   104-157-106    87-142- 87   #578e57
+"  neutral_orange   #d65d0e   [   ]  [   ]   166 [  ][  ]   214- 93- 14   202- 72- 14   #ca480e
+
+"  faded_red        #9d0006   [   ]   [red]   88 [  ][ 9]   157-  0-  6   137-  0-  9   #890009
+"  faded_green      #79740e   [   ] [green]  100 [  ][10]   121-116- 14   102- 98- 13   #66620d
+"  faded_yellow     #b57614   [   ][yellow]  136 [  ][11]   181-118- 20   165- 99- 17   #a56311
+"  faded_blue       #076678   [   ]  [blue]   24 [  ][12]     7-102-120    14- 83-101   #0e5365
+"  faded_purple     #8f3f71   [   ][purple]   96 [  ][13]   143- 63-113   123- 43- 94   #7b2b5e
+"  faded_aqua       #427b58   [   ]  [aqua]   66 [  ][14]    66-123- 88    53-106- 70   #356a46
+"  faded_orange     #af3a03   [   ][orange]  130 [  ][  ]   175- 58-  3   157- 40-  7   #9d2807
+

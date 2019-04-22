@@ -5,13 +5,14 @@
 # 
 #         USAGE: ./setup-scripts-symlinks.sh 
 # 
-#   DESCRIPTION: 
+#   DESCRIPTION: Creates symlinks to all scripts in the dotfiles to the 
+#                appropriate system files
 # 
 #       OPTIONS: ---
 #  REQUIREMENTS: ---
 #          BUGS: ---
 #         NOTES: ---
-#        AUTHOR: YOUR NAME (), 
+#        AUTHOR: Steven Lang, 
 #  ORGANIZATION: 
 #       CREATED: 03/06/2019 10:49
 #      REVISION:  ---

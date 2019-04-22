@@ -44,7 +44,7 @@ background = ${xrdb:color0}
 foreground = ${xrdb:color4}
 
 [bar/example]
-;monitor = ${env:MONITOR:HDMI-1}
+monitor = ${env:MONITOR:}
 width = 100%
 height = 25 
 ;offset-x = 1%

@@ -22,9 +22,6 @@ ln -s ./zsh/.zshrc ~/.zshrc
 
 source ~/.zshrc
 
-echo "Installing vim-plug"
-sudo pacman -S vim-plug
-
 # Link .vimrc
 echo "Linking .vimrc"
 if [ -e ~/.vimrc ]
