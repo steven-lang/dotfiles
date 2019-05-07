@@ -236,7 +236,7 @@ exec --no-startup-id feh --bg-scale ~/Downloads/wallpapers/trees.jpg
  
 
 # i3 lock
-exec --no-startup-id xautolock -time 30 -locker 'betterlockscreen -l blur' -detectsleep &
+exec --no-startup-id xautolock -time 30 -locker 'i3lock-fancy -p -- scrot -z' -detectsleep &
 exec --no-startup-id pulseaudio
 exec --no-startup-id pa-applet
 
@@ -244,7 +244,7 @@ exec --no-startup-id pa-applet
 exec --no-startup-id nm-applet --tray --sm-disable & 
 
 # locker shortcut
-set $Locker betterlockscreen -l blur && sleep 1
+set $Locker i3lock-fancy -p -- scrot -z && sleep 1
 
 # suspend/lock shortcuts
 bindsym $mod+$mod2+Ctrl+s exec --no-startup-id systemctl suspend && $Locker 
@@ -340,3 +340,5 @@ for_window [title="cheatsheet"] floating enable, move position center
 bindsym $mod+c exec vim-key-cheat-sheet
 
 exec redshift &
+exec pasystray &
+exech volumeicon &

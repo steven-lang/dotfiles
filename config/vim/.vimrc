@@ -1,7 +1,18 @@
 set hidden
 set noshowmode
-set cmdheight=1
 
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+" Some servers have issues with backup files, see #649
+set nobackup
+set nowritebackup
+
+" Better display for messages
+set cmdheight=2
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
+" always show signcolumns
+set signcolumn=yes
 " Remove '-- INSERT --' line since it is shown in lighline anyway
 set clipboard=unnamedplus
 
@@ -50,21 +61,22 @@ Plug 'Yggdroot/indentLine'
 
 "" Autocomplete framework
 " Deoplete
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-Plug 'davidhalter/jedi-vim'
-Plug 'zchee/deoplete-jedi'
+" if has('nvim')
+"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" else
+"   Plug 'Shougo/deoplete.nvim'
+"   Plug 'roxma/nvim-yarp'
+"   Plug 'roxma/vim-hug-neovim-rpc'
+" endif
+" Plug 'davidhalter/jedi-vim'
+" Plug 'zchee/deoplete-jedi'
 
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 " Markdown support
 Plug 'tpope/vim-markdown'
 
-Plug 'ervandew/supertab'
+" Plug 'ervandew/supertab'
 
 " Gruvbox colorscheme
 Plug 'morhetz/gruvbox'
@@ -101,7 +113,7 @@ Plug 'tpope/vim-commentary'
 Plug 'w0rp/ale'
 
 " Python virtual envs
-Plug 'plytophogy/vim-virtualenv'
+" Plug 'plytophogy/vim-virtualenv'
 
 " FZF
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -132,14 +144,14 @@ Plug 'JuliaEditorSupport/julia-vim'
 Plug 'lilydjwg/colorizer'
 
 " Language spell/grammer checker, invoke with: :LanguageToolCheck
-Plug 'dpelle/vim-LanguageTool'
+" Plug 'dpelle/vim-LanguageTool'
 
 " UtilSnips
 " Track the engine.
-Plug 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
 
-" Snippets are separated from the engine. Add this if you want them:
-Plug 'honza/vim-snippets'
+" " Snippets are separated from the engine. Add this if you want them:
+" Plug 'honza/vim-snippets'
 
 " Add repeat support for plugins
 Plug 'tpope/vim-repeat'
@@ -257,20 +269,35 @@ endif
 
 
 " Jedi {{{
-let g:jedi#rename_command = "<leader>r"
-let g:jedi#auto_close_doc = 1
-let g:jedi#usages_command = '<Leader>u'
-let g:jedi#goto_command = "gd"
-" Disable since deoplete is enabled
-let g:jedi#auto_initialization = 1
-let g:jedi#completions_enabled = 0
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#smart_auto_mappings = 0
-let g:jedi#popup_on_dot = 0
-let g:jedi#completions_command = ""
-let g:jedi#show_call_signatures = "2"
-let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
+" let g:jedi#rename_command = "<leader>r"
+" let g:jedi#auto_close_doc = 1
+" let g:jedi#usages_command = '<Leader>u'
+" let g:jedi#goto_command = "gd"
+" " Disable since deoplete is enabled
+" let g:jedi#auto_initialization = 1
+" let g:jedi#completions_enabled = 0
+" let g:jedi#auto_vim_configuration = 0
+" let g:jedi#smart_auto_mappings = 0
+" let g:jedi#popup_on_dot = 0
+" let g:jedi#completions_command = ""
+" let g:jedi#show_call_signatures = "2"
+" let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
 " }}}
+
+" Deoplete {{{
+" set pumheight=12
+" let g:deoplete#enable_at_startup = 1
+" let g:deoplete#enable_ignore_case = 1
+" let g:deoplete#enable_smart_case = 1
+" " Disable autocompletion (using deoplete instead)
+" let g:jedi#completions_enabled = 0
+" " set completeopt-=preview
+let g:python_host_prog = '/usr/bin/python'
+let g:python3_host_prog = '/usr/bin/python3'
+" " let g:deoplete#auto_complete_delay = 100
+" let g:deoplete#sources#jedi#show_docstring=1
+" }}}
+
 
 " EasyMotion {{{
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -280,7 +307,7 @@ let g:EasyMotion_smartcase = 1
 " Customize fzf colors to match your color scheme
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
-      \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+      \| autocmd BufLeave <buffer> set laststatus=2 noshowmode ruler
 
 " Disable trailing spaces warning
 let g:python_highlight_space_errors=0
@@ -307,20 +334,9 @@ let g:ale_lint_on_insert_leave = 1
 " Disable latex-box from polyglot dependency to make vimtex usable
 let g:polyglot_disabled = ['latex', 'markdown']
 
+" Disable gitgutter mappings
+let g:gitgutter_map_keys = 0
 
-" Deoplete {{{
-set pumheight=12
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_ignore_case = 1
-let g:deoplete#enable_smart_case = 1
-" Disable autocompletion (using deoplete instead)
-let g:jedi#completions_enabled = 0
-" set completeopt-=preview
-let g:python_host_prog = '/usr/bin/python'
-let g:python3_host_prog = '/usr/bin/python3'
-" let g:deoplete#auto_complete_delay = 100
-let g:deoplete#sources#jedi#show_docstring=1
-" }}}
 
 
 " Python bindings {{{
@@ -391,7 +407,7 @@ nnoremap <silent> <Leader>l :Lines<CR>
 nnoremap <silent> <Leader>t :BTags<CR>
 nnoremap <silent> <Leader>T :Tags<CR>
 nnoremap <silent> <Leader>f :Files<CR>
-nnoremap <silent> <Leader>h :History<CR>
+nnoremap <silent> <Leader>h :History:<CR>
 nnoremap <silent> <Leader>/ :Ag<CR>
 nnoremap <silent> <Leader><Tab> :b#<CR>
 
@@ -421,19 +437,56 @@ let g:colorizer_nomap = 1
 " Python-gendoc
 let g:python_gendoc_style = 'google'
 
-" Vim sneak
-let g:sneak#label = 1
-
-" Preview markdown files with grip
-" display the rendered markdown in your browser
-if executable('grip')
-  nnoremap <space>m :Dispatch grip --pass $GRIP -b %<cr>
-endif
-
 " Vim cool{{{
 let g:CoolTotalMatches = 1
 " }}}
 
+" CoC Vim {{{
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+" }}}
 
 
 " Custom semshi Highlights {{{
@@ -442,7 +495,7 @@ function CustomSemshiHighlights()
   hi semshiGlobal          ctermfg=172 guifg=#d79921
   hi semshiImported        ctermfg=172 guifg=#d79921 cterm=bold gui=bold
   hi semshiParameter       ctermfg=109 guifg=#83a598
-  hi semshiParameterUnused ctermfg=108 guifg=#8ec07c cterm=underline gui=underline
+  hi semshiParameterUnused ctermfg=108 guifg=#7c6f64 cterm=underline gui=underline
   hi semshiFree            ctermfg=176 guifg=#d3869b
   hi semshiBuiltin         ctermfg=132 guifg=#b16286
   hi semshiAttribute       ctermfg=108 guifg=#8ec07c
