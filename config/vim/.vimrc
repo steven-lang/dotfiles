@@ -57,26 +57,26 @@ Plug 'thaerkh/vim-workspace'
 " Python/Braceless language text objects
 " Plug 'tweekmonster/braceless.vim'
 
-Plug 'Yggdroot/indentLine'
+" Plug 'Yggdroot/indentLine'
 
 "" Autocomplete framework
 " Deoplete
-" if has('nvim')
-"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" else
-"   Plug 'Shougo/deoplete.nvim'
-"   Plug 'roxma/nvim-yarp'
-"   Plug 'roxma/vim-hug-neovim-rpc'
-" endif
-" Plug 'davidhalter/jedi-vim'
-" Plug 'zchee/deoplete-jedi'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+Plug 'davidhalter/jedi-vim'
+Plug 'zchee/deoplete-jedi'
 
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+" Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 " Markdown support
-Plug 'tpope/vim-markdown'
+" Plug 'tpope/vim-markdown'
 
-" Plug 'ervandew/supertab'
+Plug 'ervandew/supertab'
 
 " Gruvbox colorscheme
 Plug 'morhetz/gruvbox'
@@ -148,10 +148,10 @@ Plug 'lilydjwg/colorizer'
 
 " UtilSnips
 " Track the engine.
-" Plug 'SirVer/ultisnips'
+Plug 'SirVer/ultisnips'
 
 " " Snippets are separated from the engine. Add this if you want them:
-" Plug 'honza/vim-snippets'
+Plug 'honza/vim-snippets'
 
 " Add repeat support for plugins
 Plug 'tpope/vim-repeat'
@@ -232,6 +232,8 @@ let g:lightline = {
       \ }
       \ }
 
+
+
 let g:lightline.separator = {
       \   'left': '', 'right': ''
       \}
@@ -269,32 +271,32 @@ endif
 
 
 " Jedi {{{
-" let g:jedi#rename_command = "<leader>r"
-" let g:jedi#auto_close_doc = 1
-" let g:jedi#usages_command = '<Leader>u'
-" let g:jedi#goto_command = "gd"
-" " Disable since deoplete is enabled
-" let g:jedi#auto_initialization = 1
-" let g:jedi#completions_enabled = 0
-" let g:jedi#auto_vim_configuration = 0
-" let g:jedi#smart_auto_mappings = 0
-" let g:jedi#popup_on_dot = 0
-" let g:jedi#completions_command = ""
-" let g:jedi#show_call_signatures = "2"
-" let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
+let g:jedi#rename_command = "<leader>r"
+let g:jedi#auto_close_doc = 1
+let g:jedi#usages_command = '<Leader>u'
+let g:jedi#goto_command = "gd"
+" Disable since deoplete is enabled
+let g:jedi#auto_initialization = 1
+let g:jedi#completions_enabled = 0
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#smart_auto_mappings = 0
+let g:jedi#popup_on_dot = 0
+let g:jedi#completions_command = ""
+let g:jedi#show_call_signatures = "2"
+let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
 " }}}
 
 " Deoplete {{{
-" set pumheight=12
-" let g:deoplete#enable_at_startup = 1
-" let g:deoplete#enable_ignore_case = 1
-" let g:deoplete#enable_smart_case = 1
-" " Disable autocompletion (using deoplete instead)
-" let g:jedi#completions_enabled = 0
-" " set completeopt-=preview
+set pumheight=12
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_ignore_case = 1
+let g:deoplete#enable_smart_case = 1
+" Disable autocompletion (using deoplete instead)
+let g:jedi#completions_enabled = 0
+" set completeopt-=preview
 let g:python_host_prog = '/usr/bin/python'
 let g:python3_host_prog = '/usr/bin/python3'
-" " let g:deoplete#auto_complete_delay = 100
+" let g:deoplete#auto_complete_delay = 100
 " let g:deoplete#sources#jedi#show_docstring=1
 " }}}
 
@@ -331,8 +333,36 @@ let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
 " }}}
 
+
+" LaTeX {{{
 " Disable latex-box from polyglot dependency to make vimtex usable
 let g:polyglot_disabled = ['latex', 'markdown']
+" let g:polyglot_disabled = ['markdown']
+
+let g:tex_flavor='latex'
+let g:vimtex_view_method='zathura'
+let g:vimtex_quickfix_mode=0
+set conceallevel=1
+let g:tex_conceal='abdmg'
+
+
+" LaTeX bindings {{{
+augroup latexbindings
+  autocmd! latexbindings
+  autocmd Filetype tex inoremap <buffer> <silent> _ _{}<Left>
+
+  autocmd BufWritePost *.tex :silent execute ':!pdflatex homework.tex'
+augroup end
+" }}}
+" }}}
+
+" UltiSnips {{{
+let g:UltiSnipsExpandTrigger = '<tab>'
+let g:UltiSnipsJumpForwardTrigger = '<c-b>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-z>'
+let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+" }}}
+
 
 " Disable gitgutter mappings
 let g:gitgutter_map_keys = 0
@@ -345,9 +375,6 @@ augroup pythonbindings
   " Refactor with ALE black
   autocmd Filetype python nnoremap <buffer> <silent> <localleader>r :ALEFix black<CR>
 
-  " Python print stuff in selection
-  autocmd Filetype python vnoremap <buffer> <silent> <localleader>p yoprint("<ESC>pa:", <ESC>pa)<ESC>
-
   " Insert debugging with ipdb
   autocmd Filetype python nnoremap <buffer> <silent> <localleader>b :call InsertIPDB()<CR>
 
@@ -357,9 +384,12 @@ augroup pythonbindings
   " autocmd Filetype python vnoremap <buffer> <silent> <localleader>d :'<,'>GenPyDoc<CR>
   " Function to insert python IPDB debug line
   function! InsertIPDB()
-    let trace = expand("import ipdb; ipdb.set_trace(context=5)")
+    let trace = expand("import ipdb; ipdb.set_trace(context=9)")
     execute "normal O".trace
   endfunction
+
+  " 
+  " autocmd BufWritePre *.py execute ':ALEFix black'
 augroup end
 " }}}
 
@@ -444,53 +474,58 @@ let g:CoolTotalMatches = 1
 " CoC Vim {{{
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" Use `:Format` to format current buffer
+" command! -nargs=0 Format :call CocAction('format')
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
+" function! s:check_back_space() abort
+"   let col = col('.') - 1
+"   return !col || getline('.')[col - 1]  =~# '\s'
+" endfunction
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" " Use <c-space> to trigger completion.
+" inoremap <silent><expr> <c-space> coc#refresh()
 
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+" " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" " Coc only does snippet and additional edit on confirm.
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
+"                                            \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" " Use K to show documentation in preview window
+" nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
+" function! s:show_documentation()
+"   if (index(['vim','help'], &filetype) >= 0)
+"     execute 'h '.expand('<cword>')
+"   else
+"     call CocAction('doHover')
+"   endif
+" endfunction
+
+" " Remap keys for gotos
+" nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gr <Plug>(coc-references)
+
+
+" " Highlight symbol under cursor on CursorHold
+" " autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" " Remap for rename current word
+" nmap <leader>rn <Plug>(coc-rename)
 " }}}
 
 
 " Custom semshi Highlights {{{
-function CustomSemshiHighlights()
+function! CustomSemshiHighlights()
   hi semshiLocal           ctermfg=208 guifg=#fe8019
   hi semshiGlobal          ctermfg=172 guifg=#d79921
   hi semshiImported        ctermfg=172 guifg=#d79921 cterm=bold gui=bold

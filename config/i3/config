@@ -224,15 +224,15 @@ floating_modifier $mod
 #for_window [window_role="menu"] floating enable
 #for_window [window_role="Preferences"] floating enable
 
-# Chromium
-bindsym $mod+Ctrl+c exec chromium
+# Browsers
+bindsym $mod+Ctrl+f exec firefox
 bindsym $mod+Ctrl+q exec qutebrowser
 
 # Set keyboardlayout to german
 exec --no-startup-id setxkbmap us altgr-intl -option caps:escape
 
 # Wallpaper 
-exec --no-startup-id feh --bg-scale ~/Downloads/wallpapers/trees.jpg
+# exec --no-startup-id feh --bg-scale ~/Downloads/wallpapers/trees.jpg
  
 
 # i3 lock
