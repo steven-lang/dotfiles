@@ -3,6 +3,9 @@
 --tag-relative=yes
 --exclude=.git
 --exclude=env
+--exclude=*.json
+--exclude=*.csv
+--exclude=node_modules
 
 
 # Julia

@@ -1,3 +1,7 @@
+# Echo important shortcuts to learn:
+echo "Shortcuts to learn:"
+echo "CTRL-T: Paste filename"
+echo "ALT-C: Go to directory"
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
