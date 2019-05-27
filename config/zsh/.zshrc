@@ -166,6 +166,8 @@ alias gnome-screenshot='gnome-screenshot -a'
 alias envactivate='source ./env/bin/activate'
 alias find='ag -g'
 
+# Update all pip packages
+alias pipupdate="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
 
 # Add dir colors
 eval `dircolors ~/.config/dircolors-gruvbox.db`

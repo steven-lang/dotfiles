@@ -16,7 +16,7 @@ set signcolumn=yes
 " Remove '-- INSERT --' line since it is shown in lighline anyway
 set clipboard=unnamedplus
 
-set pumheight=12
+set pumheight=8
 
 " Use pum as wildmenu
 set wildoptions=pum
