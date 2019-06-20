@@ -21,11 +21,36 @@ set pumheight=8
 " Use pum as wildmenu
 set wildoptions=pum
 
+" Enable incremental commands (e.g. search-replace preview)
+set inccommand=split
+
+" Enable automatic indentation
+set autoindent 
+filetype plugin indent on    " required
+
 " Reload .vimrc on save
 autocmd! bufwritepost .vimrc source %
 
 " Disable arrows
 let g:elite_mode=1
+
+function! MyFoldText() " {{{
+    let line = getline(v:foldstart)
+
+    let nucolwidth = &fdc + &number * &numberwidth
+    let windowwidth = winwidth(0) - nucolwidth - 3
+    let foldedlinecount = v:foldend - v:foldstart
+
+    " expand tabs into spaces
+    let onetab = strpart('          ', 0, &tabstop)
+    let line = substitute(line, '\t', onetab, 'g')
+
+    let line = strpart(line, 0, windowwidth - 2 -len(foldedlinecount))
+    let fillcharcount = windowwidth - len(line) - len(foldedlinecount)
+    return line . '…' . repeat(" ",fillcharcount) . foldedlinecount . '…' . ' '
+endfunction " }}}
+set foldtext=MyFoldText()
+
 
 " Enable hard time using hjkl
 "let g:hardtime_default_on = 1
@@ -40,6 +65,12 @@ endif
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
+" Better python folding
+Plug 'tmhedberg/SimpylFold'
+
+" Control Shift S
+Plug 'dyng/ctrlsf.vim'
+
 " Match-Up: vim matchit alternative
 Plug 'andymass/vim-matchup'
 
@@ -63,28 +94,31 @@ Plug 'thaerkh/vim-workspace'
 
 "" Autocomplete framework
 " Deoplete
-" if has('nvim')
-"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" else
-"   Plug 'Shougo/deoplete.nvim'
-"   Plug 'roxma/nvim-yarp'
-"   Plug 'roxma/vim-hug-neovim-rpc'
-" endif
-" Plug 'davidhalter/jedi-vim'
-" Plug 'zchee/deoplete-jedi'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+Plug 'davidhalter/jedi-vim'
+Plug 'zchee/deoplete-jedi'
+Plug 'ncm2/float-preview.nvim'
 
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+" Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 " Markdown support
 " Plug 'tpope/vim-markdown'
 
-" Plug 'ervandew/supertab'
+Plug 'ervandew/supertab'
 
 " Gruvbox colorscheme
-Plug 'morhetz/gruvbox'
+" Plug 'morhetz/gruvbox'
+Plug 'gruvbox-community/gruvbox/'
+Plug 'Lokaltog/vim-monotone'
 
-" Enable multiple cursors with <C-n> in visual mode
-Plug 'terryma/vim-multiple-cursors'
+" USE cgn with dot repeat instead ///Enable multiple cursors with <C-n> in visual mode
+" Plug 'terryma/vim-multiple-cursors'
 
 " Python autoimport
 Plug 'mgedmin/python-imports.vim'
@@ -153,10 +187,12 @@ Plug 'honza/vim-snippets'
 Plug 'tpope/vim-repeat'
 Plug 'godlygeek/tabular'
 
+
+Plug 'hauleth/sad.vim'
+
 " Initialize plugin system
 call plug#end()
 
-filetype plugin indent on    " required
 
 "Credit joshdick
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
@@ -180,6 +216,7 @@ syntax on                 " Enable syntax highlighting
 let g:gruvbox_italic=1
 let g:gruvbox_bold=1
 " let g:gruvbox_contrast_dark='soft'
+" set background=dark
 set background=dark
 colorscheme gruvbox
 set path=.,,**
@@ -197,18 +234,12 @@ set showmatch
 set incsearch             " Enable incremental seach; Highlight while typing
 set ignorecase            " Ignore case for searches; temp undo with /\c or /\C
 
-" Map Ctrl-c to esc
-" imap <C-c> <Esc>
 
 "split navigations
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-
-" Custom mappings
-nnoremap H ^
-nnoremap L $
 
 " Keep visual mode while indenting
 vnoremap < <gv
@@ -267,33 +298,37 @@ endif
 
 
 " Jedi {{{
-" let g:jedi#rename_command = "<leader>r"
-" let g:jedi#auto_close_doc = 1
-" let g:jedi#usages_command = '<Leader>u'
-" let g:jedi#goto_command = "gd"
-" " Disable since deoplete is enabled
-" let g:jedi#auto_initialization = 1
-" let g:jedi#completions_enabled = 0
-" let g:jedi#auto_vim_configuration = 0
-" let g:jedi#smart_auto_mappings = 0
-" let g:jedi#popup_on_dot = 0
-" let g:jedi#completions_command = ""
-" let g:jedi#show_call_signatures = "2"
-" let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
+let g:jedi#rename_command = "<leader>r"
+let g:jedi#auto_close_doc = 1
+let g:jedi#usages_command = '<Leader>u'
+let g:jedi#goto_command = "gd"
+" Disable since deoplete is enabled
+let g:jedi#auto_initialization = 1
+let g:jedi#completions_enabled = 0
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#smart_auto_mappings = 0
+let g:jedi#popup_on_dot = 0
+let g:jedi#completions_command = ""
+let g:jedi#show_call_signatures = "2"
+let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
+
 " " }}}
 
 " " Deoplete {{{
-" set pumheight=12
-" let g:deoplete#enable_at_startup = 1
-" let g:deoplete#enable_ignore_case = 1
-" let g:deoplete#enable_smart_case = 1
-" " Disable autocompletion (using deoplete instead)
-" let g:jedi#completions_enabled = 0
-" set completeopt-=preview
+let g:float_preview#docked = 0
+set pumheight=12
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_ignore_case = 1
+let g:deoplete#enable_smart_case = 1
+" Disable autocompletion (using deoplete instead)
+set completeopt-=preview
 let g:python_host_prog = '/usr/bin/python'
 let g:python3_host_prog = '/usr/bin/python3'
-" let g:deoplete#auto_complete_delay = 100
-" let g:deoplete#sources#jedi#show_docstring=1
+let g:deoplete#sources#jedi#statement_length = 30
+let g:deoplete#sources#jedi#enable_typeinfo = 1
+let g:jedi#completions_enabled = 0
+let g:deoplete#auto_complete_delay = 100
+let g:deoplete#sources#jedi#show_docstring=1
 " }}}
 
 
@@ -346,8 +381,9 @@ let g:tex_conceal='abdmg'
 augroup latexbindings
   autocmd! latexbindings
   autocmd Filetype tex inoremap <buffer> <silent> _ _{}<Left>
+  autocmd Filetype tex inoremap <buffer> <silent> ^ ^{}<Left>
 
-  autocmd BufWritePost *.tex :silent execute ':!pdflatex homework.tex'
+  autocmd BufWritePost *.tex execute ':!pdflatex homework.tex'
 augroup end
 " }}}
 " }}}
@@ -365,6 +401,8 @@ let g:gitgutter_map_keys = 0
 let g:gitgutter_enabled = 0
 
 
+" Short for select replace next (replaces multi cursor plugin)
+vnoremap rs y/<c-r>"<cr>Ncgn
 
 " Python bindings {{{
 augroup pythonbindings
@@ -381,7 +419,7 @@ augroup pythonbindings
   " autocmd Filetype python vnoremap <buffer> <silent> <localleader>d :'<,'>GenPyDoc<CR>
   " Function to insert python IPDB debug line
   function! InsertIPDB()
-    let trace = expand("import ipdb; ipdb.set_trace(context=9)")
+    let trace = expand("__import__(\"ipdb\").set_trace(context=13)")
     execute "normal O".trace
   endfunction
 
@@ -430,13 +468,13 @@ vmap s} S}i
 
 " Leader mappings {{
 nnoremap <silent> <Leader>b :Buffers<CR>
-nnoremap <silent> <Leader>l :Lines<CR>
-nnoremap <silent> <Leader>t :BTags<CR>
-nnoremap <silent> <Leader>T :Tags<CR>
+nnoremap <silent> <Leader>l :BLines<CR>
+nnoremap <silent> <Leader>L :Lines<CR>
+nnoremap <silent> <Leader>t :Tags<CR>
 nnoremap <silent> <Leader>f :Files<CR>
 nnoremap <silent> <Leader>h :History:<CR>
 nnoremap <silent> <Leader>/ :Ag<CR>
-nnoremap <silent> <Leader><Tab> :b#<CR>
+" nnoremap <silent> <Leader><Tab> :b#<CR>
 
 " Move to word
 map  <Leader>w <Plug>(easymotion-bd-w)
@@ -472,54 +510,54 @@ let g:CoolTotalMatches = 1
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 " Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
-" Extensions
-let g:coc_global_extensions=['coc-ultisnips', 'coc-tag', 'coc-python', 'coc-json', 'coc-word']
+" command! -nargs=0 Format :call CocAction('format')
+" " Extensions
+" let g:coc_global_extensions=['coc-ultisnips', 'coc-tag', 'coc-python', 'coc-json']
 
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+" function! s:check_back_space() abort
+"   let col = col('.') - 1
+"   return !col || getline('.')[col - 1]  =~# '\s'
+" endfunction
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
-                                           \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
-
-
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+" " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" " Coc only does snippet and additional edit on confirm.
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
+"                                            \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" " Use <c-space> to trigger completion.
+" inoremap <silent><expr> <c-space> coc#refresh()
 
 
-" Highlight symbol under cursor on CursorHold
-" autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
+" " Use K to show documentation in preview window
+" nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+" function! s:show_documentation()
+"   if (index(['vim','help'], &filetype) >= 0)
+"     execute 'h '.expand('<cword>')
+"   else
+"     call CocAction('doHover')
+"   endif
+" endfunction
+
+" " Remap keys for gotos
+" nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gr <Plug>(coc-references)
+
+
+" " Highlight symbol under cursor on CursorHold
+" " autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" " Remap for rename current word
+" nmap <leader>rn <Plug>(coc-rename)
 " }}}
 
 

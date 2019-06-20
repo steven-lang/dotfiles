@@ -242,6 +242,8 @@ exec --no-startup-id pa-applet
 
 # nm-applet
 exec --no-startup-id nm-applet --tray --sm-disable & 
+# Bluetooth
+exec --no-startup-id blueberry-tray &
 
 # locker shortcut
 set $Locker i3lock-fancy -p -- scrot -z && sleep 1
