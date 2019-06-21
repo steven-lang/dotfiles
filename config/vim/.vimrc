@@ -52,6 +52,8 @@ endfunction " }}}
 set foldtext=MyFoldText()
 
 
+
+
 " Enable hard time using hjkl
 "let g:hardtime_default_on = 1
 
