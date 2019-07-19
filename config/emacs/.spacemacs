@@ -67,7 +67,9 @@ This function should only modify configuration layer settings."
                       version-control-global-margin t)
      themes-megapack
      (python :variables
-             python-backend 'lsp)
+             python-backend 'lsp
+             python-lsp-server 'mspyls
+             python-lsp-git-root "~/python-language-server")
      lsp
      (gtags :variables gtags-enable-by-default t)
      (latex :variables latex-enable-auto-fill t)

@@ -2,27 +2,24 @@ set hidden
 set noshowmode
 
 " don't give |ins-completion-menu| messages.
-set shortmess+=c
-" Some servers have issues with backup files, see #649
-set nobackup
-set nowritebackup
+" set shortmess+=c
 
+set nofoldenable
 " Better display for messages
 set cmdheight=2
-" Smaller updatetime for CursorHold & CursorHoldI
-set updatetime=300
 " always show signcolumns
-set signcolumn=yes
-" Remove '-- INSERT --' line since it is shown in lighline anyway
+" set signcolumn=yes
 set clipboard=unnamedplus
 
 set pumheight=8
 
-" Use pum as wildmenu
-set wildoptions=pum
+if has('nvim')
+  " Use pum as wildmenu
+  set wildoptions=pum
+  " Enable incremental commands (e.g. search-replace preview)
+  set inccommand=split
+endif
 
-" Enable incremental commands (e.g. search-replace preview)
-set inccommand=split
 
 " Enable automatic indentation
 set autoindent 
@@ -34,42 +31,19 @@ autocmd! bufwritepost .vimrc source %
 " Disable arrows
 let g:elite_mode=1
 
-function! MyFoldText() " {{{
-    let line = getline(v:foldstart)
-
-    let nucolwidth = &fdc + &number * &numberwidth
-    let windowwidth = winwidth(0) - nucolwidth - 3
-    let foldedlinecount = v:foldend - v:foldstart
-
-    " expand tabs into spaces
-    let onetab = strpart('          ', 0, &tabstop)
-    let line = substitute(line, '\t', onetab, 'g')
-
-    let line = strpart(line, 0, windowwidth - 2 -len(foldedlinecount))
-    let fillcharcount = windowwidth - len(line) - len(foldedlinecount)
-    return line . '…' . repeat(" ",fillcharcount) . foldedlinecount . '…' . ' '
-endfunction " }}}
-set foldtext=MyFoldText()
-
-
-
-
 " Enable hard time using hjkl
 "let g:hardtime_default_on = 1
-
 
 " Autoinstall Plug if not available
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent execute "!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
+
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
-" Better python folding
-Plug 'tmhedberg/SimpylFold'
-
 " Control Shift S
 Plug 'dyng/ctrlsf.vim'
 
@@ -83,41 +57,37 @@ Plug 'romainl/vim-cool'
 Plug 'wellle/targets.vim'
 
 " Python docstrings
-Plug '~/.vim/plugged/python-gendoc'
+" Plug '~/.vim/plugged/python-gendoc'
+Plug 'kkoomen/vim-doge'
 
 " Python semantic highlighting
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-
-" Show function signatures in commandline
-Plug 'Shougo/echodoc.vim'
 
 " Vim session handling made easy
 Plug 'thaerkh/vim-workspace'
 
 "" Autocomplete framework
 " Deoplete
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-Plug 'davidhalter/jedi-vim'
-Plug 'zchee/deoplete-jedi'
-Plug 'ncm2/float-preview.nvim'
+" if has('nvim')
+"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" else
+"   Plug 'Shougo/deoplete.nvim'
+"   Plug 'roxma/nvim-yarp'
+"   Plug 'roxma/vim-hug-neovim-rpc'
+" endif
+" Plug 'davidhalter/jedi-vim'
+" Plug 'zchee/deoplete-jedi'
 
-" Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
 " Markdown support
 " Plug 'tpope/vim-markdown'
 
-Plug 'ervandew/supertab'
+" Plug 'ervandew/supertab'
 
 " Gruvbox colorscheme
 " Plug 'morhetz/gruvbox'
 Plug 'gruvbox-community/gruvbox/'
-Plug 'Lokaltog/vim-monotone'
 
 " USE cgn with dot repeat instead ///Enable multiple cursors with <C-n> in visual mode
 " Plug 'terryma/vim-multiple-cursors'
@@ -139,8 +109,6 @@ Plug 'tpope/vim-surround'
 
 " Vim git integration
 Plug 'tpope/vim-fugitive' " Git commands
-Plug 'tpope/vim-rhubarb' " Gbrowse support for github
-Plug 'shumphrey/fugitive-gitlab.vim' " Gbrowse support for gitlab
 Plug 'airblade/vim-gitgutter' " Git info on the sidebar
 Plug 'rhysd/committia.vim' " Git commit extension
 
@@ -156,9 +124,6 @@ Plug 'junegunn/fzf.vim'
 
 " Sensible vim config
 Plug 'tpope/vim-sensible'
-
-" Bash support
-Plug 'vim-scripts/bash-support.vim'
 
 " CTag automation
 Plug 'ludovicchabant/vim-gutentags'
@@ -189,7 +154,6 @@ Plug 'honza/vim-snippets'
 Plug 'tpope/vim-repeat'
 Plug 'godlygeek/tabular'
 
-
 Plug 'hauleth/sad.vim'
 
 " Initialize plugin system
@@ -217,8 +181,7 @@ endif
 syntax on                 " Enable syntax highlighting
 let g:gruvbox_italic=1
 let g:gruvbox_bold=1
-" let g:gruvbox_contrast_dark='soft'
-" set background=dark
+let g:gruvbox_contrast_dark='soft'
 set background=dark
 colorscheme gruvbox
 set path=.,,**
@@ -258,6 +221,7 @@ let g:lightline = {
       \ 'colorscheme': 'gruvbox',
       \ 'component_function': {
       \   'gitbranch' : 'fugitive#head',
+      \   'method': 'NearestMethodOrFunction'
       \ }
       \ }
 
@@ -290,47 +254,48 @@ let g:fzf_colors =
 " }}}
 
 
-" Disable arrow movement, resize splits instead.
+" Disable arrow movement, resize splits instead. {{{
 if get(g:, 'elite_mode')
   nnoremap <Up>    :resize +2<CR>
   nnoremap <Down>  :resize -2<CR>
   nnoremap <Left>  :vertical resize +2<CR>
   nnoremap <Right> :vertical resize -2<CR>
 endif
+" }}}
 
 
 " Jedi {{{
-let g:jedi#rename_command = "<leader>r"
-let g:jedi#auto_close_doc = 1
-let g:jedi#usages_command = '<Leader>u'
-let g:jedi#goto_command = "gd"
-" Disable since deoplete is enabled
-let g:jedi#auto_initialization = 1
-let g:jedi#completions_enabled = 0
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#smart_auto_mappings = 0
-let g:jedi#popup_on_dot = 0
-let g:jedi#completions_command = ""
-let g:jedi#show_call_signatures = "2"
-let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
+" let g:jedi#rename_command = "<leader>r"
+" let g:jedi#auto_close_doc = 1
+" let g:jedi#usages_command = 'gu'
+" let g:jedi#goto_command = "gd"
+" " Disable since deoplete is enabled
+" let g:jedi#auto_initialization = 1
+" let g:jedi#completions_enabled = 0
+" let g:jedi#auto_vim_configuration = 0
+" let g:jedi#smart_auto_mappings = 0
+" let g:jedi#popup_on_dot = 0
+" let g:jedi#completions_command = ""
+" let g:jedi#show_call_signatures = "2"
+" let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
 
 " " }}}
 
 " " Deoplete {{{
-let g:float_preview#docked = 0
-set pumheight=12
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_ignore_case = 1
-let g:deoplete#enable_smart_case = 1
-" Disable autocompletion (using deoplete instead)
-set completeopt-=preview
-let g:python_host_prog = '/usr/bin/python'
-let g:python3_host_prog = '/usr/bin/python3'
-let g:deoplete#sources#jedi#statement_length = 30
-let g:deoplete#sources#jedi#enable_typeinfo = 1
-let g:jedi#completions_enabled = 0
-let g:deoplete#auto_complete_delay = 100
-let g:deoplete#sources#jedi#show_docstring=1
+" let g:float_preview#docked = 0
+" set pumheight=12
+" let g:deoplete#enable_at_startup = 1
+" let g:deoplete#enable_ignore_case = 1
+" let g:deoplete#enable_smart_case = 1
+" " Disable autocompletion (using deoplete instead)
+" set completeopt-=preview
+" let g:python_host_prog = '/usr/bin/python2'
+" let g:python3_host_prog = '/usr/bin/python3'
+" let g:deoplete#sources#jedi#statement_length = 30
+" let g:deoplete#sources#jedi#enable_typeinfo = 1
+" let g:jedi#completions_enabled = 0
+" let g:deoplete#auto_complete_delay = 100
+" let g:deoplete#sources#jedi#show_docstring=1
 " }}}
 
 
@@ -343,6 +308,7 @@ let g:EasyMotion_smartcase = 1
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
       \| autocmd BufLeave <buffer> set laststatus=2 noshowmode ruler
+
 
 " Disable trailing spaces warning
 let g:python_highlight_space_errors=0
@@ -406,11 +372,30 @@ let g:gitgutter_enabled = 0
 " Short for select replace next (replaces multi cursor plugin)
 vnoremap rs y/<c-r>"<cr>Ncgn
 
+nnoremap <F9> :make<CR>
+
+" Julia bindings
+augroup juliabindings
+  autocmd! juliabindings
+  autocmd Filetype julia set makeprg=julia\ %
+augroup end
+" }}}
+
+" Bash bindings TODO: bash is not a valid filetype, create custom ft {{{
+augroup bashbindings
+  autocmd! bashbindings
+  autocmd Filetype bash set makeprg=bash\ %
+augroup end
+" }}}
+
 " Python bindings {{{
 augroup pythonbindings
   autocmd! pythonbindings
   " Refactor with ALE black
   autocmd Filetype python nnoremap <buffer> <silent> <localleader>r :ALEFix black<CR>
+
+  " Run python file
+  autocmd Filetype python set makeprg=python\ %
 
   " Insert debugging with ipdb
   autocmd Filetype python nnoremap <buffer> <silent> <localleader>b :call InsertIPDB()<CR>
@@ -446,7 +431,7 @@ let g:UltiSnipsEditSplit="vertical"
 " }}}
 
 " Supertab {{{
-let g:SuperTabDefaultCompletionType = "<c-n>"
+" let g:SuperTabDefaultCompletionType = "<c-n>"
 " }}}
 
 " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
@@ -470,9 +455,10 @@ vmap s} S}i
 
 " Leader mappings {{
 nnoremap <silent> <Leader>b :Buffers<CR>
-nnoremap <silent> <Leader>l :BLines<CR>
-nnoremap <silent> <Leader>L :Lines<CR>
+nnoremap <silent> <Leader>l :Lines<CR>
+nnoremap <silent> <Leader>L :BLines<CR>
 nnoremap <silent> <Leader>t :Tags<CR>
+nnoremap <silent> <Leader>T :BTags<CR>
 nnoremap <silent> <Leader>f :Files<CR>
 nnoremap <silent> <Leader>h :History:<CR>
 nnoremap <silent> <Leader>/ :Ag<CR>
@@ -480,6 +466,7 @@ nnoremap <silent> <Leader>/ :Ag<CR>
 
 " Move to word
 map  <Leader>w <Plug>(easymotion-bd-w)
+nmap s <Plug>(easymotion-bd-f2)
 " " Move to line
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
@@ -500,10 +487,6 @@ let g:vim_markdown_folding_disabled = 1
 " Unmap malicious plugin bindings
 let g:colorizer_nomap = 1
 
-
-" Python-gendoc
-let g:python_gendoc_style = 'google'
-
 " Vim cool{{{
 let g:CoolTotalMatches = 1
 " }}}
@@ -512,54 +495,53 @@ let g:CoolTotalMatches = 1
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 " Use `:Format` to format current buffer
-" command! -nargs=0 Format :call CocAction('format')
-" " Extensions
-" let g:coc_global_extensions=['coc-ultisnips', 'coc-tag', 'coc-python', 'coc-json']
+command! -nargs=0 Format :call CocAction('format')
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
+" Extensions
+let g:coc_global_extensions=['coc-tag', 'coc-python']
 
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? "\<C-n>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-" function! s:check_back_space() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
-" " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" " Coc only does snippet and additional edit on confirm.
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
-"                                            \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-" " Use <c-space> to trigger completion.
-" inoremap <silent><expr> <c-space> coc#refresh()
-
-
-
-" " Use K to show documentation in preview window
-" nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-" function! s:show_documentation()
-"   if (index(['vim','help'], &filetype) >= 0)
-"     execute 'h '.expand('<cword>')
-"   else
-"     call CocAction('doHover')
-"   endif
-" endfunction
-
-" " Remap keys for gotos
-" nmap <silent> gd <Plug>(coc-definition)
-" nmap <silent> gy <Plug>(coc-type-definition)
-" nmap <silent> gi <Plug>(coc-implementation)
-" nmap <silent> gr <Plug>(coc-references)
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
+                                           \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
 
 
-" " Highlight symbol under cursor on CursorHold
-" " autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" " Remap for rename current word
-" nmap <leader>rn <Plug>(coc-rename)
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
 " }}}
 
 
@@ -567,7 +549,7 @@ let g:CoolTotalMatches = 1
 function! CustomSemshiHighlights()
   hi semshiLocal           ctermfg=208 guifg=#fe8019
   hi semshiGlobal          ctermfg=172 guifg=#d79921
-  hi semshiImported        ctermfg=172 guifg=#d79921 cterm=bold gui=bold
+  hi semshiImported        ctermfg=172 guifg=#d79921 
   hi semshiParameter       ctermfg=109 guifg=#83a598
   hi semshiParameterUnused ctermfg=108 guifg=#7c6f64 cterm=underline gui=underline
   hi semshiFree            ctermfg=176 guifg=#d3869b
@@ -582,6 +564,14 @@ function! CustomSemshiHighlights()
   sign define semshiError text=E> texthl=semshiErrorSign
 endfunction
 autocmd filetype python call CustomSemshiHighlights()
+" }}}
+
+
+" Doge document generator {{{
+let g:doge_doc_standard_python = 'google'
+let g:doge_mapping_comment_jump_forward = '<C-n>'
+let g:doge_mapping_comment_jump_backward = '<C-b>'
+"
 " }}}
 
 

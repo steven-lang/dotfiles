@@ -1,19 +1,21 @@
-# Echo important shortcuts to learn:
-echo "Shortcuts to learn:"
-echo "CTRL-T: Paste filename"
-echo "ALT-C: Go to directory"
+echo "Commands:"
+echo "- Edit in vim: <C-x><C-e>"
+echo "- Correct last command in editor: fc"
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
+
+# Download antigen if not present
+if [[ ! -f $HOME/antigen.zsh ]]; then
+    curl -L git.io/antigen > $HOME/antigen.zsh
+fi
 
 # Source antigen
 source ~/antigen.zsh
 antigen use oh-my-zsh
-# plugins=(git git-flow-avh mvn gradle)
 antigen bundle git
 antigen bundle git-flow-avh
 antigen bundle git-flow-mvn
 antigen bundle gradle
-# antigen bundle agkozak/zsh-z
 antigen bundle z 
 antigen bundle fzf
 antigen bundle zsh-users/zsh-syntax-highlighting
@@ -51,7 +53,7 @@ HYPHEN_INSENSITIVE="true"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -81,13 +83,20 @@ source $ZSH/oh-my-zsh.sh
 export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/bin:$HOME/bin"
 export TERM="xterm-256color"
 
-# Preferred editor for local and remote sessions
 if [[ -z $SSH_CONNECTION ]]; then
   export TERM=xterm-color
+fi
+
+# Use colored cat if available
+if hash ccat 2>/dev/null; then
+  alias cat='ccat'
+fi
+
+# Check if nvim is available
+if hash nvim 2>/dev/null; then
   export EDITOR=nvim
   export VISUAL=nvim
   alias vim=nvim
-  alias cat='ccat'
 else
   export EDITOR=vim
   export VISUAL=vim
@@ -145,6 +154,7 @@ alias i3statusconfig='vim ~/.config/i3status/config'
 
 # Fast terminal-directory navigation
 alias xclip='xclip -selection c'
+alias clone='termite -e "bash" 2>&1 >/dev/null & disown %1'
 alias PWD='echo $(pwd) | xclip && pwd && echo "path copied"'
 alias CD='echo "cd $(xclip -o)" && cd $(xclip -o)'
 alias :q='exit'
@@ -185,6 +195,19 @@ bindkey '^N' down-line-or-search
 bindkey '^h' backward-word
 bindkey '^l' forward-word
 
+bindkey '^r' history-incremental-search-backward
+
+function zle-line-init zle-keymap-select {
+    VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
+    RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/} $EPS1"
+    zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-keymap-select
+
+
+
 # Check for virtual environments
 function cd() {
   builtin cd "$@"
@@ -224,19 +247,11 @@ fi
 
 function gi() { curl -L -s https://www.gitignore.io/api/$@ ;}
 
-function toggle_darkmode() {
-  f="$HOME/.zshrc"
-  grep -q "export DARKMODE=1" $f && sed -i "s/export DARKMODE=1/export DARKMODE=0/g" $f || sed -i "s/DARKMODE=0/DARKMODE=1/g" $f
-  source $f
-}
-
-if [[ ! -f $HOME/antigen.zsh ]]; then
-    curl -L git.io/antigen > $HOME/antigen.zsh
-fi
 
 if [[ ! -d $HOME/zsh-syntax-highlighting ]]; then
 	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/zsh-syntax-highlighting
 fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 source $HOME/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+eval "$(direnv hook zsh)"
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
