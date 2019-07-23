@@ -2,15 +2,19 @@ set hidden
 set noshowmode
 
 " don't give |ins-completion-menu| messages.
-" set shortmess+=c
+set shortmess+=c
 
+" Disable folds
 set nofoldenable
+
 " Better display for messages
 set cmdheight=2
+
 " always show signcolumns
 " set signcolumn=yes
 set clipboard=unnamedplus
 
+" Set fixed popup menu height
 set pumheight=8
 
 if has('nvim')
@@ -28,12 +32,6 @@ filetype plugin indent on    " required
 " Reload .vimrc on save
 autocmd! bufwritepost .vimrc source %
 
-" Disable arrows
-let g:elite_mode=1
-
-" Enable hard time using hjkl
-"let g:hardtime_default_on = 1
-
 " Autoinstall Plug if not available
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent execute "!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
@@ -44,6 +42,8 @@ endif
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
+Plug 'liuchengxu/vista.vim'
+
 " Control Shift S
 Plug 'dyng/ctrlsf.vim'
 
@@ -66,27 +66,10 @@ Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 " Vim session handling made easy
 Plug 'thaerkh/vim-workspace'
 
-"" Autocomplete framework
-" Deoplete
-" if has('nvim')
-"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" else
-"   Plug 'Shougo/deoplete.nvim'
-"   Plug 'roxma/nvim-yarp'
-"   Plug 'roxma/vim-hug-neovim-rpc'
-" endif
-" Plug 'davidhalter/jedi-vim'
-" Plug 'zchee/deoplete-jedi'
-
+" Completion Framework (and more)
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
-" Markdown support
-" Plug 'tpope/vim-markdown'
-
-" Plug 'ervandew/supertab'
-
 " Gruvbox colorscheme
-" Plug 'morhetz/gruvbox'
 Plug 'gruvbox-community/gruvbox/'
 
 " USE cgn with dot repeat instead ///Enable multiple cursors with <C-n> in visual mode
@@ -97,9 +80,6 @@ Plug 'mgedmin/python-imports.vim'
 
 " Tex
 Plug 'lervag/vimtex'
-
-" Have a hard time using hjkl
-Plug 'takac/vim-hardtime'
 
 " Easier vim navigation
 Plug 'easymotion/vim-easymotion'
@@ -114,9 +94,6 @@ Plug 'rhysd/committia.vim' " Git commit extension
 
 " Comment/uncomment with gc
 Plug 'tpope/vim-commentary'
-
-" Linting
-Plug 'w0rp/ale'
 
 " FZF
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -140,14 +117,11 @@ Plug 'itchyny/lightline.vim'
 " Julia support
 Plug 'JuliaEditorSupport/julia-vim'
 
-" Hex color preview
-Plug 'lilydjwg/colorizer'
-
-" UtilSnips
+" UltiSnips
 " Track the engine.
 Plug 'SirVer/ultisnips'
 
-" " Snippets are separated from the engine. Add this if you want them:
+" Snippets are separated from the engine. Add this if you want them:
 Plug 'honza/vim-snippets'
 
 " Add repeat support for plugins
@@ -212,16 +186,27 @@ vnoremap > >gv
 " }}}
 
 
+" Vista {{{
+function! NearestMethodOrFunction() abort
+  return get(b:, 'vista_nearest_method_or_function', '')
+endfunction
+
+" If you want to show the nearest function in your statusline automatically,
+" you can add the following line to your vimrc 
+autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+" }}}
+
 " Lightline {{{
 let g:lightline = {
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'relativepath', 'modified' ] ],
+      \   'left': [ [ 'mode', 'paste' ], ['cocstatus'],[ 'gitbranch', 'readonly', 'relativepath', 'method', 'modified'] ],
       \   'right' : [ ['lineinfo'], ['percent'], ['filetype'] ]
       \ },
       \ 'colorscheme': 'gruvbox',
       \ 'component_function': {
       \   'gitbranch' : 'fugitive#head',
-      \   'method': 'NearestMethodOrFunction'
+      \   'method': 'NearestMethodOrFunction',
+      \   'cocstatus': 'coc#status',
       \ }
       \ }
 
@@ -254,49 +239,11 @@ let g:fzf_colors =
 " }}}
 
 
-" Disable arrow movement, resize splits instead. {{{
-if get(g:, 'elite_mode')
-  nnoremap <Up>    :resize +2<CR>
-  nnoremap <Down>  :resize -2<CR>
-  nnoremap <Left>  :vertical resize +2<CR>
-  nnoremap <Right> :vertical resize -2<CR>
-endif
-" }}}
-
-
-" Jedi {{{
-" let g:jedi#rename_command = "<leader>r"
-" let g:jedi#auto_close_doc = 1
-" let g:jedi#usages_command = 'gu'
-" let g:jedi#goto_command = "gd"
-" " Disable since deoplete is enabled
-" let g:jedi#auto_initialization = 1
-" let g:jedi#completions_enabled = 0
-" let g:jedi#auto_vim_configuration = 0
-" let g:jedi#smart_auto_mappings = 0
-" let g:jedi#popup_on_dot = 0
-" let g:jedi#completions_command = ""
-" let g:jedi#show_call_signatures = "2"
-" let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
-
-" " }}}
-
-" " Deoplete {{{
-" let g:float_preview#docked = 0
-" set pumheight=12
-" let g:deoplete#enable_at_startup = 1
-" let g:deoplete#enable_ignore_case = 1
-" let g:deoplete#enable_smart_case = 1
-" " Disable autocompletion (using deoplete instead)
-" set completeopt-=preview
-" let g:python_host_prog = '/usr/bin/python2'
-" let g:python3_host_prog = '/usr/bin/python3'
-" let g:deoplete#sources#jedi#statement_length = 30
-" let g:deoplete#sources#jedi#enable_typeinfo = 1
-" let g:jedi#completions_enabled = 0
-" let g:deoplete#auto_complete_delay = 100
-" let g:deoplete#sources#jedi#show_docstring=1
-" }}}
+" Use arrow keys for resizing
+nnoremap <Up>    :resize +2<CR>
+nnoremap <Down>  :resize -2<CR>
+nnoremap <Left>  :vertical resize +2<CR>
+nnoremap <Right> :vertical resize -2<CR>
 
 
 " EasyMotion {{{
@@ -313,30 +260,9 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
 " Disable trailing spaces warning
 let g:python_highlight_space_errors=0
 
-" ALE config {{{
-" Ale fixers
-let g:ale_fixers = ['black'] 
-let g:ale_fix_on_save = 1
-
-" Highlights
-" let g:ale_set_highlights = 0
-
-" " Check Python files with flake8 and pylint.
-" let b:ale_linters = ['flake8']
-" let g:ale_echo_msg_error_str = 'E'
-" let g:ale_echo_msg_warning_str = 'W'
-" let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-" " Lint always in Normal Mode
-" let g:ale_lint_on_text_changed = 'normal'
-" " Lint when leaving Insert Mode but don't lint when in Insert Mode 
-" let g:ale_lint_on_insert_leave = 1
-" }}}
-
-
 " LaTeX {{{
 " Disable latex-box from polyglot dependency to make vimtex usable
 let g:polyglot_disabled = ['latex', 'markdown']
-" let g:polyglot_disabled = ['markdown']
 
 let g:tex_flavor='latex'
 let g:vimtex_view_method='zathura'
@@ -356,44 +282,18 @@ augroup end
 " }}}
 " }}}
 
-" UltiSnips {{{
-let g:UltiSnipsExpandTrigger = '<c-s>'
-let g:UltiSnipsJumpForwardTrigger = '<c-b>'
-let g:UltiSnipsJumpBackwardTrigger = '<c-z>'
-let g:UltiSnipsSnippetDirectories=["UltiSnips"]
-" }}}
 
 
 " Disable gitgutter mappings
 let g:gitgutter_map_keys = 0
 let g:gitgutter_enabled = 0
 
-
-" Short for select replace next (replaces multi cursor plugin)
-vnoremap rs y/<c-r>"<cr>Ncgn
-
+" Run make on <F9>
 nnoremap <F9> :make<CR>
-
-" Julia bindings
-augroup juliabindings
-  autocmd! juliabindings
-  autocmd Filetype julia set makeprg=julia\ %
-augroup end
-" }}}
-
-" Bash bindings TODO: bash is not a valid filetype, create custom ft {{{
-augroup bashbindings
-  autocmd! bashbindings
-  autocmd Filetype bash set makeprg=bash\ %
-augroup end
-" }}}
 
 " Python bindings {{{
 augroup pythonbindings
   autocmd! pythonbindings
-  " Refactor with ALE black
-  autocmd Filetype python nnoremap <buffer> <silent> <localleader>r :ALEFix black<CR>
-
   " Run python file
   autocmd Filetype python set makeprg=python\ %
 
@@ -403,6 +303,12 @@ augroup pythonbindings
   " Python import
   autocmd Filetype python nnoremap <buffer> <silent> <localleader>i     :ImportName<CR>
 
+  " use `:OR` for organize import of current buffer
+  command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+  " Organize imports
+  autocmd Filetype python nnoremap <buffer> <silent> <localleader>o :OR<CR>
+
   " autocmd Filetype python vnoremap <buffer> <silent> <localleader>d :'<,'>GenPyDoc<CR>
   " Function to insert python IPDB debug line
   function! InsertIPDB()
@@ -410,29 +316,21 @@ augroup pythonbindings
     execute "normal O".trace
   endfunction
 
-  " 
-  " autocmd BufWritePre *.py execute ':ALEFix black'
+  " Format buffer on write
+  autocmd BufWritePre *.py execute ':Format'
 augroup end
 " }}}
 
-" LanguageTool config {{{
-let g:languagetool_jar = '$HOME/Downloads/LanguageTool-4.3/languagetool-commandline.jar'
-hi LanguageToolGrammarError  guisp=#b58900 gui=undercurl guifg=NONE guibg=NONE ctermfg=white ctermbg=blue term=underline cterm=none
-hi LanguageToolSpellingError guisp=#dc322f  gui=undercurl guifg=NONE guibg=NONE ctermfg=white ctermbg=red  term=underline cterm=none
-" }}}
-
 " UtilSnips {{{
-let g:UltiSnipsExpandTrigger="<c-s>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsExpandTrigger = '<c-s>'
+let g:UltiSnipsJumpForwardTrigger = '<c-b>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-z>'
+let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 let g:ultisnips_python_style="google"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 " }}}
 
-" Supertab {{{
-" let g:SuperTabDefaultCompletionType = "<c-n>"
-" }}}
 
 " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
 inoremap <c-c> <ESC>
@@ -466,8 +364,7 @@ nnoremap <silent> <Leader>/ :Ag<CR>
 
 " Move to word
 map  <Leader>w <Plug>(easymotion-bd-w)
-nmap s <Plug>(easymotion-bd-f2)
-" " Move to line
+" Move to line
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 " }}
@@ -479,13 +376,6 @@ let g:workspace_session_directory = $HOME . '/.vim/sessions/'
 let g:workspace_autosave = 0
 let g:workspace_autosave_untrailspaces = 0
 " }}}
-
-" Vim markdown{{{
-let g:vim_markdown_folding_disabled = 1
-" }}}
-
-" Unmap malicious plugin bindings
-let g:colorizer_nomap = 1
 
 " Vim cool{{{
 let g:CoolTotalMatches = 1
@@ -499,7 +389,7 @@ command! -nargs=0 Format :call CocAction('format')
 " Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=300
 " Extensions
-let g:coc_global_extensions=['coc-tag', 'coc-python']
+let g:coc_global_extensions=['coc-tag', 'coc-python', 'coc-highlight']
 
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
@@ -515,12 +405,12 @@ endfunction
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : 
-                                           \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
-
+" Highlights
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -539,6 +429,18 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
+" Update signature help on jump placeholder
+autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
+" Use auocmd to force lightline update
+autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+
+" Add status line support, for integration with other plugin, checkout `:h coc-status`
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+function! CocstatusCustom()
+  return coc#status() . get(b:,'coc_current_function','')
+endfunction
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
@@ -565,7 +467,6 @@ function! CustomSemshiHighlights()
 endfunction
 autocmd filetype python call CustomSemshiHighlights()
 " }}}
-
 
 " Doge document generator {{{
 let g:doge_doc_standard_python = 'google'
