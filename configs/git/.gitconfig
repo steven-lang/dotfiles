@@ -1,0 +1,19 @@
+[push]
+	default = simple
+[user]
+	email = steven.lang.mz@gmail.com
+	name = Steven Lang
+[merge]
+	tool = vimdiff
+[alias]
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+[core]
+	autocrlf = input
+	editor = nvim
+[commit]
+	template = ~/.gitmessage
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process

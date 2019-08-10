@@ -108,7 +108,7 @@ fi
 export JAVA_HOME=/usr/lib/jvm/java-10-openjdk
 export TERMINAL=termite
 export WEKA_HOME=$HOME/wekafiles
-export DOTFILES=$HOME/dotfiles
+export DOT=$HOME/dotfiles
 
 # fzf
 export FZF_DEFAULT_OPTS='--height 40% --border'
