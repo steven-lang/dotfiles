@@ -1,6 +1,6 @@
 rofi.combi-modi:    window,drun,ssh
 rofi.theme:         gruvbox 
-rofi.font:          hack 11
+rofi.font:          hack 12
 rofi.modi:          combi 
 
 ! Base16 OneDark

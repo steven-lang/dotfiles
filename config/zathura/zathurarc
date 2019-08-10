@@ -1,0 +1,2 @@
+map <Left> navigate "previous"
+map <Right> navigate "next"

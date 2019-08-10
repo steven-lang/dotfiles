@@ -231,15 +231,19 @@ floating_modifier $mod
 bindsym $mod+Ctrl+f exec firefox
 bindsym $mod+Ctrl+q exec qutebrowser
 
-# Set keyboardlayout to german
-exec --no-startup-id setxkbmap us altgr-intl -option caps:escape
+# Set keyboardlayout 
+exec --no-startup-id setxkbmap us altgr-intl -option ctrl:nocaps
 
 # Wallpaper 
 # exec --no-startup-id feh --bg-scale ~/Downloads/wallpapers/trees.jpg
  
+# locker shortcut
+# set $Locker i3lock-fancy -p -- scrot -z && sleep 1
+set $Locker i3lock -c 222222 && sleep 1
 
 # i3 lock
-exec --no-startup-id xautolock -time 30 -locker 'i3lock-fancy -p -- scrot -z' -detectsleep &
+# exec --no-startup-id xautolock -time 30 -locker 'i3lock-fancy -p -- scrot -z' -detectsleep &
+exec --no-startup-id xautolock -time 30 -locker $Locker -detectsleep &
 exec --no-startup-id pulseaudio
 exec --no-startup-id pa-applet
 
@@ -252,8 +256,6 @@ exec --no-startup-id blueberry-tray &
 exec --no-startup-id ~/dotfiles/scripts/map-caps-ctrl-escp.sh
 
 
-# locker shortcut
-set $Locker i3lock-fancy -p -- scrot -z && sleep 1
 
 # suspend/lock shortcuts
 bindsym $mod+$mod2+Ctrl+s exec --no-startup-id systemctl suspend && $Locker 
@@ -330,17 +332,6 @@ client.placeholder      $base00 $base00 $base05 $base00 $base00
 client.background       $base07
 
 
-# Defaults
-# client.focused          #4c7899 #4c7899 #fdf6e3 #268bd2
-# # client.focused          #4c7899 #285577 #fdf6e3 #268bd2
-# client.focused_inactive #002b36 #073642 #839496 #073642
-# client.unfocused        #002b36 #073642 #839496 #073642
-# client.urgent           #002b36 #dc322f #fdf6e3 #002b36 
-# client.focused #4c7899 #285577 #ffffff #2e9ef4
-# client.focused_inactive #333333 #5f676a #ffffff #484e50
-# client.unfocused #333333 #222222 #888888 #292d2e
-# client.urgent #2f343a #900000 #ffffff #900000
-
 # Compton
 # exec compton -bc -r 5 -l -4 -t -4 --shadow-exclude '_GTK_FRAME_EXTENTS@:c'
 
@@ -351,29 +342,3 @@ bindsym $mod+c exec vim-key-cheat-sheet
 exec redshift &
 exec pasystray &
 exech volumeicon &
-
-
-
-# Plasma stuff
-for_window [title="Desktop — Plasma"] kill; floating enable; border none
-for_window [class="plasmashell"] floating enable;
-for_window [class="Plasma"] floating enable; border none
-for_window [title="plasma-desktop"] floating enable; border none
-for_window [title="win7"] floating enable; border none
-for_window [class="krunner"] floating enable; border none
-for_window [class="Kmix"] floating enable; border none
-for_window [class="Klipper"] floating enable; border none
-for_window [class="Plasmoidviewer"] floating enable; border none
-for_window [class="(?i)*nextcloud*"] floating disable
-for_window [class="plasmashell" window_type="notification"] floating enable, border none, move right 700px, move down 450px, no_focus 
-
-exec --no-startup-id wmctrl -c Plasma
-
-# >>> Avoid tiling for non-Plasma stuff <<<
-for_window [window_role="pop-up"] floating enable
-for_window [window_role="bubble"] floating enable
-for_window [window_role="task_dialog"] floating enable
-for_window [window_role="Preferences"] floating enable
-for_window [window_role="About"] floating enable 
-for_window [window_type="dialog"] floating enable
-for_window [window_type="menu"] floating enable

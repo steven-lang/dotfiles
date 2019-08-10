@@ -1,5 +1,5 @@
 echo "Commands:"
-echo "- Edit in vim: <C-x><C-e>"
+echo "- Edit in vim : <C-x><C-e>"
 echo "- Correct last command in editor: fc"
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
@@ -97,6 +97,9 @@ if hash nvim 2>/dev/null; then
   export EDITOR=nvim
   export VISUAL=nvim
   alias vim=nvim
+
+  # Use nvim for manpages
+  export MANPAGER="nvim -c 'set ft=man' -"
 else
   export EDITOR=vim
   export VISUAL=vim
@@ -138,15 +141,12 @@ alias grep='grep --color=auto'
 alias pacu='sudo pacman -Syu && yay -Syua'
 alias pacs='sudo pacman -S'
 alias yay='yay --noconfirm'
-# Moved to update functions (see above)
 
 # zshrc editing
 alias eZ='vim ~/.zshrc'
 alias rZ='source ~/.zshrc'
 alias reboot='sudo systemctl reboot'
 alias poweroff='sudo systemctl poweroff'
-# Grub update - (currently systemd-boot -> no need for that)
-#alias update-grub='sudo grub-mkconfig -o /boot/grub/grub.cfg'
 
 # i3-shortcuts
 alias i3config='vim ~/.config/i3/config'
@@ -160,8 +160,8 @@ alias CD='echo "cd $(xclip -o)" && cd $(xclip -o)'
 alias :q='exit'
 
 alias img='feh'
-alias pdf='evince'
 alias zathura='zathura --fork'
+alias pdf='zathura --fork'
 
 alias vimconfig='vim ~/dotfiles/config/vim/.vimrc'
 alias vimupdate='vim +PlugClean +PlugUpdate +UpdateRemoteRepositories +qa'
@@ -196,17 +196,6 @@ bindkey '^h' backward-word
 bindkey '^l' forward-word
 
 bindkey '^r' history-incremental-search-backward
-
-function zle-line-init zle-keymap-select {
-    VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
-    RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/} $EPS1"
-    zle reset-prompt
-}
-
-zle -N zle-line-init
-zle -N zle-keymap-select
-
-
 
 # Check for virtual environments
 function cd() {
