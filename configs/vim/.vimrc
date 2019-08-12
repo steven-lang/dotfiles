@@ -178,6 +178,10 @@ set showmatch
 set incsearch             " Enable incremental seach; Highlight while typing
 set ignorecase            " Ignore case for searches; temp undo with /\c or /\C
 
+" Allow for visual movements over wrapped lines
+nnoremap j gj
+nnoremap k gk
+
 " Vim which key {{{
 let g:which_key_use_floating_win=0
 let g:which_key_hspace=3

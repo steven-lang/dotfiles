@@ -483,6 +483,7 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
   (global-company-mode t)
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+  (add-hook 'org-mode-hook 'electric-pair-mode)
 
   ;; Default org file when using capture (C-c c)
   (setq org-default-notes-file "~/orgmode/notes.org")
