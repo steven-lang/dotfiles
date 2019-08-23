@@ -80,7 +80,7 @@ COMPLETION_WAITING_DOTS="true"
 # EXPORTS #
 source $ZSH/oh-my-zsh.sh
 
-export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/bin:$HOME/bin"
+export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/bin:$HOME/bin/:$HOME/.cargo/bin/"
 export TERM="xterm-256color"
 
 if [[ -z $SSH_CONNECTION ]]; then
@@ -163,11 +163,11 @@ alias img='feh'
 alias zathura='zathura --fork'
 alias pdf='zathura --fork'
 
-alias vimconfig='vim ~/dotfiles/config/vim/.vimrc'
+alias vimconfig='vim ~/.vimrc'
 alias vimupdate='vim +PlugClean +PlugUpdate +UpdateRemoteRepositories +qa'
-alias zshconfig='vim ~/dotfiles/config/zsh/.zshrc'
+alias zshconfig='vim ~/.zshrc'
 alias zshreload='source ~/.zshrc'
-alias i3config='vim ~/dotfiles/config/i3/config'
+alias i3config='vim ~/.config/i3/config'
 alias xresourcesconfig='vim ~/.Xresources'
 alias xresourcesreload='xrdb -merge ~/.Xresources'
 

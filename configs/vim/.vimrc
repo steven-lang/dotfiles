@@ -25,7 +25,7 @@ set pumheight=8
 
 if has('nvim')
   " Use pum as wildmenu
-  set wildoptions=pum
+  " set wildoptions=pum
   " Enable incremental commands (e.g. search-replace preview)
   set inccommand=split
 endif
@@ -47,12 +47,10 @@ endif
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
-call plug#begin('~/.vim/plugged')
-" Provide leader key map
-Plug 'liuchengxu/vim-which-key'
 
-" Use for <current_function> in statusline
-Plug 'liuchengxu/vista.vim'
+call plug#begin('~/.vim/plugged')
+" Make screenshots of code
+Plug 'segeljakt/vim-silicon'
 
 " Control Shift S
 Plug 'dyng/ctrlsf.vim'
@@ -67,7 +65,6 @@ Plug 'romainl/vim-cool'
 Plug 'wellle/targets.vim'
 
 " Python docstrings
-" Plug '~/.vim/plugged/python-gendoc'
 Plug 'kkoomen/vim-doge'
 
 " Python semantic highlighting
@@ -77,7 +74,26 @@ Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 Plug 'thaerkh/vim-workspace'
 
 " Completion Framework (and more)
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+" Deoplete
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+Plug 'davidhalter/jedi-vim'
+Plug 'deoplete-plugins/deoplete-jedi'
+Plug 'Shougo/echodoc.vim'
+
+" Ale
+Plug 'dense-analysis/ale'
+
+" Hex color preview
+Plug 'lilydjwg/colorizer'
+
+" Bracket autocomplete
+Plug 'jiangmiao/auto-pairs'
 
 " Gruvbox colorscheme
 Plug 'gruvbox-community/gruvbox/'
@@ -182,33 +198,6 @@ set ignorecase            " Ignore case for searches; temp undo with /\c or /\C
 nnoremap j gj
 nnoremap k gk
 
-" Vim which key {{{
-let g:which_key_use_floating_win=0
-let g:which_key_hspace=3
-nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
-nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
-
-" By default timeoutlen is 1000 ms
-set timeoutlen=500
-
-" Disable statusline if which_key is present
-autocmd! FileType which_key
-autocmd  FileType which_key set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 noshowmode ruler
-
-" Register description key map
-call which_key#register('<Space>', "g:which_key_map")
-
-" Define prefix dictionary
-let g:which_key_map =  {}
-
-" Set highlights
-highlight default link WhichKey GruvboxPurple
-highlight default link WhichKeySeperator GruvboxGray
-highlight default link WhichKeyDesc GruvboxYellow
-highlight default link WhichKeyGroup GruvboxRed
-" }}}
-
 "split navigations
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
@@ -221,31 +210,17 @@ vnoremap > >gv
 " }}}
 
 
-" Vista {{{
-function! NearestMethodOrFunction() abort
-  return get(b:, 'vista_nearest_method_or_function', '')
-endfunction
-
-" If you want to show the nearest function in your statusline automatically,
-" you can add the following line to your vimrc 
-autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
-" }}}
-
 " Lightline {{{
 let g:lightline = {
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], ['cocstatus'],['gitbranch', 'readonly', 'relativepath', 'modified'] ],
-      \   'right' : [ ['lineinfo'], ['percent'], ['filetype'] ]
+      \   'left': [ [ 'mode', 'paste' ], ['gitbranch', 'readonly', 'relativepath', 'modified'] ],
+      \   'right' : [ ['lineinfo'], ['percent'] ]
       \ },
       \ 'colorscheme': 'gruvbox',
       \ 'component_function': {
       \   'gitbranch' : 'fugitive#head',
-      \   'method': 'NearestMethodOrFunction',
-      \   'cocstatus': 'coc#status',
       \ }
       \ }
-
-
 
 let g:lightline.separator = {
       \   'left': '', 'right': ''
@@ -253,7 +228,6 @@ let g:lightline.separator = {
 let g:lightline.subseparator = {
       \   'left': '', 'right': '' 
       \}
-
 " }}}
 
 " FZF {{{
@@ -365,9 +339,6 @@ augroup pythonbindings
     let trace = expand("__import__(\"ipdb\").set_trace(context=13)")
     execute "normal O".trace
   endfunction
-
-  " Format buffer on write
-  " autocmd BufWritePre *.py execute ':Format'
 augroup end
 " }}}
 
@@ -401,52 +372,47 @@ vmap s[ S]i
 vmap s{ S}i
 vmap s} S}i
 
-" Leader mappings {{
-let g:which_key_map.f = { 'name' : '+find' }
-nnoremap <silent> <Leader>fb :Buffers<CR>
-let g:which_key_map.f.b = "buffers"
-nnoremap <silent> <Leader>fl :Lines<CR>
-let g:which_key_map.f.l = "lines"
-nnoremap <silent> <Leader>fL :BLines<CR>
-let g:which_key_map.f.L = "lines-buffer"
-nnoremap <silent> <Leader>ft :Tags<CR>
-let g:which_key_map.f.t = "tags"
-nnoremap <silent> <Leader>fT :BTags<CR>
-let g:which_key_map.f.T = "tags-buffer"
-nnoremap <silent> <Leader>ff :Files<CR>
-let g:which_key_map.f.f = "files"
-nnoremap <silent> <Leader>fh :History:<CR>
-let g:which_key_map.f.h = "cmd-history"
-nnoremap <silent> <Leader>f.a :Ag<CR>
-let g:which_key_map.f.a = "ag-search"
+" ALE config {{{
+" Ale fixers
+let g:ale_fixers = ['black'] 
+let g:ale_fix_on_save = 1
 
-" =======================================================
-" Create menus not based on existing mappings:
-" =======================================================
-" Provide commands(ex-command, <Plug>/<C-W>/<C-d> mapping, etc.) and descriptions for existing mappings
-let g:which_key_map.b = { 'name' : '+buffer' }
-nnoremap <silent> <Leader>b1 :b1<cr>
-let g:which_key_map.b.1 = 'buffer 1'
-nnoremap <silent> <Leader>b2 :b2<cr>
-let g:which_key_map.b.2 = 'buffer 2'
-nnoremap <silent> <Leader>bd :bd<cr>
-let g:which_key_map.b.d = 'delete-buffer'
-nnoremap <silent> <Leader>bn :bn<cr>
-let g:which_key_map.b.n = 'next-buffer'
-nnoremap <silent> <Leader>bp :bp<cr>
-let g:which_key_map.b.p = 'previous-buffer'
-nnoremap <silent> <Leader>bb :Buffers<cr>
-let g:which_key_map.b.b = 'fzf-buffer'
+" Highlights
+let g:ale_set_highlights = 0
+
+let g:ale_linters = {
+\   'python': ['flake8'],
+\}
+
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+" Lint always in Normal Mode
+let g:ale_lint_on_text_changed = 'normal'
+" Lint when leaving Insert Mode but don't lint when in Insert Mode 
+let g:ale_lint_on_insert_leave = 1
+" }}}
+
+" Leader mappings {{
+nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>l :Lines<CR>
+nnoremap <silent> <Leader>L :BLines<CR>
+nnoremap <silent> <Leader>T :BTags<CR>
+nnoremap <silent> <Leader>t :Tags<CR>
+nnoremap <silent> <Leader>f :Files<CR>
+nnoremap <silent> <Leader>h :History<CR>
+nnoremap <silent> <Leader>/ :Ag<CR>
 
 " Jump motions
 map  <Leader>w <Plug>(easymotion-bd-w)
-let g:which_key_map.w = 'jump-word'
 map <Leader>j <Plug>(easymotion-j)
-let g:which_key_map.j = 'jump-line-up'
 map <Leader>k <Plug>(easymotion-k)
-let g:which_key_map.k = 'jump-line-down'
 " }}
 
+" Center after search {{{
+nnoremap n nzz
+nnoremap N Nzz
+" }}}
 
 " Vim workspace {{{
 nnoremap <leader>s :ToggleWorkspace<CR>
@@ -459,87 +425,51 @@ let g:workspace_autosave_untrailspaces = 0
 let g:CoolTotalMatches = 1
 " }}}
 
-" CoC Vim {{{
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-" Use `:Format` to format current buffer
-let g:which_key_map.c = { 'name' : '+coc' }
-command! -nargs=0 Format :call CocAction('format')
-" Smaller updatetime for CursorHold & CursorHoldI
-set updatetime=300
-" Extensions
-let g:coc_global_extensions=['coc-tag', 'coc-python', 'coc-json', 'coc-pairs']
-
-
-" Remap for do codeAction of current line
-nmap <leader>ca  <Plug>(coc-codeaction)
-let g:which_key_map.c.a = 'coc-codeaction'
-" Fix autofix problem of current line
-nmap <leader>cf  <Plug>(coc-fix-current)
-let g:which_key_map.c.f = 'coc-fix-current'
-
-" Navigate diagnostics
-let g:which_key_map.c.d = { 'name' : '+diagnostics' }
-nmap <silent> <leader>cdp <Plug>(coc-diagnostic-prev)
-let g:which_key_map.c.d.p = 'coc-diagnostic-prev'
-nmap <silent> <leader>cdn <Plug>(coc-diagnostic-next)
-let g:which_key_map.c.d.n = 'coc-diagnostic-next'
-
+function! s:check_back_space() abort "{{{
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction"}}}
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+      \ deoplete#manual_complete()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gr <Plug>(coc-references)
-
-" Update signature help on jump placeholder
-autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-
-" Use auocmd to force lightline update
-autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
-
-function! CocstatusCustom()
-  return coc#status() . get(b:,'coc_current_function','')
-endfunction
-
-" Remap for rename current word
-nmap <leader>cr <Plug>(coc-rename)
-let g:which_key_map.c.r = 'coc-rename'
-" Format
-nmap <leader>cf :Format<cr>
-let g:which_key_map.c.f = 'coc-format'
-
-" Coc error text
-highlight CocErrorSign ctermfg=9 guifg=#fb4934
-
+" Deoplete {{{
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_ignore_case = 1
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#sources#jedi#enable_typeinfo = 1
+let g:deoplete#sources#jedi#show_docstring = 1
+" Disable autocompletion (using deoplete instead)
+let g:jedi#completions_enabled = 0
+set completeopt-=preview
+let g:python_host_prog = '/usr/bin/python'
+let g:python3_host_prog = '/usr/bin/python3'
+" }}}
+" Echodoc {{{
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = "echo"
 " }}}
 
+" Jedi {{{
+let g:jedi#rename_command = "<leader>r"
+let g:jedi#auto_close_doc = 1
+let g:jedi#usages_command = "gu"
+let g:jedi#goto_command = "gd"
+" Disable since deoplete is enabled
+let g:jedi#auto_initialization = 1
+let g:jedi#completions_enabled = 0
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#smart_auto_mappings = 0
+let g:jedi#popup_on_dot = 0
+let g:jedi#completions_command = ""
+let g:jedi#show_call_signatures = "1"
+let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
+" }}}
+
+" Unmap malicious plugin bindings
+let g:colorizer_nomap = 1
 
 " Custom semshi Highlights {{{
 function! CustomSemshiHighlights()
@@ -566,9 +496,25 @@ autocmd filetype python call CustomSemshiHighlights()
 let g:doge_doc_standard_python = 'google'
 let g:doge_mapping_comment_jump_forward = '<C-n>'
 let g:doge_mapping_comment_jump_backward = '<C-b>'
-
 let g:doge_mapping='<Leader>d'
-let g:which_key_map.d = 'doge-generate'
+" }}}
+
+" Silicon {{{
+let g:silicon = {
+      \ 'theme':              'TwoDark',
+      \ 'font':                  'Hack',
+      \ 'background':         '#7c6f64',
+      \ 'shadow-color':       '#555555',
+      \ 'line-pad':                   2,
+      \ 'pad-horiz':                 10,
+      \ 'pad-vert':                 20,
+      \ 'shadow-blur-radius':         0,
+      \ 'shadow-offset-x':            0,
+      \ 'shadow-offset-y':            0,
+      \ 'line-number':           v:true,
+      \ 'round-corner':          v:true,
+      \ 'window-controls':       v:false,
+      \ }
 " }}}
 
 " GRUVBOX color table https://github.com/morhetz/gruvbox-contrib/blob/master/color.table
