@@ -252,10 +252,6 @@ exec --no-startup-id nm-applet --tray --sm-disable &
 # Bluetooth
 exec --no-startup-id blueberry-tray &
 
-# Keymappings
-exec --no-startup-id ~/dotfiles/scripts/map-caps-ctrl-escp.sh
-
-
 
 # suspend/lock shortcuts
 bindsym $mod+$mod2+Ctrl+s exec --no-startup-id systemctl suspend && $Locker 
@@ -336,9 +332,9 @@ client.background       $base07
 # exec compton -bc -r 5 -l -4 -t -4 --shadow-exclude '_GTK_FRAME_EXTENTS@:c'
 
 # Cheat sheet
-for_window [title="cheatsheet"] floating enable, move position center
-bindsym $mod+c exec vim-key-cheat-sheet
+for_window [title="cheatsheet"] floating enable,resize set 1300 1000, move position center
+bindsym $mod+c exec bash ~/dotfiles/scripts/keys-cheat-sheet.sh
 
 exec redshift &
 exec pasystray &
-exech volumeicon &
+exec volumeicon &

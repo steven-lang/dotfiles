@@ -21,7 +21,7 @@ set clipboard=unnamedplus
 set pumheight=8
 
 " Avoid escape
-" imap jj <ESC>
+imap jj <ESC>
 
 if has('nvim')
   " Use pum as wildmenu
@@ -49,6 +49,9 @@ endif
 " - Avoid using standard Vim directory names like 'plugin'
 
 call plug#begin('~/.vim/plugged')
+" Debugger
+" Plug 'strottos/vim-padre', { 'dir': '~/.vim/plugged/vim-padre', 'do': 'make' }
+
 " Make screenshots of code
 Plug 'segeljakt/vim-silicon'
 
