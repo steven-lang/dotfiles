@@ -467,6 +467,9 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (setq-default git-magit-status-fullscreen t)
+
+  ; Set default font (necessary when using emacsclient)
+  (setq default-frame-alist '((font . "-SRC-Hack-bold-normal-normal-*-*-*-*-*-m-0-iso10646-1")))
   )
 
 (defun dotspacemacs/user-load ()
@@ -500,6 +503,20 @@ before packages are loaded."
                     "CANCELED"
                     )))
 
+  ;; Set todo keyword colors
+  (setq org-todo-keyword-faces
+        '(
+          ("TODO" :foreground "OrangeRed" :weight bold)
+          ("UNCERTAIN" :foreground "tomato" :weight bold)
+          ("WAITING" :foreground "SkyBlue3" :weight bold)
+          ("STARTED" :foreground "orange2" :weight bold)
+          ("DONE" :foreground "Darkolivegreen3" :weight bold)
+          )
+        )
+
+  ;; Disable TODO and DONE highlighting in org mode
+  (add-hook 'org-mode-hook (lambda () (hl-todo-mode -1)))
+
   ;; Enable global visual line
   (global-visual-line-mode 1)
 
@@ -527,6 +544,34 @@ before packages are loaded."
   (eval-after-load "company"
     '(add-to-list 'company-backends 'ein:company-backend))
 
+  ;; org-pomodoro
+  (setq org-pomodoro-clock-break t)
+  ;; Needs terminal-notifier (brew install terminal-notifier)
+  (defun notify-send (title message)
+    (call-process "notify-send"
+                  nil 0 nil
+                  title
+                  message
+                  "--expiry-time" "300000" ; 5 minutes
+                  "--app-name" "Emacs"
+                  ))
+
+  ;; org-pomodoro mode hooks
+  (add-hook 'org-pomodoro-finished-hook
+            (lambda ()
+              (notify-send "Pomodoro completed!" "Time for a break.")))
+
+  (add-hook 'org-pomodoro-break-finished-hook
+            (lambda ()
+              (notify-send "Pomodoro Short Break Finished" "Ready for Another?")))
+
+  (add-hook 'org-pomodoro-long-break-finished-hook
+            (lambda ()
+              (notify-send "Pomodoro Long Break Finished" "Ready for Another?")))
+
+  (add-hook 'org-pomodoro-killed-hook
+            (lambda ()
+              (notify-send "Pomodoro Killed" "One does not simply kill a pomodoro!")))
   )
 
 
@@ -597,6 +642,7 @@ This function is called at the very end of Spacemacs initialization."
  '(nrepl-message-colors
    (quote
     ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
+ '(org-agenda-files (quote ("~/orgmode/gtd.org" "~/orgmode/tracking.org")))
  '(package-selected-packages
    (quote
     (ob-ipython ein skewer-mode polymode websocket js2-mode pdf-tools tablist dap-mode bui tree-mode lsp-python web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode prettier-js impatient-mode simple-httpd helm-css-scss haml-mode emmet-mode counsel-css company-web web-completion-data add-node-modules-path atomic-chrome jedi-core ede-php-autoload-composer-installers jedi company-jedi company-flx atom-one-dark-theme oceanic-theme evil-easymotion gmail-message-mode ham-mode html-to-markdown flymd edit-server csv-mode git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-helm flyspell-correct diff-hl browse-at-remote auto-dictionary lsp-ui company-lsp dracula-theme doom-themes django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme yasnippet-snippets yapfify xterm-color unfill smeargle shell-pop pyvenv pytest pyenv-mode py-isort pippel pipenv pip-requirements orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-brain mwim multi-term mmm-mode markdown-toc markdown-mode magit-svn magit-gitflow lsp-julia lsp-mode dash-functional live-py-mode julia-repl julia-mode importmagic epc ctable concurrent deferred htmlize helm-pydoc helm-org-rifle helm-gtags helm-gitignore helm-git-grep helm-company helm-c-yasnippet gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md ggtags fuzzy flycheck-pos-tip pos-tip flycheck evil-org evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help cython-mode company-statistics company-auctex company-anaconda company auto-yasnippet yasnippet auctex-latexmk auctex anaconda-mode pythonic ac-ispell auto-complete ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen treemacs-projectile treemacs-evil treemacs ht pfuture toc-org symon string-inflection spaceline-all-the-icons spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode password-generator paradox spinner overseer org-bullets open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state iedit evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens smartparens paredit evil-args evil-anzu anzu eval-sexp-fu elisp-slime-nav editorconfig dumb-jump doom-modeline eldoc-eval shrink-path all-the-icons memoize f dash s define-word counsel-projectile projectile counsel swiper ivy pkg-info epl column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile packed aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core popup which-key use-package pcre2el org-plus-contrib hydra font-lock+ evil goto-chg undo-tree dotenv-mode diminish bind-map bind-key async)))
@@ -650,7 +696,6 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:background nil))))
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
  '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
 )

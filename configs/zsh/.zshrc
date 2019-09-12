@@ -80,7 +80,7 @@ COMPLETION_WAITING_DOTS="true"
 # EXPORTS #
 source $ZSH/oh-my-zsh.sh
 
-export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/bin:$HOME/bin/:$HOME/.cargo/bin/"
+export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/bin:$HOME/bin/:$HOME/.cargo/bin/:/opt/android-sdk/platform-tools/"
 export TERM="xterm-256color"
 
 if [[ -z $SSH_CONNECTION ]]; then
@@ -185,7 +185,6 @@ eval `dircolors ~/.config/dircolors-gruvbox.db`
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-
 bindkey '^w' backward-kill-word
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
@@ -196,6 +195,7 @@ bindkey '^h' backward-word
 bindkey '^l' forward-word
 
 bindkey '^r' history-incremental-search-backward
+
 
 # Check for virtual environments
 function cd() {

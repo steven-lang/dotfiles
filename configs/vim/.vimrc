@@ -52,6 +52,9 @@ call plug#begin('~/.vim/plugged')
 " Debugger
 " Plug 'strottos/vim-padre', { 'dir': '~/.vim/plugged/vim-padre', 'do': 'make' }
 
+" Jupyter vim
+Plug 'szymonmaszke/vimpyter'
+
 " Make screenshots of code
 Plug 'segeljakt/vim-silicon'
 
