@@ -19,6 +19,7 @@ antigen bundle gradle
 antigen bundle z 
 antigen bundle fzf
 antigen bundle zsh-users/zsh-syntax-highlighting
+# antigen theme romkatv/powerlevel10k powerlevel10k
 # antigen theme bureau
 antigen apply
 
@@ -27,7 +28,8 @@ antigen apply
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 # ZSH_THEME="gnzh"
-ZSH_THEME="bureau"
+# ZSH_THEME="bureau"
+ZSH_THEME=powerlevel10k/powerlevel10k
 # ZSH_THEME="amuse"
 
 # Uncomment the following line to use case-sensitive completion.
@@ -53,7 +55,7 @@ HYPHEN_INSENSITIVE="true"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
+# COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -83,9 +85,9 @@ source $ZSH/oh-my-zsh.sh
 export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/bin:$HOME/bin/:$HOME/.cargo/bin/:/opt/android-sdk/platform-tools/"
 export TERM="xterm-256color"
 
-if [[ -z $SSH_CONNECTION ]]; then
-  export TERM=xterm-color
-fi
+# if [[ -z $SSH_CONNECTION ]]; then
+#   export TERM=xterm-color
+# fi
 
 # Use colored cat if available
 if hash ccat 2>/dev/null; then
@@ -180,7 +182,7 @@ alias find='ag -g'
 alias pipupdate="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
 
 # Add dir colors
-eval `dircolors ~/.config/dircolors-gruvbox.db`
+# eval `dircolors ~/.config/dircolors-gruvbox.db`
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -189,10 +191,10 @@ bindkey '^w' backward-kill-word
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 
-bindkey '^P' up-line-or-search
-bindkey '^N' down-line-or-search
-bindkey '^h' backward-word
-bindkey '^l' forward-word
+bindkey '^P' up-line-or-beginning-search
+bindkey '^N' down-line-or-beginning-search
+# bindkey '^h' backward-word
+# bindkey '^l' forward-word
 
 bindkey '^r' history-incremental-search-backward
 
@@ -244,3 +246,6 @@ fi
 source $HOME/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 eval "$(direnv hook zsh)"
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh

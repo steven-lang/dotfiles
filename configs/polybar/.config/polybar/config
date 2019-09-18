@@ -46,7 +46,7 @@ foreground = ${xrdb:color4}
 [bar/example]
 monitor = ${env:MONITOR:}
 width = 100%
-height = 30 
+height = 25 
 ;offset-x = 1%
 ;offset-y = 1%
 radius = 0.0
@@ -67,9 +67,9 @@ padding-right = 2
 module-margin-left = 1
 module-margin-right = 2
 
-font-0 = "UbuntuMono Nerd Font:pixelsize=14;2" 
-font-1 = "Hack:pixelsize=13;2" 
-font-2 = "Iosevka Nerd Font:antialias=false:size=13;2"
+font-0 = "UbuntuMono Nerd Font:pixelsize=12;2" 
+font-1 = "Hack:pixelsize=12;2" 
+font-2 = "Iosevka Nerd Font:antialias=false:size=12;2"
 ; font-0 = hack:pixelsize=10;1
 ; font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 ; font-2 = siji:pixelsize=10;1
@@ -147,7 +147,7 @@ strip-wsnumbers = true
 pin-workspaces = false
 
 label-separator = |
-label-separator-padding = 1
+label-separator-padding = 0
 label-separator-foreground = ${colors.white}
 
 label-focused = %name%

@@ -102,7 +102,7 @@ Plug 'lilydjwg/colorizer'
 Plug 'jiangmiao/auto-pairs'
 
 " Gruvbox colorscheme
-Plug 'gruvbox-community/gruvbox/'
+Plug 'gruvbox-community/gruvbox'
 
 " USE cgn with dot repeat instead ///Enable multiple cursors with <C-n> in visual mode
 " Plug 'terryma/vim-multiple-cursors'
@@ -183,6 +183,7 @@ syntax on                 " Enable syntax highlighting
 let g:gruvbox_italic=1
 let g:gruvbox_bold=1
 let g:gruvbox_contrast_dark='soft'
+let g:gruvbox_contrast_light='medium'
 set background=dark
 colorscheme gruvbox
 set path=.,,**
@@ -381,7 +382,8 @@ vmap s} S}i
 " ALE config {{{
 " Ale fixers
 let g:ale_fixers = ['black'] 
-let g:ale_fix_on_save = 1
+let g:ale_python_black_options = '-l 100' 
+" let g:ale_fix_on_save = 1
 
 " Highlights
 let g:ale_set_highlights = 0
@@ -408,6 +410,7 @@ nnoremap <silent> <Leader>t :Tags<CR>
 nnoremap <silent> <Leader>f :Files<CR>
 nnoremap <silent> <Leader>h :History<CR>
 nnoremap <silent> <Leader>/ :Ag<CR>
+nnoremap <Leader>c :ALEFix<CR>
 
 " Jump motions
 map  <Leader>w <Plug>(easymotion-bd-w)
@@ -522,6 +525,10 @@ let g:silicon = {
       \ 'window-controls':       v:false,
       \ }
 " }}}
+
+
+" Gradle syntax highlighting
+au BufNewFile,BufRead *.gradle setf groovy
 
 " GRUVBOX color table https://github.com/morhetz/gruvbox-contrib/blob/master/color.table
 " GRUVCOLR         HEX       RELATV ALIAS   TERMCOLOR      RGB           ITERM RGB     OSX HEX
