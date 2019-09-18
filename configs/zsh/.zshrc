@@ -94,6 +94,7 @@ if hash ccat 2>/dev/null; then
   alias cat='ccat'
 fi
 
+
 # Check if nvim is available
 if hash nvim 2>/dev/null; then
   export EDITOR=nvim
@@ -136,7 +137,10 @@ alias np='nano -w PKGBUILD'
 alias more=less
 
 # Better ls
-alias ls='ls -lh --color=auto --group-directories-first'
+# alias ls='ls -lh --color=auto --group-directories-first'
+if hash exa 2>/dev/null; then
+  alias ls='exa -l --group-directories-first --git --color auto'
+fi
 alias grep='grep --color=auto'
 
 # Pacman shortcuts
