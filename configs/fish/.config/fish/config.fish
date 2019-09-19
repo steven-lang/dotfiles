@@ -1,4 +1,8 @@
-# Bootstrap fisher
+# Bootstrap Oh-My-Fish
+if not type -q omf then
+  git clone https://github.com/oh-my-fish/oh-my-fish
+  ./oh-my-fish/bin/install --offline
+end
 
 # Exports
 set -x PATH "$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/bin:$HOME/bin/:$HOME/.cargo/bin/:/opt/android-sdk/platform-tools/"
