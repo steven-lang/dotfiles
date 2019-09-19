@@ -131,6 +131,7 @@ if [[ -z $SSH_CONNECTION ]]; then
   eval $(keychain --eval --quiet id_rsa_mz id_rsa)
 else
   antigen theme gnzh
+  antigen apply
 fi
 
 # Aliases
