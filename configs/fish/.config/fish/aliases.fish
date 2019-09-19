@@ -12,7 +12,8 @@ alias more less
 # Better ls
 # alias ls 'ls -lh --color=auto --group-directories-first'
 if type -q exa
-  alias ls 'exa -1 --group-directories-first --git --color auto'
+  alias ls 'exa -1'
+  alias ll 'exa -l --group-directories-first --git --color auto'
 end
 alias grep 'grep --color=auto'
 
