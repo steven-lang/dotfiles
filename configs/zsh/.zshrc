@@ -130,7 +130,7 @@ LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/"
 if [[ -z $SSH_CONNECTION ]]; then
   eval $(keychain --eval --quiet id_rsa_mz id_rsa)
 else
-  antigen theme gnzsh
+  antigen theme gnzh
 fi
 
 # Aliases
