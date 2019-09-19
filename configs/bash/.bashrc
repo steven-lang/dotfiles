@@ -43,7 +43,7 @@
 #fi
 
 if [[ "$TERM" == *xterm* ]]; then
-   exec fish 
+   exec zsh 
 fi
 
 # If not running interactively, don't do anything

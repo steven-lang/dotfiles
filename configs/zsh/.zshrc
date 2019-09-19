@@ -18,9 +18,9 @@ antigen bundle git-flow-mvn
 antigen bundle gradle
 antigen bundle z 
 antigen bundle fzf
+antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
-# antigen theme romkatv/powerlevel10k powerlevel10k
-# antigen theme bureau
+antigen theme bureau
 antigen apply
 
 # Set name of the theme to load.
@@ -28,8 +28,8 @@ antigen apply
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 # ZSH_THEME="gnzh"
-# ZSH_THEME="bureau"
-ZSH_THEME=powerlevel10k/powerlevel10k
+ZSH_THEME="bureau"
+# ZSH_THEME=powerlevel10k/powerlevel10k
 # ZSH_THEME="amuse"
 
 # Uncomment the following line to use case-sensitive completion.
@@ -139,7 +139,8 @@ alias more=less
 # Better ls
 # alias ls='ls -lh --color=auto --group-directories-first'
 if hash exa 2>/dev/null; then
-  alias ls='exa -l --group-directories-first --git --color auto'
+  alias ls='exa -1'
+  alias ll='exa -l --group-directories-first --git --color auto'
 fi
 alias grep='grep --color=auto'
 
