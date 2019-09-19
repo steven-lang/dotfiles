@@ -112,6 +112,7 @@ export JAVA_HOME=/usr/lib/jvm/java-10-openjdk
 export TERMINAL=termite
 export WEKA_HOME=$HOME/wekafiles
 export DOT=$HOME/dotfiles
+export LD_LIBRARY_PATH="/usr/local/cuda-10.1/lib64"
 
 # fzf
 export FZF_DEFAULT_OPTS='--height 40% --border'
