@@ -79,21 +79,24 @@ Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 " Vim session handling made easy
 Plug 'thaerkh/vim-workspace'
 
-" Completion Framework (and more)
-" Deoplete
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-Plug 'davidhalter/jedi-vim'
-Plug 'deoplete-plugins/deoplete-jedi'
-Plug 'Shougo/echodoc.vim'
+" CoC vim
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+"
+" " Completion Framework (and more)
+" " Deoplete
+" if has('nvim')
+"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" else
+"   Plug 'Shougo/deoplete.nvim'
+"   Plug 'roxma/nvim-yarp'
+"   Plug 'roxma/vim-hug-neovim-rpc'
+" endif
+" Plug 'davidhalter/jedi-vim'
+" Plug 'deoplete-plugins/deoplete-jedi'
+" Plug 'Shougo/echodoc.vim'
 
-" Ale
-Plug 'dense-analysis/ale'
+" " Ale
+" Plug 'dense-analysis/ale'
 
 " Hex color preview
 Plug 'lilydjwg/colorizer'
@@ -220,12 +223,13 @@ vnoremap > >gv
 " Lightline {{{
 let g:lightline = {
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], ['gitbranch', 'readonly', 'relativepath', 'modified'] ],
-      \   'right' : [ ['lineinfo'], ['percent'] ]
+      \   'left': [ [ 'mode', 'paste' ], ['cocstatus', 'gitbranch', 'readonly', 'relativepath', 'modified'] ],
+      \   'right' : [ ['lineinfo'], ['percent']]
       \ },
       \ 'colorscheme': 'gruvbox',
       \ 'component_function': {
-      \   'gitbranch' : 'fugitive#head',
+      \   'gitbranch' : 'fugitive#head', 
+      \   'cocstatus': 'coc#status',
       \ }
       \ }
 
@@ -379,27 +383,27 @@ vmap s[ S]i
 vmap s{ S}i
 vmap s} S}i
 
-" ALE config {{{
-" Ale fixers
-let g:ale_fixers = ['black'] 
-let g:ale_python_black_options = '-l 100' 
-" let g:ale_fix_on_save = 1
+" " ALE config {{{
+" " Ale fixers
+" let g:ale_fixers = ['black'] 
+" let g:ale_python_black_options = '-l 100' 
+" " let g:ale_fix_on_save = 1
 
-" Highlights
-let g:ale_set_highlights = 0
+" " Highlights
+" let g:ale_set_highlights = 0
 
-let g:ale_linters = {
-\   'python': ['flake8'],
-\}
+" let g:ale_linters = {
+" \   'python': ['flake8'],
+" \}
 
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-" Lint always in Normal Mode
-let g:ale_lint_on_text_changed = 'normal'
-" Lint when leaving Insert Mode but don't lint when in Insert Mode 
-let g:ale_lint_on_insert_leave = 1
-" }}}
+" let g:ale_echo_msg_error_str = 'E'
+" let g:ale_echo_msg_warning_str = 'W'
+" let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+" " Lint always in Normal Mode
+" let g:ale_lint_on_text_changed = 'normal'
+" " Lint when leaving Insert Mode but don't lint when in Insert Mode 
+" let g:ale_lint_on_insert_leave = 1
+" " }}}
 
 " Leader mappings {{
 nnoremap <silent> <Leader>b :Buffers<CR>
@@ -410,7 +414,7 @@ nnoremap <silent> <Leader>t :Tags<CR>
 nnoremap <silent> <Leader>f :Files<CR>
 nnoremap <silent> <Leader>h :History<CR>
 nnoremap <silent> <Leader>/ :Ag<CR>
-nnoremap <Leader>c :ALEFix<CR>
+nnoremap <Leader>c :Format<CR>
 
 " Jump motions
 map  <Leader>w <Plug>(easymotion-bd-w)
@@ -434,48 +438,48 @@ let g:workspace_autosave_untrailspaces = 0
 let g:CoolTotalMatches = 1
 " }}}
 
-function! s:check_back_space() abort "{{{
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction"}}}
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ deoplete#manual_complete()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" function! s:check_back_space() abort "{{{
+"   let col = col('.') - 1
+"   return !col || getline('.')[col - 1]  =~ '\s'
+" endfunction"}}}
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ deoplete#manual_complete()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-" Deoplete {{{
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_ignore_case = 1
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#sources#jedi#enable_typeinfo = 1
-let g:deoplete#sources#jedi#show_docstring = 1
-" Disable autocompletion (using deoplete instead)
-let g:jedi#completions_enabled = 0
-set completeopt-=preview
-let g:python_host_prog = '/usr/bin/python'
-let g:python3_host_prog = '/usr/bin/python3'
-" }}}
-" Echodoc {{{
-let g:echodoc#enable_at_startup = 1
-let g:echodoc#type = "floating"
-" }}}
+" " Deoplete {{{
+" let g:deoplete#enable_at_startup = 1
+" let g:deoplete#enable_ignore_case = 1
+" let g:deoplete#enable_smart_case = 1
+" let g:deoplete#sources#jedi#enable_typeinfo = 1
+" let g:deoplete#sources#jedi#show_docstring = 1
+" " Disable autocompletion (using deoplete instead)
+" let g:jedi#completions_enabled = 0
+" set completeopt-=preview
+" let g:python_host_prog = '/usr/bin/python'
+" let g:python3_host_prog = '/usr/bin/python3'
+" " }}}
+" " Echodoc {{{
+" let g:echodoc#enable_at_startup = 1
+" let g:echodoc#type = "floating"
+" " }}}
 
-" Jedi {{{
-let g:jedi#rename_command = "<leader>r"
-let g:jedi#auto_close_doc = 1
-let g:jedi#usages_command = "gu"
-let g:jedi#goto_command = "gd"
-" Disable since deoplete is enabled
-let g:jedi#auto_initialization = 1
-let g:jedi#completions_enabled = 0
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#smart_auto_mappings = 0
-let g:jedi#popup_on_dot = 0
-let g:jedi#completions_command = ""
-let g:jedi#show_call_signatures = "1"
-let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
-" }}}
+" " Jedi {{{
+" let g:jedi#rename_command = "<leader>r"
+" let g:jedi#auto_close_doc = 1
+" let g:jedi#usages_command = "gu"
+" let g:jedi#goto_command = "gd"
+" " Disable since deoplete is enabled
+" let g:jedi#auto_initialization = 1
+" let g:jedi#completions_enabled = 0
+" let g:jedi#auto_vim_configuration = 0
+" let g:jedi#smart_auto_mappings = 0
+" let g:jedi#popup_on_dot = 0
+" let g:jedi#completions_command = ""
+" let g:jedi#show_call_signatures = "1"
+" let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
+" " }}}
 
 " Unmap malicious plugin bindings
 let g:colorizer_nomap = 1
@@ -529,6 +533,83 @@ let g:silicon = {
 
 " Gradle syntax highlighting
 au BufNewFile,BufRead *.gradle setf groovy
+
+" CoC Vim {{{
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
+" Extensions
+let g:coc_global_extensions=['coc-tag', 'coc-python', 'coc-json', 'coc-pairs']
+
+" Remap for do codeAction of current line
+nmap <leader>ca  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>cf  <Plug>(coc-fix-current)
+
+" Navigate diagnostics
+nmap <silent> <leader>cdp <Plug>(coc-diagnostic-prev)
+nmap <silent> <leader>cdn <Plug>(coc-diagnostic-next)
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gr <Plug>(coc-references)
+
+" Update signature help on jump placeholder
+autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
+" Use auocmd to force lightline update
+autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+
+function! CocstatusCustom()
+  return coc#status() . get(b:,'coc_current_function','')
+endfunction
+
+" Remap for rename current word
+nmap <leader>r <Plug>(coc-rename)
+" Format
+nmap <leader>cf :Format<cr>
+
+" Coc error text
+highlight CocErrorSign ctermfg=9 guifg=#fb4934
+
+" }}}
+
+
+
+
+
 
 " GRUVBOX color table https://github.com/morhetz/gruvbox-contrib/blob/master/color.table
 " GRUVCOLR         HEX       RELATV ALIAS   TERMCOLOR      RGB           ITERM RGB     OSX HEX
