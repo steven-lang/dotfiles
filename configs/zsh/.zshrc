@@ -80,14 +80,10 @@ HYPHEN_INSENSITIVE="true"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 # EXPORTS #
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
 
 export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/bin:$HOME/bin/:$HOME/.cargo/bin/:/opt/android-sdk/platform-tools/"
 export TERM="xterm-256color"
-
-# if [[ -z $SSH_CONNECTION ]]; then
-#   export TERM=xterm-color
-# fi
 
 # Use colored cat if available
 if hash ccat 2>/dev/null; then
@@ -129,9 +125,6 @@ LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/"
 # Eval keychain only locally
 if [[ -z $SSH_CONNECTION ]]; then
   eval $(keychain --eval --quiet id_rsa_mz id_rsa)
-else
-  antigen theme gnzh
-  antigen apply
 fi
 
 # Aliases
@@ -146,34 +139,25 @@ if hash exa 2>/dev/null; then
   alias ls='exa -1'
   alias ll='exa -l --group-directories-first --git --color auto'
 fi
-alias grep='grep --color=auto'
 
-# Pacman shortcuts
+alias grep='grep --color=auto'
 alias pacu='sudo pacman -Syu && yay -Syua'
 alias pacs='sudo pacman -S'
 alias yay='yay --noconfirm'
-
-# zshrc editing
 alias eZ='vim ~/.zshrc'
 alias rZ='source ~/.zshrc'
 alias reboot='sudo systemctl reboot'
 alias poweroff='sudo systemctl poweroff'
-
-# i3-shortcuts
 alias i3config='vim ~/.config/i3/config'
 alias i3statusconfig='vim ~/.config/i3status/config'
-
-# Fast terminal-directory navigation
 alias xclip='xclip -selection c'
 alias clone='termite -e "bash" 2>&1 >/dev/null & disown %1'
 alias PWD='echo $(pwd) | xclip && pwd && echo "path copied"'
 alias CD='echo "cd $(xclip -o)" && cd $(xclip -o)'
 alias :q='exit'
-
 alias img='feh'
 alias zathura='zathura --fork'
 alias pdf='zathura --fork'
-
 alias vimconfig='vim ~/.vimrc'
 alias vimupdate='vim +PlugClean +PlugUpdate +UpdateRemoteRepositories +qa'
 alias zshconfig='vim ~/.zshrc'
@@ -181,34 +165,26 @@ alias zshreload='source ~/.zshrc'
 alias i3config='vim ~/.config/i3/config'
 alias xresourcesconfig='vim ~/.Xresources'
 alias xresourcesreload='xrdb -merge ~/.Xresources'
-
 alias gnome-screenshot='gnome-screenshot -a'
-
 alias envactivate='source ./env/bin/activate'
 alias find='ag -g'
 
 # Update all pip packages
 alias pipupdate="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
 
-# Add dir colors
-# eval `dircolors ~/.config/dircolors-gruvbox.db`
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
+# Emacs bindings
 bindkey '^w' backward-kill-word
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 
+# Make CTRL-P/N behave like UP/DOWN arrows
 bindkey '^P' up-line-or-beginning-search
 bindkey '^N' down-line-or-beginning-search
-# bindkey '^h' backward-word
-# bindkey '^l' forward-word
 
 bindkey '^r' history-incremental-search-backward
 
 
-# Check for virtual environments
+# Check for virtual environments when cd'ing into directories
 function cd() {
   builtin cd "$@"
 
@@ -216,6 +192,10 @@ function cd() {
     ## If env folder is found then activate the vitualenv
       if [[ -d ./env ]] ; then
         source ./env/bin/activate
+        echo -e "Python virtual environment activated!"
+      fi
+      if [[ -d ./venv ]] ; then
+        source ./venv/bin/activate
         echo -e "Python virtual environment activated!"
       fi
   else
@@ -229,32 +209,8 @@ function cd() {
   fi
 }
 
-# autoload -Uz add-zsh-hook
-
-function xterm_title_precmd () {
-	print -Pn '\e]2;%n@%m %1~\a'
-}
-
-function xterm_title_preexec () {
-	print -Pn '\e]2;%n@%m %1~ %# '
-	print -n "${(q)1}\a"
-}
-
-if [[ "$TERM" == (screen*|xterm*|rxvt*) ]]; then
-	add-zsh-hook -Uz precmd xterm_title_precmd
-	add-zsh-hook -Uz preexec xterm_title_preexec
-fi
-
-function gi() { curl -L -s https://www.gitignore.io/api/$@ ;}
-
-
-if [[ ! -d $HOME/zsh-syntax-highlighting ]]; then
-	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/zsh-syntax-highlighting
-fi
+# Enable fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-source $HOME/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-eval "$(direnv hook zsh)"
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+# Enable direnv
+eval "$(direnv hook zsh)"

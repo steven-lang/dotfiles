@@ -458,7 +458,7 @@ let g:python3_host_prog = '/usr/bin/python3'
 " }}}
 " Echodoc {{{
 let g:echodoc#enable_at_startup = 1
-let g:echodoc#type = "echo"
+let g:echodoc#type = "floating"
 " }}}
 
 " Jedi {{{
