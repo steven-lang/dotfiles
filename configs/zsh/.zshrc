@@ -249,7 +249,8 @@ function cd() {
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Check if direnv is installed
-if -f hash direnv 2>/dev/null; then
+if ! [[ hash direnv 2>/dev/null ]]; then
+  echo "Direnv not found. Installing now ..."
   wget -o $HOME/bin/direnv https://github.com/direnv/direnv/releases/download/v2.20.0/direnv.linux-amd64
   chmod +x $HOME/bin/direnv
 fi
