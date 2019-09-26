@@ -420,6 +420,7 @@ nnoremap <Leader>c :Format<CR>
 map  <Leader>w <Plug>(easymotion-bd-w)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
+map s <Plug>(easymotion-s2)
 " }}
 
 " Center after search {{{

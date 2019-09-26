@@ -544,17 +544,18 @@ before packages are loaded."
   (eval-after-load "company"
     '(add-to-list 'company-backends 'ein:company-backend))
 
-  ;; org-pomodoro
-  (setq org-pomodoro-clock-break t)
   ;; Needs terminal-notifier (brew install terminal-notifier)
   (defun notify-send (title message)
     (call-process "notify-send"
                   nil 0 nil
                   title
                   message
-                  "--expiry-time" "300000" ; 5 minutes
+                  "--expire-time" "300000" ; 5 minutes
                   "--app-name" "Emacs"
                   ))
+
+  ;; org-pomodoro
+  ;; (setq org-pomodoro-clock-break t)
 
   ;; org-pomodoro mode hooks
   (add-hook 'org-pomodoro-finished-hook
@@ -595,6 +596,9 @@ This function is called at the very end of Spacemacs initialization."
  '(cua-normal-cursor-color "#657b83")
  '(cua-overwrite-cursor-color "#b58900")
  '(cua-read-only-cursor-color "#859900")
+ '(custom-safe-themes
+   (quote
+    ("585942bb24cab2d4b2f74977ac3ba6ddbd888e3776b9d2f993c5704aa8bb4739" "8e797edd9fa9afec181efbfeeebf96aeafbd11b69c4c85fa229bb5b9f7f7e66c" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" default)))
  '(evil-want-Y-yank-to-eol nil)
  '(fci-rule-color "#eee8d5")
  '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
@@ -697,5 +701,10 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
+ '(org-level-1 ((t (:foreground "#83a598" :height 1.5))))
+ '(org-level-2 ((t (:foreground "#fabd2f" :height 1.4))))
+ '(org-level-3 ((t (:foreground "#d3869b" :height 1.3))))
+ '(org-level-4 ((t (:foreground "#fb4933" :height 1.2))))
+ '(org-level-5 ((t (:foreground "#b8bb26" :height 1.1)))))
 )

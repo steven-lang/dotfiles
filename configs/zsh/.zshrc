@@ -20,7 +20,9 @@ antigen bundle z
 antigen bundle fzf
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
-antigen theme bureau
+antigen bundle mafredri/zsh-async
+antigen bundle sindresorhus/pure
+# antigen theme bureau
 antigen apply
 
 # Set name of the theme to load.
@@ -28,8 +30,7 @@ antigen apply
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 # ZSH_THEME="gnzh"
-ZSH_THEME="bureau"
-# ZSH_THEME=powerlevel10k/powerlevel10k
+# ZSH_THEME="bureau"
 # ZSH_THEME="amuse"
 
 # Uncomment the following line to use case-sensitive completion.
@@ -172,17 +173,52 @@ alias find='ag -g'
 # Update all pip packages
 alias pipupdate="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
 
-# Emacs bindings
-bindkey '^w' backward-kill-word
-bindkey '^a' beginning-of-line
-bindkey '^e' end-of-line
+# vi mode
+bindkey -v
+export KEYTIMEOUT=1
 
-# Make CTRL-P/N behave like UP/DOWN arrows
+# Emacs bindings
+# bindkey '^w' backward-kill-word
+# bindkey '^a' beginning-of-line
+# bindkey '^e' end-of-line
+
+# # Make CTRL-P/N behave like UP/DOWN arrows
 bindkey '^P' up-line-or-beginning-search
 bindkey '^N' down-line-or-beginning-search
 
 bindkey '^r' history-incremental-search-backward
 
+# Use vim keys in tab complete menu:
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -v '^?' backward-delete-char
+bindkey -M vicmd "k" up-line-or-beginning-search
+bindkey -M vicmd "j" down-line-or-beginning-search
+
+
+
+# Change cursor shape for different vi modes.
+function zle-keymap-select {
+  if [[ ${KEYMAP} == vicmd ]] ||
+     [[ $1 = 'block' ]]; then
+    echo -ne '\e[1 q'
+  elif [[ ${KEYMAP} == main ]] ||
+       [[ ${KEYMAP} == viins ]] ||
+       [[ ${KEYMAP} = '' ]] ||
+       [[ $1 = 'beam' ]]; then
+    echo -ne '\e[5 q'
+  fi
+}
+zle -N zle-keymap-select
+zle-line-init() {
+    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+    echo -ne "\e[5 q"
+}
+zle -N zle-line-init
+echo -ne '\e[5 q' # Use beam shape cursor on startup.
+preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
 # Check for virtual environments when cd'ing into directories
 function cd() {
@@ -211,6 +247,12 @@ function cd() {
 
 # Enable fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Check if direnv is installed
+if -f hash direnv 2>/dev/null; then
+  wget -o $HOME/bin/direnv https://github.com/direnv/direnv/releases/download/v2.20.0/direnv.linux-amd64
+  chmod +x $HOME/bin/direnv
+fi
 
 # Enable direnv
 eval "$(direnv hook zsh)"
