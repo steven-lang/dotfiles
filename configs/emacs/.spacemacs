@@ -230,8 +230,8 @@ It should only modify the values of Spacemacs settings."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    ;; dotspacemacs-default-font '("Source Code Pro"
-   dotspacemacs-default-font '("Hack"
-                               :size 16
+   dotspacemacs-default-font '("IBM Plex Mono"
+                               :size 18
                                :weight normal
                                :width normal)
 
@@ -467,9 +467,6 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (setq-default git-magit-status-fullscreen t)
-
-  ; Set default font (necessary when using emacsclient)
-  (setq default-frame-alist '((font . "-SRC-Hack-bold-normal-normal-*-*-*-*-*-m-0-iso10646-1")))
   )
 
 (defun dotspacemacs/user-load ()
@@ -702,9 +699,9 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
  '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
- '(org-level-1 ((t (:foreground "#83a598" :height 1.5))))
- '(org-level-2 ((t (:foreground "#fabd2f" :height 1.4))))
- '(org-level-3 ((t (:foreground "#d3869b" :height 1.3))))
- '(org-level-4 ((t (:foreground "#fb4933" :height 1.2))))
+ '(org-level-1 ((t (:foreground "#83a598" :height 1.3))))
+ '(org-level-2 ((t (:foreground "#fabd2f" :height 1.25))))
+ '(org-level-3 ((t (:foreground "#d3869b" :height 1.2))))
+ '(org-level-4 ((t (:foreground "#fb4933" :height 1.15))))
  '(org-level-5 ((t (:foreground "#b8bb26" :height 1.1)))))
 )

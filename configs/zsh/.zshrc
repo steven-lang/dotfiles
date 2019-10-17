@@ -137,8 +137,7 @@ alias more=less
 # Better ls
 # alias ls='ls -lh --color=auto --group-directories-first'
 if hash exa 2>/dev/null; then
-  alias ls='exa -1'
-  alias ll='exa -l --group-directories-first --git --color auto'
+  alias ls='exa -l --group-directories-first --git --color auto'
 fi
 
 alias grep='grep --color=auto'
@@ -251,7 +250,7 @@ function cd() {
 # Check if direnv is installed
 if ! hash direnv 2>/dev/null; then
   echo "Direnv not found. Installing now ..."
-  wget -O $HOME/bin/direnv https://github.com/direnv/direnv/releases/download/v2.20.0/direnv.linux-amd64
+  wget -O $HOME/bin/direnv https://github.com/direnv/direnv/releases/download/v2.20.0/direnv.linux-amd64 > /dev/null
   chmod +x $HOME/bin/direnv
 fi
 

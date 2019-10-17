@@ -508,8 +508,6 @@ autocmd filetype python call CustomSemshiHighlights()
 
 " Doge document generator {{{
 let g:doge_doc_standard_python = 'google'
-let g:doge_mapping_comment_jump_forward = '<C-n>'
-let g:doge_mapping_comment_jump_backward = '<C-b>'
 let g:doge_mapping='<Leader>d'
 " }}}
 
