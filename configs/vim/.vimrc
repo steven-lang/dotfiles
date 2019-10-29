@@ -485,9 +485,10 @@ let g:CoolTotalMatches = 1
 " let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
 " " }}}
 
-" Unmap malicious plugin bindings
-let g:colorizer_nomap = 1
-lua require'colorizer'.setup()
+if has('nvim')
+  lua require'colorizer'.setup()
+endif
+
 
 " Custom semshi Highlights {{{
 function! CustomSemshiHighlightsGruvbox()
