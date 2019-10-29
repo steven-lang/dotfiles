@@ -40,56 +40,105 @@ scrollback_lines = 10000
 # "off", "left" or "right"
 #scrollbar = off
 
-
 [colors]
-# Base16 Gruvbox dark, soft
-# Author: Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
+# Base16 OceanicNext
+# Author: https://github.com/voronianski/oceanic-next-color-scheme
 
-foreground          = #d5c4a1
-foreground_bold     = #ebdbb2
-cursor              = #ebdbb2
-cursor_foreground   = #32302f
-background          = rgba(50, 48, 47)
+foreground          = #C0C5CE
+foreground_bold     = #CDD3DE
+cursor              = #CDD3DE
+cursor_foreground   = #1B2B34
+background          = rgba(27, 43, 52)
 
 # 16 color space
 
 # Black, Gray, Silver, White
-color0  = #32302f
-color8  = #665c54
-color7  = #d5c4a1
-color15 = #fbf1c7
+color0  = #1B2B34
+color8  = #65737E
+color7  = #C0C5CE
+color15 = #D8DEE9
 
 # Red
-color1  = #fb4934
-color9  = #fb4934
+color1  = #EC5f67
+color9  = #EC5f67
 
 # Green
-color2  = #b8bb26
-color10 = #b8bb26
+color2  = #99C794
+color10 = #99C794
 
 # Yellow
-color3  = #fabd2f
-color11 = #fabd2f
+color3  = #FAC863
+color11 = #FAC863
 
 # Blue
-color4  = #83a598
-color12 = #83a598
+color4  = #6699CC
+color12 = #6699CC
 
 # Purple
-color5  = #d3869b
-color13 = #d3869b
+color5  = #C594C5
+color13 = #C594C5
 
 # Teal
-color6  = #8ec07c
-color14 = #8ec07c
+color6  = #5FB3B3
+color14 = #5FB3B3
 
 # Extra colors
-color16 = #fe8019
-color17 = #d65d0e
-color18 = #3c3836
-color19 = #504945
-color20 = #bdae93
-color21 = #ebdbb2
+color16 = #F99157
+color17 = #AB7967
+color18 = #343D46
+color19 = #4F5B66
+color20 = #A7ADBA
+color21 = #CDD3DE
+
+# [colors]
+# # Base16 Gruvbox dark, soft
+# # Author: Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
+
+# foreground          = #d5c4a1
+# foreground_bold     = #ebdbb2
+# cursor              = #ebdbb2
+# cursor_foreground   = #32302f
+# background          = rgba(50, 48, 47)
+
+# # 16 color space
+
+# # Black, Gray, Silver, White
+# color0  = #32302f
+# color8  = #665c54
+# color7  = #d5c4a1
+# color15 = #fbf1c7
+
+# # Red
+# color1  = #fb4934
+# color9  = #fb4934
+
+# # Green
+# color2  = #b8bb26
+# color10 = #b8bb26
+
+# # Yellow
+# color3  = #fabd2f
+# color11 = #fabd2f
+
+# # Blue
+# color4  = #83a598
+# color12 = #83a598
+
+# # Purple
+# color5  = #d3869b
+# color13 = #d3869b
+
+# # Teal
+# color6  = #8ec07c
+# color14 = #8ec07c
+
+# # Extra colors
+# color16 = #fe8019
+# color17 = #d65d0e
+# color18 = #3c3836
+# color19 = #504945
+# color20 = #bdae93
+# color21 = #ebdbb2
 
 [hints]
 #font = Monospace 12

@@ -99,13 +99,14 @@ Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 " Plug 'dense-analysis/ale'
 
 " Hex color preview
-Plug 'lilydjwg/colorizer'
+Plug 'norcalli/nvim-colorizer.lua'
 
 " Bracket autocomplete
 Plug 'jiangmiao/auto-pairs'
 
 " Gruvbox colorscheme
 Plug 'gruvbox-community/gruvbox'
+Plug 'mhartington/oceanic-next'
 
 " USE cgn with dot repeat instead ///Enable multiple cursors with <C-n> in visual mode
 " Plug 'terryma/vim-multiple-cursors'
@@ -183,12 +184,14 @@ endif
 :let maplocalleader = ',' " Local leader key
 
 syntax on                 " Enable syntax highlighting
-let g:gruvbox_italic=1
-let g:gruvbox_bold=1
-let g:gruvbox_contrast_dark='soft'
-let g:gruvbox_contrast_light='medium'
+" let g:gruvbox_italic=1
+" let g:gruvbox_bold=1
+" let g:gruvbox_contrast_dark='soft'
+" let g:gruvbox_contrast_light='medium'
 set background=dark
-colorscheme gruvbox
+let g:oceanic_next_terminal_bold = 1
+let g:oceanic_next_terminal_italic = 1"
+colorscheme OceanicNext
 set path=.,,**
 set expandtab
 set tabstop=4
@@ -226,7 +229,7 @@ let g:lightline = {
       \   'left': [ [ 'mode', 'paste' ], ['cocstatus', 'gitbranch', 'readonly', 'relativepath', 'modified'] ],
       \   'right' : [ ['lineinfo'], ['percent']]
       \ },
-      \ 'colorscheme': 'gruvbox',
+      \ 'colorscheme': 'oceanicnext',
       \ 'component_function': {
       \   'gitbranch' : 'fugitive#head', 
       \   'cocstatus': 'coc#status',
@@ -484,9 +487,10 @@ let g:CoolTotalMatches = 1
 
 " Unmap malicious plugin bindings
 let g:colorizer_nomap = 1
+lua require'colorizer'.setup()
 
 " Custom semshi Highlights {{{
-function! CustomSemshiHighlights()
+function! CustomSemshiHighlightsGruvbox()
   hi semshiLocal           ctermfg=208 guifg=#fe8019
   hi semshiGlobal          ctermfg=172 guifg=#d79921
   hi semshiImported        ctermfg=172 guifg=#d79921 gui=NONE
@@ -503,7 +507,26 @@ function! CustomSemshiHighlights()
   hi semshiErrorChar       ctermfg=230 guifg=#f9f5d7 ctermbg=124 guibg=#fb4934
   sign define semshiError text=E> texthl=semshiErrorSign
 endfunction
-autocmd filetype python call CustomSemshiHighlights()
+
+function! CustomSemshiHighlightsOceanicNext()
+  hi semshiLocal           ctermfg=208 guifg=#f99157
+  hi semshiGlobal          ctermfg=172 guifg=#fac863
+  hi semshiImported        ctermfg=172 guifg=#fac863 gui=NONE
+  hi semshiParameter       ctermfg=109 guifg=#c594c5
+  hi semshiParameterUnused ctermfg=108 guifg=#65737e cterm=underline gui=underline
+  hi semshiFree            ctermfg=176 guifg=#c594c5
+  hi semshiBuiltin         ctermfg=132 guifg=#6699cc
+  hi semshiAttribute       ctermfg=108 guifg=#c594c5
+  hi semshiSelf            ctermfg=248 guifg=#5fb3b3
+  hi semshiUnresolved      ctermfg=166 guifg=#ec5f67 cterm=underline gui=underline
+  hi semshiSelected        ctermfg=230 guifg=#cdd3de ctermbg=237 guibg=#65737E
+
+  hi semshiErrorSign       ctermfg=230 guifg=#cdd3de ctermbg=124 guibg=#ec5f67
+  hi semshiErrorChar       ctermfg=230 guifg=#cdd3de ctermbg=124 guibg=#ec5f67
+  sign define semshiError text=E> texthl=semshiErrorSign
+endfunction
+
+autocmd filetype python call CustomSemshiHighlightsOceanicNext()
 " }}}
 
 " Doge document generator {{{
@@ -601,8 +624,8 @@ nmap <leader>r <Plug>(coc-rename)
 nmap <leader>cf :Format<cr>
 
 " Coc error text
-highlight CocErrorSign ctermfg=9 guifg=#fb4934
-
+" highlight CocErrorSign ctermfg=9 guifg=#fb4934 " Gruvbox
+highlight CocErrorSign ctermfg=9 guifg=#ec5f67 " OceanicNext
 " }}}
 
 
