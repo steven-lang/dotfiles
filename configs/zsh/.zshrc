@@ -155,9 +155,7 @@ alias clone='termite -e "bash" 2>&1 >/dev/null & disown %1'
 alias PWD='echo $(pwd) | xclip && pwd && echo "path copied"'
 alias CD='echo "cd $(xclip -o)" && cd $(xclip -o)'
 alias :q='exit'
-alias img='feh'
 alias zathura='zathura --fork'
-alias pdf='zathura --fork'
 alias vimconfig='vim ~/.vimrc'
 alias vimupdate='vim +PlugClean +PlugUpdate +UpdateRemoteRepositories +qa'
 alias zshconfig='vim ~/.zshrc'
@@ -219,6 +217,18 @@ zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
+# Open pdfs in background by default
+function pdf() {
+  evince "$@" &
+  disown
+}
+
+# Open images in background by default
+function img() {
+  eog "$@" &
+  disown
+}
+
 # Check for virtual environments when cd'ing into directories
 function cd() {
   builtin cd "$@"
@@ -226,11 +236,11 @@ function cd() {
   if [[ -z "$VIRTUAL_ENV" ]] ; then
     ## If env folder is found then activate the vitualenv
       if [[ -d ./env ]] ; then
-        source ./env/bin/activate
+# source ./env/bin/activate  # commented out by conda initialize
         echo -e "Python virtual environment activated!"
       fi
       if [[ -d ./venv ]] ; then
-        source ./venv/bin/activate
+# source ./venv/bin/activate  # commented out by conda initialize
         echo -e "Python virtual environment activated!"
       fi
   else
@@ -254,5 +264,41 @@ if ! hash direnv 2>/dev/null; then
   chmod +x $HOME/bin/direnv
 fi
 
+# fzf-history-widget() {
+#   local selected num
+#   setopt localoptions noglobsubst noposixbuiltins pipefail 2> /dev/null
+#   selected=( $(fc -rl 1 |
+#     sort -k2 -k1rn | uniq -f 1 | sort -r -n |
+#     FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
+#   local ret=$?
+#   if [ -n "$selected" ]; then
+#     num=$selected[1]
+#     if [ -n "$num" ]; then
+#       zle vi-fetch-history -n $num
+#     fi
+#   fi
+#   zle reset-prompt
+#   return $ret
+# }
+
 # Enable direnv
 eval "$(direnv hook zsh)"
+
+# Remove history duplicates
+setopt HIST_IGNORE_ALL_DUPS
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('$HOME/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="$HOME/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+

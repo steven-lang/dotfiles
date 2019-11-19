@@ -6,6 +6,7 @@
 --exclude=*.json
 --exclude=*.csv
 --exclude=node_modules
+--langmap=c++:+.cu
 
 
 # Julia

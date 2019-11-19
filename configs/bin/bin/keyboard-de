@@ -1,1 +1,1 @@
-setxkbmap de -option caps:escape
+setxkbmap de -option caps:ctrl_modifier

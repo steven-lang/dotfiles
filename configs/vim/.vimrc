@@ -17,6 +17,8 @@ set scrolloff=5
 set signcolumn=yes
 set clipboard=unnamedplus
 
+" Use global replace by default (/g) to revert
+set gdefault
 " Set fixed popup menu height
 set pumheight=8
 
@@ -49,8 +51,17 @@ endif
 " - Avoid using standard Vim directory names like 'plugin'
 
 call plug#begin('~/.vim/plugged')
-" Debugger
-" Plug 'strottos/vim-padre', { 'dir': '~/.vim/plugged/vim-padre', 'do': 'make' }
+" Filetree
+Plug 'scrooloose/nerdtree'
+
+" CUDA
+Plug 'bfrg/vim-cuda-syntax'
+
+" Overleaf vim
+Plug 'da-h/AirLatex.vim'
+
+" DAP Plugin
+Plug 'puremourning/vimspector'
 
 " Make screenshots of code
 Plug 'segeljakt/vim-silicon'
@@ -78,22 +89,6 @@ Plug 'thaerkh/vim-workspace'
 
 " CoC vim
 Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
-"
-" " Completion Framework (and more)
-" " Deoplete
-" if has('nvim')
-"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" else
-"   Plug 'Shougo/deoplete.nvim'
-"   Plug 'roxma/nvim-yarp'
-"   Plug 'roxma/vim-hug-neovim-rpc'
-" endif
-" Plug 'davidhalter/jedi-vim'
-" Plug 'deoplete-plugins/deoplete-jedi'
-" Plug 'Shougo/echodoc.vim'
-
-" " Ale
-" Plug 'dense-analysis/ale'
 
 " Hex color preview
 Plug 'norcalli/nvim-colorizer.lua'
@@ -106,7 +101,7 @@ Plug 'gruvbox-community/gruvbox'
 Plug 'mhartington/oceanic-next'
 
 " USE cgn with dot repeat instead ///Enable multiple cursors with <C-n> in visual mode
-" Plug 'terryma/vim-multiple-cursors'
+Plug 'terryma/vim-multiple-cursors'
 
 " Python autoimport
 Plug 'mgedmin/python-imports.vim'
@@ -157,6 +152,9 @@ Plug 'honza/vim-snippets'
 " Add repeat support for plugins
 Plug 'tpope/vim-repeat'
 Plug 'godlygeek/tabular'
+
+" Sidebar with tags
+Plug 'liuchengxu/vista.vim'
 
 " Initialize plugin system
 call plug#end()
@@ -214,11 +212,22 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+" Duplicate line and comment out the upper one
+nmap yp Ypkgccj
+
 " Keep visual mode while indenting
 vnoremap < <gv
 vnoremap > >gv
 " }}}
 
+" {{{ Vista Vim 
+function! NearestMethodOrFunction() abort
+  return get(b:, 'vista_nearest_method_or_function', '')
+endfunction
+
+autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+
+" }}}
 
 " Lightline {{{
 let g:lightline = {
@@ -230,6 +239,7 @@ let g:lightline = {
       \ 'component_function': {
       \   'gitbranch' : 'fugitive#head', 
       \   'cocstatus': 'coc#status',
+      \   'method': 'NearestMethodOrFunction',
       \ }
       \ }
 
@@ -315,13 +325,7 @@ augroup latexbindings
   autocmd BufWritePost *.tex execute ':!pdflatex homework.tex'
 augroup end
 " }}}
-" }}}
 
-
-
-" Disable gitgutter mappings
-let g:gitgutter_map_keys = 0
-let g:gitgutter_enabled = 0
 
 " Run make on <F9>
 nnoremap <F9> :make<CR>
@@ -414,7 +418,7 @@ nnoremap <silent> <Leader>t :Tags<CR>
 nnoremap <silent> <Leader>f :Files<CR>
 nnoremap <silent> <Leader>h :History<CR>
 nnoremap <silent> <Leader>/ :Ag<CR>
-nnoremap <Leader>c :Format<CR>
+nnoremap <Leader>cc :Format<CR>
 
 " Jump motions
 map  <Leader>w <Plug>(easymotion-bd-w)
@@ -604,6 +608,8 @@ endfunction
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " Update signature help on jump placeholder
@@ -619,7 +625,7 @@ endfunction
 " Remap for rename current word
 nmap <leader>r <Plug>(coc-rename)
 " Format
-nmap <leader>cf :Format<cr>
+nmap <leader><leader>f :Format<cr>
 
 " Coc error text
 " highlight CocErrorSign ctermfg=9 guifg=#fb4934 " Gruvbox
@@ -627,53 +633,26 @@ highlight CocErrorSign ctermfg=9 guifg=#ec5f67 " OceanicNext
 " }}}
 
 
+" Cuda stuff {{{
+" Highlight keywords from CUDA Runtime API
+let g:cuda_runtime_api_highlight = 1
 
+" Highlight keywords from CUDA Driver API
+let g:cuda_driver_api_highlight = 1
 
+" Highlight keywords from CUDA Thrust library
+let g:cuda_thrust_highlight = 1
 
+" Disable highlighting of CUDA kernel calls
+let g:cuda_no_kernel_highlight = 1
+" }}} 
 
-" GRUVBOX color table https://github.com/morhetz/gruvbox-contrib/blob/master/color.table
-" GRUVCOLR         HEX       RELATV ALIAS   TERMCOLOR      RGB           ITERM RGB     OSX HEX
-"  --------------   -------   ------------   ------------   -----------   -----------   -------
-"  dark0_hard       #1d2021   [   ]  [   ]   234 [h0][  ]    29- 32- 33    22- 24- 25   #161819
-"  dark0            #282828   [bg0]  [fg0]   235 [ 0][  ]    40- 40- 40    30- 30- 30   #1e1e1e
-"  dark0_soft       #32302f   [   ]  [   ]   236 [s0][  ]    50- 48- 47    38- 36- 35   #262423
-"  dark1            #3c3836   [bg1]  [fg1]   237 [  ][15]    60- 56- 54    46- 42- 41   #2e2a29
-"  dark2            #504945   [bg2]  [fg2]   239 [  ][  ]    80- 73- 69    63- 57- 53   #3f3935
-"  dark3            #665c54   [bg3]  [fg3]   241 [  ][  ]   102- 92- 84    83- 74- 66   #534a42
-"  dark4            #7c6f64   [bg4]  [fg4]   243 [  ][ 7]   124-111-100   104- 92- 81   #685c51
+" Sync
+nnoremap <leader><leader>s :w<CR>:!./sync.sh<CR>
+" Run
+nnoremap <leader><leader>r :w<CR>:!./run.sh<CR>
 
-"  gray_245         #928374   [gray] [   ]   245 [ 8][  ]   146-131-116   127-112- 97   #7f7061
-"  gray_244         #928374   [   ] [gray]   244 [  ][ 8]   146-131-116   127-112- 97   #7f7061
-
-"  light0_hard      #f9f5d7   [   ]  [   ]   230 [  ][h0]   249-245-215   248-244-205   #f8f4cd
-"  light0           #fbf1c7   [fg0]  [bg0]   229 [  ][ 0]   251-241-199   250-238-187   #faeebb
-"  light0_soft      #f2e5bc   [   ]  [   ]   228 [  ][s0]   242-229-188   239-223-174   #efdfae
-"  light1           #ebdbb2   [fg1]  [bg1]   223 [15][  ]   235-219-178   230-212-163   #e6d4a3
-"  light2           #d5c4a1   [fg2]  [bg2]   250 [  ][  ]   213-196-161   203-184-144   #cbb890
-"  light3           #bdae93   [fg3]  [bg3]   248 [  ][  ]   189-174-147   175-159-129   #af9f81
-"  light4           #a89984   [fg4]  [bg4]   246 [ 7][  ]   168-153-132   151-135-113   #978771
-
-"  bright_red       #fb4934   [red]   [  ]   167 [ 9][  ]   251- 73- 52   247- 48- 40   #f73028
-"  bright_green     #b8bb26   [green] [  ]   142 [10][  ]   184-187- 38   170-176- 30   #aab01e
-"  bright_yellow    #fabd2f   [yellow][  ]   214 [11][  ]   250-189- 47   247-177- 37   #f7b125
-"  bright_blue      #83a598   [blue]  [  ]   109 [12][  ]   131-165-152   113-149-134   #719586
-"  bright_purple    #d3869b   [purple][  ]   175 [13][  ]   211-134-155   199-112-137   #c77089
-"  bright_aqua      #8ec07c   [aqua]  [  ]   108 [14][  ]   142-192-124   125-182-105   #7db669
-"  bright_orange    #fe8019   [orange][  ]   208 [  ][  ]   254-128- 25   251-106- 22   #fb6a16
-
-"  neutral_red      #cc241d   [   ]  [   ]   124 [ 1][ 1]   204- 36- 29   190- 15- 23   #be0f17
-"  neutral_green    #98971a   [   ]  [   ]   106 [ 2][ 2]   152-151- 26   134-135- 21   #868715
-"  neutral_yellow   #d79921   [   ]  [   ]   172 [ 3][ 3]   215-153- 33   204-136- 26   #cc881a
-"  neutral_blue     #458588   [   ]  [   ]    66 [ 4][ 4]    69-133-136    55-115-117   #377375
-"  neutral_purple   #b16286   [   ]  [   ]   132 [ 5][ 5]   177- 98-134   160- 75-115   #a04b73
-"  neutral_aqua     #689d6a   [   ]  [   ]    72 [ 6][ 6]   104-157-106    87-142- 87   #578e57
-"  neutral_orange   #d65d0e   [   ]  [   ]   166 [  ][  ]   214- 93- 14   202- 72- 14   #ca480e
-
-"  faded_red        #9d0006   [   ]   [red]   88 [  ][ 9]   157-  0-  6   137-  0-  9   #890009
-"  faded_green      #79740e   [   ] [green]  100 [  ][10]   121-116- 14   102- 98- 13   #66620d
-"  faded_yellow     #b57614   [   ][yellow]  136 [  ][11]   181-118- 20   165- 99- 17   #a56311
-"  faded_blue       #076678   [   ]  [blue]   24 [  ][12]     7-102-120    14- 83-101   #0e5365
-"  faded_purple     #8f3f71   [   ][purple]   96 [  ][13]   143- 63-113   123- 43- 94   #7b2b5e
-"  faded_aqua       #427b58   [   ]  [aqua]   66 [  ][14]    66-123- 88    53-106- 70   #356a46
-"  faded_orange     #af3a03   [   ][orange]  130 [  ][  ]   175- 58-  3   157- 40-  7   #9d2807
-
+" {{{ Enable CUDA filetype
+au BufNewFile,BufRead *.cu set ft=cuda
+au BufNewFile,BufRead *.cuh set ft=cuda
+" }}}

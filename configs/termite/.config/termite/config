@@ -5,7 +5,8 @@ allow_bold = true
 clickable_url = true
 #dynamic_title = true
 # font = Source Code Pro Regular 13
-# font = Hack 14
+# font = Hack 16
+# cell_height_scale = 1.1
 font = IBM Plex Mono 15
 #fullscreen = true
 #icon_name = terminal
@@ -39,7 +40,6 @@ scrollback_lines = 10000
 
 # "off", "left" or "right"
 #scrollbar = off
-
 [colors]
 # Base16 OceanicNext
 # Author: https://github.com/voronianski/oceanic-next-color-scheme

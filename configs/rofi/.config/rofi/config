@@ -1,7 +1,7 @@
 rofi.combi-modi:    window,drun,ssh
 rofi.theme:         oceanicnext 
-rofi.font:          IBMPlex Mono 18
-rofi.modi:          combi 
+rofi.font:          IBMPlex Mono 20
+rofi.modi:          drun 
 
 ! Base16 OceanicNext
 ! Author: https://github.com/voronianski/oceanic-next-color-scheme

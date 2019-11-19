@@ -43,14 +43,9 @@ focus_follows_mouse yes
 # kill focused window
 bindsym $mod+q kill
 
-# Color variables border/background
-set $mybordercol #3988AC 
-set $mybgcol #2C6A86 
-
 # start dmenu (a program launcher)
-# bindsym $mod+d exec dmenu_run -l 15 -i -p "$" -sb "#2C6A86" -fn "Monospace-12:normal"
-bindsym $mod+d exec rofi -show run
-bindsym $mod+Shift+d exec rofi -show combi 
+# bindsym $mod+d exec dmenu_run -l 15 -i -p "$" -sb "#2C6A86" -fn "Monospace-18:normal"
+bindsym $mod+d exec zsh -c "rofi -show run"
 
 
 # window navigation
@@ -357,7 +352,7 @@ client.background       $base07
 # exec compton -bc -r 5 -l -4 -t -4 --shadow-exclude '_GTK_FRAME_EXTENTS@:c'
 
 # Cheat sheet
-for_window [title="cheatsheet"] floating enable,resize set 1300 1000, move position center
+for_window [title="cheatsheet"] floating enable,resize set 1600 1300, move position center
 bindsym $mod+c exec bash ~/dotfiles/scripts/keys-cheat-sheet.sh
 
 exec redshift &
