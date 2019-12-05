@@ -1,6 +1,6 @@
-echo "Commands:"
-echo "- Edit in vim : <C-x><C-e>"
-echo "- Correct last command in editor: fc"
+# echo "Commands:"
+# echo "- Edit in vim : <C-x><C-e>"
+# echo "- Correct last command in editor: fc"
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -236,11 +236,11 @@ function cd() {
   if [[ -z "$VIRTUAL_ENV" ]] ; then
     ## If env folder is found then activate the vitualenv
       if [[ -d ./env ]] ; then
-# source ./env/bin/activate  # commented out by conda initialize
+        source ./env/bin/activate
         echo -e "Python virtual environment activated!"
       fi
       if [[ -d ./venv ]] ; then
-# source ./venv/bin/activate  # commented out by conda initialize
+        source ./venv/bin/activate
         echo -e "Python virtual environment activated!"
       fi
   else
@@ -254,32 +254,14 @@ function cd() {
   fi
 }
 
-# Enable fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Check if direnv is installed
-if ! hash direnv 2>/dev/null; then
+if [ ! -f $HOME/bin/direnv ]; then
   echo "Direnv not found. Installing now ..."
   wget -O $HOME/bin/direnv https://github.com/direnv/direnv/releases/download/v2.20.0/direnv.linux-amd64 > /dev/null
   chmod +x $HOME/bin/direnv
 fi
 
-# fzf-history-widget() {
-#   local selected num
-#   setopt localoptions noglobsubst noposixbuiltins pipefail 2> /dev/null
-#   selected=( $(fc -rl 1 |
-#     sort -k2 -k1rn | uniq -f 1 | sort -r -n |
-#     FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
-#   local ret=$?
-#   if [ -n "$selected" ]; then
-#     num=$selected[1]
-#     if [ -n "$num" ]; then
-#       zle vi-fetch-history -n $num
-#     fi
-#   fi
-#   zle reset-prompt
-#   return $ret
-# }
 
 # Enable direnv
 eval "$(direnv hook zsh)"
@@ -302,3 +284,5 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# Enable fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

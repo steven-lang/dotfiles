@@ -582,6 +582,9 @@ before packages are loaded."
 
   ;; Disable scroll bar
   (toggle-scroll-bar 1)
+
+  ;; bigger latex fragment
+  (plist-put org-format-latex-options :scale 2)
   )
 
 

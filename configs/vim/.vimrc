@@ -51,17 +51,20 @@ endif
 " - Avoid using standard Vim directory names like 'plugin'
 
 call plug#begin('~/.vim/plugged')
-" Filetree
-Plug 'scrooloose/nerdtree'
+" Adds file type icons to Vim plugins
+Plug 'ryanoasis/vim-devicons'
+
+" Highlight words under cursor
+Plug 'RRethy/vim-illuminate'
+
+" Smooth C-d scrolling
+Plug 'psliwka/vim-smoothie'
 
 " CUDA
 Plug 'bfrg/vim-cuda-syntax'
 
 " Overleaf vim
 Plug 'da-h/AirLatex.vim'
-
-" DAP Plugin
-Plug 'puremourning/vimspector'
 
 " Make screenshots of code
 Plug 'segeljakt/vim-silicon'
@@ -88,7 +91,7 @@ Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 Plug 'thaerkh/vim-workspace'
 
 " CoC vim
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Hex color preview
 Plug 'norcalli/nvim-colorizer.lua'
@@ -117,8 +120,8 @@ Plug 'tpope/vim-surround'
 
 " Vim git integration
 Plug 'tpope/vim-fugitive' " Git commands
-Plug 'airblade/vim-gitgutter' " Git info on the sidebar
 Plug 'rhysd/committia.vim' " Git commit extension
+Plug 'jreybert/vimagit'
 
 " Comment/uncomment with gc
 Plug 'tpope/vim-commentary'
@@ -153,9 +156,6 @@ Plug 'honza/vim-snippets'
 Plug 'tpope/vim-repeat'
 Plug 'godlygeek/tabular'
 
-" Sidebar with tags
-Plug 'liuchengxu/vista.vim'
-
 " Initialize plugin system
 call plug#end()
 
@@ -183,17 +183,22 @@ syntax on                 " Enable syntax highlighting
 " let g:gruvbox_bold=1
 " let g:gruvbox_contrast_dark='soft'
 " let g:gruvbox_contrast_light='medium'
+" if strftime('%H') >= 7 && strftime('%H') < 19
+"   set background=light
+" else
+"   set background=dark
+" endif
 set background=dark
 let g:oceanic_next_terminal_bold = 1
-let g:oceanic_next_terminal_italic = 1"
+let g:oceanic_next_terminal_italic = 1
 colorscheme OceanicNext
 set path=.,,**
 set expandtab
 set tabstop=4
 set softtabstop=2
 set shiftwidth=2
-set number                " Enable numbers
-set relativenumber        " Enable relative numbers
+set nonumber                " Enable numbers
+set norelativenumber        " Enable relative numbers
 set showcmd               " Show command in bottom right position
 set cursorline            " Highlight line where curser is
 " set colorcolumn=100
@@ -220,26 +225,16 @@ vnoremap < <gv
 vnoremap > >gv
 " }}}
 
-" {{{ Vista Vim 
-function! NearestMethodOrFunction() abort
-  return get(b:, 'vista_nearest_method_or_function', '')
-endfunction
-
-autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
-
-" }}}
 
 " Lightline {{{
 let g:lightline = {
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], ['cocstatus', 'gitbranch', 'readonly', 'relativepath', 'modified'] ],
+      \   'left': [ [ 'mode', 'paste' ], ['cocstatus', 'readonly', 'relativepath', 'modified'] ],
       \   'right' : [ ['lineinfo'], ['percent']]
       \ },
       \ 'colorscheme': 'oceanicnext',
       \ 'component_function': {
-      \   'gitbranch' : 'fugitive#head', 
       \   'cocstatus': 'coc#status',
-      \   'method': 'NearestMethodOrFunction',
       \ }
       \ }
 
@@ -271,6 +266,44 @@ imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
 imap <c-x><c-l> <plug>(fzf-complete-line)
+
+" floating fzf
+if has('nvim')
+  " let $FZF_DEFAULT_OPTS .= ' --layout=reverse'
+
+  function! FloatingFZF()
+    let buf = nvim_create_buf(v:false, v:true)
+
+   " here be dragoons
+    let height = &lines
+    let width = float2nr(&columns - (&columns * 2 / 10))
+    let col = float2nr((&columns - width) / 2)
+    let col_offset = &columns / 10
+    let opts = {
+          \ 'relative': 'editor',
+          \ 'row': height / 2,
+          \ 'col': col + col_offset,
+          \ 'width': width * 2 / 1,
+          \ 'height': height / 2
+          \ }
+
+    let win = nvim_open_win(buf, v:true, opts)
+   " uncomment this if you want a normal background color for the fzf window
+    "call setwinvar(win, '&winhighlight', 'NormalFloat:Normal')
+    call setwinvar(win, '&winhl', 'NormalFloat:Pmenu')
+
+  " this is to remove all line numbers and so on from the window
+    setlocal
+          \ buftype=nofile
+          \ nobuflisted
+          \ bufhidden=hide
+          \ nonumber
+          \ norelativenumber
+          \ signcolumn=no
+  endfunction
+
+  let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+endif
 
 function! s:fzf_statusline()
   " Override statusline as you like
@@ -322,7 +355,7 @@ augroup latexbindings
   autocmd Filetype tex inoremap <buffer> <silent> _ _{}<Left>
   autocmd Filetype tex inoremap <buffer> <silent> ^ ^{}<Left>
 
-  autocmd BufWritePost *.tex execute ':!pdflatex homework.tex'
+  autocmd BufWritePost *.tex execute ':!pdflatex %'
 augroup end
 " }}}
 
@@ -335,9 +368,13 @@ augroup pythonbindings
   autocmd! pythonbindings
   " Run python file
   autocmd Filetype python set makeprg=python\ %
+  
+  " Set textwidth in python to 100 lines
+  autocmd Filetype python set textwidth=100
+  autocmd Filetype python set colorcolumn=101
 
-  " Insert debugging with ipdb
-  autocmd Filetype python nnoremap <buffer> <silent> <localleader>b :call InsertIPDB()<CR>
+  " Insert debugging with pdb
+  autocmd Filetype python nnoremap <buffer> <silent> <localleader>b :call InsertPDB()<CR>
 
   " Python import
   autocmd Filetype python nnoremap <buffer> <silent> <localleader>i     :ImportName<CR>
@@ -349,9 +386,9 @@ augroup pythonbindings
   autocmd Filetype python nnoremap <buffer> <silent> <localleader>o :OR<CR>
 
   " autocmd Filetype python vnoremap <buffer> <silent> <localleader>d :'<,'>GenPyDoc<CR>
-  " Function to insert python IPDB debug line
-  function! InsertIPDB()
-    let trace = expand("__import__(\"ipdb\").set_trace(context=13)")
+  " Function to insert python PDB debug line
+  function! InsertPDB()
+    let trace = expand("__import__(\"pdb\").set_trace()")
     execute "normal O".trace
   endfunction
 augroup end
@@ -418,7 +455,6 @@ nnoremap <silent> <Leader>t :Tags<CR>
 nnoremap <silent> <Leader>f :Files<CR>
 nnoremap <silent> <Leader>h :History<CR>
 nnoremap <silent> <Leader>/ :Ag<CR>
-nnoremap <Leader>cc :Format<CR>
 
 " Jump motions
 map  <Leader>w <Plug>(easymotion-bd-w)
@@ -462,8 +498,8 @@ let g:CoolTotalMatches = 1
 " " Disable autocompletion (using deoplete instead)
 " let g:jedi#completions_enabled = 0
 " set completeopt-=preview
-" let g:python_host_prog = '/usr/bin/python'
-" let g:python3_host_prog = '/usr/bin/python3'
+let g:python_host_prog = '/usr/bin/python'
+let g:python3_host_prog = '/usr/bin/python3'
 " " }}}
 " " Echodoc {{{
 " let g:echodoc#enable_at_startup = 1
@@ -514,14 +550,15 @@ function! CustomSemshiHighlightsOceanicNext()
   hi semshiLocal           ctermfg=208 guifg=#f99157
   hi semshiGlobal          ctermfg=172 guifg=#fac863
   hi semshiImported        ctermfg=172 guifg=#fac863 gui=NONE
-  hi semshiParameter       ctermfg=109 guifg=#c594c5
+  hi semshiParameter       ctermfg=109 guifg=#5fb3b3
   hi semshiParameterUnused ctermfg=108 guifg=#65737e cterm=underline gui=underline
-  hi semshiFree            ctermfg=176 guifg=#c594c5
+  hi semshiFree            ctermfg=176 guifg=#ec5f67
   hi semshiBuiltin         ctermfg=132 guifg=#6699cc
-  hi semshiAttribute       ctermfg=108 guifg=#c594c5
-  hi semshiSelf            ctermfg=248 guifg=#5fb3b3
+  hi semshiAttribute       ctermfg=108 guifg=#ab7967
+  hi semshiSelf            ctermfg=248 guifg=#ab7967
   hi semshiUnresolved      ctermfg=166 guifg=#ec5f67 cterm=underline gui=underline
-  hi semshiSelected        ctermfg=230 guifg=#cdd3de ctermbg=237 guibg=#65737E
+  " hi semshiSelected        ctermfg=230 guifg=#cdd3de ctermbg=237 guibg=#65737E
+  hi! link semshiSelected CursorColumn
 
   hi semshiErrorSign       ctermfg=230 guifg=#cdd3de ctermbg=124 guibg=#ec5f67
   hi semshiErrorChar       ctermfg=230 guifg=#cdd3de ctermbg=124 guibg=#ec5f67
@@ -566,7 +603,7 @@ command! -nargs=0 Format :call CocAction('format')
 " Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=300
 " Extensions
-let g:coc_global_extensions=['coc-tag', 'coc-python', 'coc-json', 'coc-pairs']
+let g:coc_global_extensions=['coc-tag', 'coc-python', 'coc-json', 'coc-pairs', 'coc-r-lsp']
 
 " Remap for do codeAction of current line
 nmap <leader>ca  <Plug>(coc-codeaction)
@@ -625,7 +662,7 @@ endfunction
 " Remap for rename current word
 nmap <leader>r <Plug>(coc-rename)
 " Format
-nmap <leader><leader>f :Format<cr>
+nmap <leader>cc :Format<cr>
 
 " Coc error text
 " highlight CocErrorSign ctermfg=9 guifg=#fb4934 " Gruvbox
@@ -655,4 +692,14 @@ nnoremap <leader><leader>r :w<CR>:!./run.sh<CR>
 " {{{ Enable CUDA filetype
 au BufNewFile,BufRead *.cu set ft=cuda
 au BufNewFile,BufRead *.cuh set ft=cuda
+" }}}
+
+" {{{ Vim Illuminate 
+" Time in milliseconds (default 250)
+let g:Illuminate_delay = 250
+let g:Illuminate_ftblacklist = ['nerdtree', 'python']
+" }}}
+
+" {{{ ViMagit
+let g:magit_default_fold_level = 0
 " }}}
