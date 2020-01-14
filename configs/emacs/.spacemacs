@@ -34,7 +34,9 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(html
+   '(javascript
+     vimscript
+     html
      csv
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
@@ -45,17 +47,22 @@ This function should only modify configuration layer settings."
      (auto-completion :variables
                       spacemacs-default-company-backends '(company-files  company-capf)
                       auto-completion-enable-snippets-in-popup t
+                      auto-completion-enable-help-tooltip t
                       auto-completion-enable-sort-by-usage t)
      ;; better-defaults ;; emacs binding specifics
      emacs-lisp
      git
      markdown
-     multiple-cursors
+     ;; multiple-cursors
      ;; treemacs
      org
+
      (shell :variables
+            shell-default-term-shell "/bin/zsh"
+            multi-term-program "/bin/zsh"
             shell-default-height 30
-            shell-default-position 'bottom)
+            shell-default-position 'bottom
+            shell-scripts-backend 'lsp)
      (spell-checking :variables
                      enable-flyspell-auto-completion nil
                      spell-checking-enable-auto-dictionary t
@@ -69,9 +76,10 @@ This function should only modify configuration layer settings."
      (python :variables
              python-backend 'lsp
              python-lsp-server 'mspyls
-             python-lsp-git-root "~/python-language-server"
+             ;; python-lsp-git-root "~/python-language-server"
              )
-     ipython-notebook
+
+     ;; ipython-notebook
      (gtags :variables gtags-enable-by-default t)
      (latex :variables latex-enable-auto-fill t)
 
@@ -85,6 +93,12 @@ This function should only modify configuration layer settings."
 
      ;; Prolog support
      prolog
+
+     ;; Julia support 
+     ;; (julia :variables julia-mode-enable-lsp t)
+
+     ;; Deft support
+     deft
      )
 
    ;; List of additional packages that will be installed without being
@@ -94,7 +108,16 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(ssh-agency)
+   dotspacemacs-additional-packages '(ssh-agency
+                                      org-ql
+                                      org-super-agenda
+                                      org-gcal
+                                      org-ref
+                                      origami
+                                      rainbow-mode
+                                      direnv
+                                      zetteldeft
+                                      graphviz-dot-mode)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -193,7 +216,7 @@ It should only modify the values of Spacemacs settings."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
@@ -202,7 +225,8 @@ It should only modify the values of Spacemacs settings."
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
    dotspacemacs-startup-lists '((recents . 5)
-                                (projects . 7))
+                                (projects . 7)
+                                (todos . 5))
 
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
@@ -218,6 +242,7 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(doom-nord
+                         solarized-light
                          gruvbox-dark-soft
                          atom-one-dark
                          spacemacs-dark
@@ -230,7 +255,8 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(spacemacs :separator wave :separator-scale 1.5)
+   ;; dotspacemacs-mode-line-theme '(doom :separator wave :separator-scale 1.5)
+   dotspacemacs-mode-line-theme '(doom)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -239,7 +265,7 @@ It should only modify the values of Spacemacs settings."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    ;; dotspacemacs-default-font '("Source Code Pro"
-   dotspacemacs-default-font '("IBM Plex Mono"
+   dotspacemacs-default-font '("Hack"
                                :size 15
                                :weight normal
                                :width normal)
@@ -467,7 +493,8 @@ This function defines the environment variables for your Emacs session. By
 default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
-  (spacemacs/load-spacemacs-env))
+  (spacemacs/load-spacemacs-env)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -491,37 +518,446 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  (global-company-mode t)
-  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-  (add-hook 'org-mode-hook 'electric-pair-mode)
 
-  ;; Default org file when using capture (C-c c)
-  (setq org-default-notes-file "~/orgmode/notes.org")
+  ;; Fix emacs font when used in daemon mode, see  https://stackoverflow.com/questions/3984730/emacs-gui-with-emacs-daemon-not-loading-fonts-correctly
+  ;; (add-to-list 'default-frame-alist '(font . "Hack 15"))
+  (when (display-graphic-p)
+    (set-face-attribute 'default nil :font "Hack 15"))
 
-  ;; Org-Mode todo keywords
-  (setq org-todo-keywords
-        '((sequence "TODO"
-                    "STARTED"
-                    "WAITING"
-                    "UNCERTAIN"
-                    "|"
-                    "DONE"
-                    "CANCELED"
-                    )))
+  (with-eval-after-load 'org
+    ;; here goes your Org config :)
+    (add-hook 'org-mode-hook 'electric-pair-mode)
 
-  ;; Set todo keyword colors
-  (setq org-todo-keyword-faces
-        '(
-          ("TODO" :foreground "OrangeRed" :weight bold)
-          ("UNCERTAIN" :foreground "tomato" :weight bold)
-          ("WAITING" :foreground "SkyBlue3" :weight bold)
-          ("STARTED" :foreground "orange2" :weight bold)
-          ("DONE" :foreground "Darkolivegreen3" :weight bold)
+    (require 'org-super-agenda)
+    (org-super-agenda--def-auto-group outline-path "their outline paths"
+      :key-form (org-super-agenda--when-with-marker-buffer (org-super-agenda--get-marker item)
+                  (s-join " | " (org-get-outline-path))))
+
+    ;; Bigger latex fragments
+    (plist-put org-format-latex-options :scale 2)
+
+    ;; Default org file when using capture (C-c c)
+    (setq org-default-notes-file "~/Dropbox/orgmode/gtd/inbox.org")
+
+    ;; Org agenda files: look for all files in the following directory
+    (setq org-agenda-files
+      (quote ("~/Dropbox/orgmode/gtd")))
+
+    ;; Org-Capture Templates
+    (setq org-capture-templates
+          '(;; Todo entries
+            ("t"
+             "Todo"
+             entry
+             (file+headline org-default-notes-file "Inbox")
+             "** TODO %?\n:PROPERTIES:\n:CREATED:\t%u\n:END:\n"
+             ;; :clock-in t
+             ;; :clock-resume t
+             :empty-lines 1)
+          ))
+
+
+    ;; Set the org refile targets to org agenda files
+    (setq org-refile-targets (quote ((nil :maxlevel . 9)
+                                    (org-agenda-files :maxlevel . 2))))
+
+    ;; Set default column view headings: Task Total-Time Time-Stamp
+    ;; (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
+
+    (defun jethro/switch-to-agenda ()
+      (interactive)
+      (org-agenda nil "a")
+      (delete-other-windows))
+
+    (setq org-agenda-window-setup 'reorganize-frame)
+
+    ;; Set f1 to open agenda
+    (bind-key "<f1>" 'jethro/switch-to-agenda)
+
+    ;; Set org-done face
+    ;; (org-done ((t (:strike-through t :weight bold))))
+
+    ;; Set org-columns view default format (activate in agenda view with ", c")
+    (setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
+
+    ;; Org-Mode todo keywords
+    (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "WAITING(w)" "|" "DONE(d)" "CANCELED(c)")))
+
+    ;; To permanently enable mode line display of org clock
+    (setq spaceline-org-clock-p t)
+
+    ;; Set todo keyword colors
+    (setq org-todo-keyword-faces
+          '(
+            ("TODO"      :foreground "#99c794" :weight bold)
+            ("STARTED"   :foreground "#fac863" :weight bold)
+            ("NEXT"      :foreground "#5fb3b3" :weight bold)
+            ("WAITING"   :foreground "#6699cc" :weight bold)
+            ;; ("UNCERTAIN" :foreground "#c594c5" :weight bold)
+            ("DONE"      :foreground "#4f5b66" :weight bold)
+            ("CANCELED"  :foreground "#ec5f67" :weight bold)
+            )
           )
-        )
 
-  ;; Disable TODO and DONE highlighting in org mode
-  (add-hook 'org-mode-hook (lambda () (hl-todo-mode -1)))
+    ;; Disable TODO and DONE highlighting in org mode
+    (add-hook 'org-mode-hook (lambda () (hl-todo-mode -1)))
+    (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
+
+    ;; Save buffer on clocking in/out
+    (add-hook 'org-clock-in-hook #'save-buffer)
+    (add-hook 'org-clock-out-hook #'save-buffer)
+
+
+    ;; org-pomodoro
+    ;; (setq org-pomodoro-clock-break t)
+
+    ;; org-pomodoro mode hooks
+    (add-hook 'org-pomodoro-finished-hook
+              (lambda ()
+                (notify-send "Pomodoro completed!" "Time for a break.")))
+
+    (add-hook 'org-pomodoro-break-finished-hook
+              (lambda ()
+                (notify-send "Pomodoro Short Break Finished" "Ready for Another?")))
+
+    (add-hook 'org-pomodoro-long-break-finished-hook
+              (lambda ()
+                (notify-send "Pomodoro Long Break Finished" "Ready for Another?")))
+
+    (add-hook 'org-pomodoro-killed-hook
+              (lambda ()
+                (notify-send "Pomodoro Killed" "One does not simply kill a pomodoro!")))
+
+
+    (setq org-tag-alist
+          '(
+            ("@work" . ?w)
+            ("@studying" . ?s)
+            ("@home" . ?h)
+            ("@freetime" . ?f)
+            )
+          )
+    ;; Disable super-agenda keymap (breaks evil up/down on headers)
+    (setq org-super-agenda-header-map (make-sparse-keymap))
+
+    ;; Set org agenda todo view (open with <f1>)
+    (setq slang/org-agenda-directory "~/Dropbox/orgmode/gtd/")
+    (setq slang/org-agenda-todo-view
+          `("a" "Full Agenda"
+            ((agenda ""
+                  ((org-agenda-span '14)
+                   ;; (org-super-agenda-groups '((:auto-parent t)))
+                    (org-deadline-warning-days 365)))
+
+            ;; To be refiled
+            (todo "TODO"
+                  ((org-agenda-overriding-header "To Refile")
+                   (org-agenda-files '(,(concat slang/org-agenda-directory "inbox.org")))))
+
+            ;; Next Actions Category
+            (alltodo ""
+                     ((org-agenda-overriding-header "Next Actions")
+                      (org-super-agenda-groups '((:discard (:not (:todo "NEXT")))
+                                                 (:auto-outline-path t)))
+                      (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+
+            ;; Waiting for category
+            (alltodo ""
+                     ((org-agenda-overriding-header "Waiting For")
+                      (org-super-agenda-groups '((:discard (:not (:todo "WAITING")))
+                                                 (:auto-outline-path t)))
+                      (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+
+            ;; All in progress
+            (alltodo ""
+                  ((org-agenda-overriding-header "Projects")
+                   (org-super-agenda-groups '(
+                                              (:discard (:tag "someday")) ;; Don't show todos tagged with "someday"
+                                              (:discard (:habit t)) ;; Don't show habits
+                                              (:discard (:todo "WAITING")) ;; Don't show waiting
+                                              (:discard (:todo "NEXT")) ;; Don't show waiting
+                                              (:auto-outline-path t)
+                                              ))
+                   (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+
+
+            (tags "someday" ;; Only show those tagged with someday
+                  ((org-agenda-overriding-header "Someday/Maybe")
+                   (org-super-agenda-groups '(
+                                              (:discard (:todo "DONE"))
+                                              (:discard (:todo "CANCELED"))
+                                              (:auto-outline-path t)))
+                   (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+
+            (alltodo ""
+                     ((org-agenda-overriding-header "Reference Material")
+                      (org-super-agenda-groups '((:auto-outline-path t)))
+                      (org-agenda-files '(,(concat slang/org-agenda-directory "reference-material.org")))))
+            )
+            nil
+            ("/tmp/org-agenda.html")))
+
+    (setq slang/org-agenda-lower-eq-10-mins-view
+          `("l" "Less than 10 minutes effort"
+            (
+             (agenda ""
+                     ((org-agenda-span 'day)
+                      (org-super-agenda-groups '(
+                                                 (:discard (:effort> "11"))
+                                                 (:auto-parent t)))
+                      (org-deadline-warning-days 365)))
+             (alltodo ""
+                      ((org-agenda-overriding-header "Less than 10 minutes effort")
+                       (org-super-agenda-groups '((:discard (:effort> "11"))
+                                                  (:discard (:habit t))
+                                                  (:auto-parent t)))
+                       (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+                       )))
+
+
+    (defun slang/make-org-agenda-custom-view (tag key description)
+      "Make a custom agenda view filtered by a specific context tag."
+        `(,key ,description
+           (
+
+            ;; Next Actions Category
+            (alltodo ""
+                     ((org-agenda-overriding-header "Next Actions")
+                      (org-super-agenda-groups '((:discard (:not (:todo "NEXT")))
+                                                 (:discard (:not (:tag ,tag)))
+                                                 (:auto-outline-path t)))
+                      (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+
+            ;; Waiting for category
+            (alltodo ""
+                     ((org-agenda-overriding-header "Waiting For")
+                      (org-super-agenda-groups '((:discard (:not (:todo "WAITING")))
+                                                 (:discard (:not (:tag ,tag)))
+                                                 (:auto-outline-path t)))
+                      (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+
+            ;; Projects
+            (alltodo ""
+                     ((org-agenda-overriding-header ,description)
+                      (org-super-agenda-groups '((:discard (:habit t))
+                                                 (:discard (:not (:tag ,tag)))
+                                                 (:discard (:todo "WAITING"))
+                                                 (:discard (:todo "NEXT"))
+                                                 (:discard (:tag "someday"))
+                                                 (:auto-outline-path t)))
+                      (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+         )))
+    
+    ;; (setq org-agenda-custom-commands
+    ;;       '(("X" agenda "" nil ("agenda.html"))))
+    ;; (setq org-agenda-custom-commands (list))
+    ;; ;; Set to empty list is necessary or else org-agenda-custom-commands is not defined
+    (setq org-agenda-custom-commands (list))
+    (add-to-list 'org-agenda-custom-commands `,slang/org-agenda-todo-view)
+    (add-to-list 'org-agenda-custom-commands `,slang/org-agenda-lower-eq-10-mins-view)
+    (add-to-list 'org-agenda-custom-commands `,(slang/make-org-agenda-custom-view "@work" "cw" "At Work"))
+    (add-to-list 'org-agenda-custom-commands `,(slang/make-org-agenda-custom-view "@home" "ch" "At Home"))
+    (add-to-list 'org-agenda-custom-commands `,(slang/make-org-agenda-custom-view "@studying" "cs" "At Studying"))
+    (add-to-list 'org-agenda-custom-commands `,(slang/make-org-agenda-custom-view "@freetime" "cf" "At Free Time"))
+
+    (defvar slang/org-current-effort "1:00" "Current effort for agenda items.")
+
+    (defun slang/my-org-agenda-set-effort (effort)
+      "Set the effort property for the current headline."
+      (interactive
+      (list (read-string (format "Effort [%s]: " slang/org-current-effort) nil nil slang/org-current-effort)))
+      (setq slang/org-current-effort effort)
+      (org-agenda-check-no-diary)
+      (let* ((hdmarker (or (org-get-at-bol 'org-hd-marker)
+                          (org-agenda-error)))
+            (buffer (marker-buffer hdmarker))
+            (pos (marker-position hdmarker))
+            (inhibit-read-only t)
+            newhead)
+        (org-with-remote-undo buffer
+                              (with-current-buffer buffer
+                                (widen)
+                                (goto-char pos)
+                                (org-show-context 'agenda)
+                                (funcall-interactively 'org-set-effort nil slang/org-current-effort)
+                                (end-of-line 1)
+                                (setq newhead (org-get-heading)))
+                              (org-agenda-change-all-lines newhead hdmarker))))
+
+
+
+    ;; Process a single inbox item:
+    ;; 1) Set tags
+    ;; 2) Set priority
+    ;; 3) Estimate effort
+    ;; 4) Refile
+    (defun slang/org-agenda-process-inbox-item ()
+      "Process a single item in the org-agenda."
+      (interactive)
+      (org-with-wide-buffer
+       (org-agenda-todo)
+       (org-agenda-set-tags)
+       (org-agenda-priority)
+       (call-interactively 'slang/my-org-agenda-set-effort)
+       (org-agenda-refile nil nil t)))
+
+    ;; Export agenda to html file
+    ;; TODO: Send via telegram or upload to server
+    (defun slang/org-agenda-export ()
+      (interactive)
+      (org-agenda-write "~/Dropbox/orgmode/gtd/export/agenda.html")
+      )
+
+    ;; Define custom agenda keybindings
+    (add-hook 'org-agenda-mode-hook (lambda ()
+      (progn
+        (org-super-agenda-mode t)
+        (define-key org-agenda-mode-map "I" 'org-agenda-clock-in)
+        (define-key org-agenda-mode-map "O" 'org-agenda-clock-out)
+        (define-key spacemacs-org-agenda-mode-map (kbd "p") 'slang/org-agenda-process-inbox-item)
+        (define-key spacemacs-org-agenda-mode-map (kbd "e") 'slang/org-agenda-export)
+        (define-key spacemacs-org-agenda-mode-map (kbd "c") 'org-agenda-columns))))
+
+    ;; org-gcal settings
+    ;; TODO read from file
+    (setq org-gcal-client-id "508241169276-aiegc8m0nnv45llkc9h4g8jp96gj96op.apps.googleusercontent.com"
+          org-gcal-client-secret "bWGYW-3pEZsiu_-IyjTdm93a"
+          org-gcal-file-alist '(("steven.lang.mz@gmail.com" .  "~/Dropbox/orgmode/gtd/calendar.org")))
+
+
+    ;; Custom faces
+    (custom-set-faces
+     '(org-agenda-structure ((t (:foreground "#ECEFF4" :box (:line-width 1 :style released-button) :weight ultra-bold :height 1.5))))
+     '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
+     '(org-level-2 ((t (:inherit outline-2 :height 1.25))))
+     '(org-level-3 ((t (:inherit outline-3 :height 1.2))))
+     '(org-level-4 ((t (:inherit outline-4 :height 1.15))))
+     '(org-level-5 ((t (:inherit outline-5 :height 1.1))))
+     '(org-super-agenda-header ((t (:inherit org-agenda-structure :box nil :height 0.8)))))
+
+    (custom-set-variables
+     '(org-agenda-prefix-format
+       '((agenda . "  %t ")
+         (todo . "  • ")
+         (tags . "  • ")
+         (search . "  • ")))
+     '(org-modules
+       '(ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus ol-info ol-irc ol-mhe org-protocol ol-rmail ol-w3m org-habit org-ql))
+     '(org-priority-faces '((66 . "#f99157") (67 . "#65737e")))
+     '(org-super-agenda-mode t)
+     )
+
+    ;; Org babel
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((dot . t)))
+    (add-to-list 'org-src-lang-modes
+                 '("dot" . graphviz-dot-mode))
+
+
+    ;; Enable latex previews on kbd "lp"
+    (define-key spacemacs-org-mode-map (kbd "lp") 'org-latex-preview)
+
+    ;; Org-ref setup
+    (require 'org-ref)
+    (setq org-ref-default-bibliography "~/Dropbox/orgmode/bibliography/references.bib"
+          org-ref-pdf-directory "~/pdf/"
+          bibtex-completion-bibliography "~/Dropbox/orgmode/bibliography/references.bib"
+          bibtex-completion-library-path "~/Dropbox/orgmode/bibliography/bibtex-pdfs"
+          bibtex-completion-notes-path "~/Dropbox/orgmode/bibliography/helm-bibtex-notes")
+
+
+    ;; End org hook
+    )
+
+  ;; Deft config
+  (setq deft-directory "~/Dropbox/orgmode/notes/"
+        deft-recursive t)
+
+  ;; Zetteldeft config
+  (require 'zetteldeft)
+
+
+  ;; (if other
+  ;;     (if switch
+  ;;         (switch-to-buffer-other-window buffer)
+  ;;       (display-buffer buffer other))
+  ;;   (switch-to-buffer buffer))
+  (defun slang/deft-other-window ()
+    (interactive)
+    (split-window-sensibly)
+    (other-window 1)
+    (deft)
+    (evil-insert 1))
+
+  (defun slang/zetteldeft-new-search-other-window ()
+    (interactive)
+    (split-window-sensibly)  ;; open in other window 
+    (other-window 1)  ;; Switch to next window
+    (zetteldeft-deft-new-search)  ;; Open deft new search
+    (goto-line 3)  ;; Set cursor to second line (first results)
+    (evil-insert 1))  ;; Enter insert mode
+
+  (spacemacs/declare-prefix "d" "deft")
+
+  ;; (spacemacs/set-leader-keys "dd" 'slang/deft-other-window)
+  (spacemacs/set-leader-keys "dd" 'slang/zetteldeft-new-search-other-window)
+  (spacemacs/set-leader-keys "dR" 'deft-refresh)
+  ;; (spacemacs/set-leader-keys "dD" 'slang/zetteldeft-new-search-other-window)
+  (spacemacs/set-leader-keys "ds" 'zetteldeft-search-at-point)
+  (spacemacs/set-leader-keys "dc" 'zetteldeft-search-current-id)
+  (spacemacs/set-leader-keys "df" 'zetteldeft-follow-link)
+  (spacemacs/set-leader-keys "dF" 'zetteldeft-avy-file-search-ace-window)
+  (spacemacs/set-leader-keys "dl" 'zetteldeft-avy-link-search)
+  (spacemacs/set-leader-keys "dt" 'zetteldeft-avy-tag-search)
+  (spacemacs/set-leader-keys "dT" 'zetteldeft-tag-buffer)
+  (spacemacs/set-leader-keys "di" 'zetteldeft-find-file-id-insert)
+  (spacemacs/set-leader-keys "dI" 'zetteldeft-find-file-full-title-insert)
+  (spacemacs/set-leader-keys "do" 'zetteldeft-find-file)
+  (spacemacs/set-leader-keys "dn" 'zetteldeft-new-file)
+  (spacemacs/set-leader-keys "dN" 'zetteldeft-new-file-and-link)
+  (spacemacs/set-leader-keys "dr" 'zetteldeft-file-rename)
+  (spacemacs/set-leader-keys "dx" 'zetteldeft-count-words)
+  (spacemacs/set-leader-keys "dy" 'zetteldeft-copy-id-current-file)
+  (spacemacs/set-leader-keys "dL" 'zetteldeft-insert-list-links)
+
+
+  ;; Add title suffix
+  (setq zetteldeft-title-suffix "
+#+OPTIONS: toc:nil num:0
+#+STARTUP: latexpreview showall
+
+* 
+
+
+* References
+")
+
+  ;; Open preview
+  (defun efls/deft-open-preview ()
+    (interactive)
+    (deft-open-file-other-window))
+  ;; Open other window
+  (defun efls/deft-open-other ()
+    (interactive)
+    (deft-open-file-other-window t))
+
+  (with-eval-after-load 'deft
+    (define-key deft-mode-map
+      (kbd "<tab>") 'efls/deft-open-preview)
+    (define-key deft-mode-map
+      (kbd "<s-return>") 'efls/deft-open-other)
+    (define-key deft-mode-map
+      (kbd "s-j") 'evil-next-line)
+    (define-key deft-mode-map (kbd "s-k") 'evil-previous-line))
+
+
+  ;; Enable company auto completion everywhere
+  (global-company-mode t)
+
+  ;; ???
+  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+
 
   ;; Enable global visual line
   (global-visual-line-mode 1)
@@ -530,7 +966,7 @@ before packages are loaded."
   (setq julia-indent-offset 2)
 
   ;; Overwrite SPC j w with jump to word (without characters)
-  (define-key evil-normal-state-map (kbd "SPC j w") 'avy-goto-word-0)
+  (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2)
 
   ;; Enable flyspell mode during latex mode
   (add-hook 'LaTeX-mode-hook 'flyspell-mode)
@@ -540,10 +976,8 @@ before packages are loaded."
    '(company-tooltip-common
      ((t (:inherit company-tooltip :weight bold :underline nil))))
    '(company-tooltip-common-selection
-     ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
-
-  ;; Enable orgmode inline images
-  ;; (setq org-startup-with-inline-images t)
+     ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
+   )
 
   ;; Needs terminal-notifier (brew install terminal-notifier)
   (defun notify-send (title message)
@@ -555,38 +989,43 @@ before packages are loaded."
                   "--app-name" "Emacs"
                   ))
 
-  ;; org-pomodoro
-  ;; (setq org-pomodoro-clock-break t)
 
-  ;; org-pomodoro mode hooks
-  (add-hook 'org-pomodoro-finished-hook
-            (lambda ()
-              (notify-send "Pomodoro completed!" "Time for a break.")))
+  ;; Golden ration for layouts
+  (golden-ratio-mode t)
 
-  (add-hook 'org-pomodoro-break-finished-hook
-            (lambda ()
-              (notify-send "Pomodoro Short Break Finished" "Ready for Another?")))
-
-  (add-hook 'org-pomodoro-long-break-finished-hook
-            (lambda ()
-              (notify-send "Pomodoro Long Break Finished" "Ready for Another?")))
-
-  (add-hook 'org-pomodoro-killed-hook
-            (lambda ()
-              (notify-send "Pomodoro Killed" "One does not simply kill a pomodoro!")))
-
-  (golden-ratio-mode 1)
-
-  ;; Fix emacs font when used in daemon mode, see  https://stackoverflow.com/questions/3984730/emacs-gui-with-emacs-daemon-not-loading-fonts-correctly
-  (setq default-frame-alist '((font . "IBM Plex Mono 15")))
 
   ;; Disable scroll bar
-  (toggle-scroll-bar 1)
+  (scroll-bar-mode -1)
 
-  ;; bigger latex fragment
-  (plist-put org-format-latex-options :scale 2)
-  )
+  ;; Explicitly enable doom-modeline icons such that they are also displayed
+  ;; in emacs daemon mode
+  (setq doom-modeline-icon t)
+  (setq doom-modeline-buffer-file-name-style 'relative-from-project)
+  (setq doom-modeline-env-python-executable "python") ; or `python-shell-interpreter'
+  (setq doom-modeline-env--command-args "--version")
 
+  ;; Disable follow symlinks warning
+  (setq vc-follow-symlinks nil)
+
+  ;; Run org-gcal-fetch every 3 hours
+  ;; (run-with-timer 0 (* 60 180) (progn
+  ;;                                (message "Synced org-gcal")
+  ;;                                'org-gcal-fetch
+  ;;                                ))
+
+  ;; Disable lsp-ui-doc-mode
+  (add-hook 'lsp-ui-mode-hook (lambda () (lsp-ui-doc-mode -1)))
+
+
+  ;; Org agenda save
+  (defun slang/org-agenda-export-and-scp ()
+    (interactive)
+    (progn
+      (org-store-agenda-views)
+      (shell-command "scp -i ~/.ssh/id_rsa_mz /tmp/org-agenda.html rpi:org-agenda/")
+      ))
+
+)
 
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -603,43 +1042,38 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
- '(compilation-message-face (quote default))
+ '(compilation-message-face 'default)
  '(cua-global-mark-cursor-color "#2aa198")
  '(cua-normal-cursor-color "#657b83")
  '(cua-overwrite-cursor-color "#b58900")
  '(cua-read-only-cursor-color "#859900")
  '(custom-safe-themes
-   (quote
-    ("585942bb24cab2d4b2f74977ac3ba6ddbd888e3776b9d2f993c5704aa8bb4739" "8e797edd9fa9afec181efbfeeebf96aeafbd11b69c4c85fa229bb5b9f7f7e66c" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" default)))
+   '("585942bb24cab2d4b2f74977ac3ba6ddbd888e3776b9d2f993c5704aa8bb4739" "8e797edd9fa9afec181efbfeeebf96aeafbd11b69c4c85fa229bb5b9f7f7e66c" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" default))
  '(evil-want-Y-yank-to-eol nil)
  '(fci-rule-color "#eee8d5")
- '(highlight-changes-colors (quote ("#d33682" "#6c71c4")))
+ '(helm-completion-style 'emacs)
+ '(highlight-changes-colors '("#d33682" "#6c71c4"))
  '(highlight-symbol-colors
    (--map
     (solarized-color-blend it "#fdf6e3" 0.25)
-    (quote
-     ("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2"))))
+    '("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2")))
  '(highlight-symbol-foreground-color "#586e75")
  '(highlight-tail-colors
-   (quote
-    (("#eee8d5" . 0)
+   '(("#eee8d5" . 0)
      ("#B4C342" . 20)
      ("#69CABF" . 30)
      ("#69B7F0" . 50)
      ("#DEB542" . 60)
      ("#F2804F" . 70)
      ("#F771AC" . 85)
-     ("#eee8d5" . 100))))
+     ("#eee8d5" . 100)))
  '(hl-bg-colors
-   (quote
-    ("#DEB542" "#F2804F" "#FF6E64" "#F771AC" "#9EA0E5" "#69B7F0" "#69CABF" "#B4C342")))
+   '("#DEB542" "#F2804F" "#FF6E64" "#F771AC" "#9EA0E5" "#69B7F0" "#69CABF" "#B4C342"))
  '(hl-fg-colors
-   (quote
-    ("#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3")))
- '(hl-paren-colors (quote ("#2aa198" "#b58900" "#268bd2" "#6c71c4" "#859900")))
+   '("#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3"))
+ '(hl-paren-colors '("#2aa198" "#b58900" "#268bd2" "#6c71c4" "#859900"))
  '(hl-todo-keyword-faces
-   (quote
-    (("TODO" . "#dc752f")
+   '(("TODO" . "#dc752f")
      ("NEXT" . "#dc752f")
      ("THEM" . "#2d9574")
      ("PROG" . "#4f97d7")
@@ -653,16 +1087,23 @@ This function is called at the very end of Spacemacs initialization."
      ("TEMP" . "#b1951d")
      ("FIXME" . "#dc752f")
      ("XXX" . "#dc752f")
-     ("XXXX" . "#dc752f"))))
+     ("XXXX" . "#dc752f")))
  '(magit-diff-use-overlays nil)
  '(nrepl-message-colors
-   (quote
-    ("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4")))
- '(org-agenda-files (quote ("~/orgmode/gtd.org" "~/orgmode/tracking.org")))
+   '("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4"))
+ '(org-agenda-prefix-format
+   '((agenda . "  %t ")
+     (todo . "  • ")
+     (tags . "  • ")
+     (search . "  • ")))
+ '(org-highlight-latex-and-related '(latex script entities))
+ '(org-modules
+   '(ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus ol-info ol-irc ol-mhe org-protocol ol-rmail ol-w3m org-habit org-ql))
+ '(org-priority-faces '((66 . "#f99157") (67 . "#65737e")))
+ '(org-super-agenda-mode t)
  '(package-selected-packages
-   (quote
-    (ssh-agency opencl-mode lsp-treemacs lsp-python-ms helm-rtags helm-lsp helm-ls-git google-c-style glsl-mode flycheck-ycmd flycheck-rtags ediprolog disaster cuda-mode cquery cpp-auto-include company-ycmd ycmd request-deferred company-rtags rtags company-glsl company-c-headers clang-format ccls org-sidebar org-ql peg ov org-super-agenda ts ob-ipython ein skewer-mode polymode websocket js2-mode pdf-tools tablist dap-mode bui tree-mode lsp-python web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode prettier-js impatient-mode simple-httpd helm-css-scss haml-mode emmet-mode counsel-css company-web web-completion-data add-node-modules-path atomic-chrome jedi-core ede-php-autoload-composer-installers jedi company-jedi company-flx atom-one-dark-theme oceanic-theme evil-easymotion gmail-message-mode ham-mode html-to-markdown flymd edit-server csv-mode git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-helm flyspell-correct diff-hl browse-at-remote auto-dictionary lsp-ui company-lsp dracula-theme doom-themes django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme yasnippet-snippets yapfify xterm-color unfill smeargle shell-pop pyvenv pytest pyenv-mode py-isort pippel pipenv pip-requirements orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-brain mwim multi-term mmm-mode markdown-toc markdown-mode magit-svn magit-gitflow lsp-julia lsp-mode dash-functional live-py-mode julia-repl julia-mode importmagic epc ctable concurrent deferred htmlize helm-pydoc helm-org-rifle helm-gtags helm-gitignore helm-git-grep helm-company helm-c-yasnippet gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md ggtags fuzzy flycheck-pos-tip pos-tip flycheck evil-org evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help cython-mode company-statistics company-auctex company-anaconda company auto-yasnippet yasnippet auctex-latexmk auctex anaconda-mode pythonic ac-ispell auto-complete ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen treemacs-projectile treemacs-evil treemacs ht pfuture toc-org symon string-inflection spaceline-all-the-icons spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode password-generator paradox spinner overseer org-bullets open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state iedit evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens smartparens paredit evil-args evil-anzu anzu eval-sexp-fu elisp-slime-nav editorconfig dumb-jump doom-modeline eldoc-eval shrink-path all-the-icons memoize f dash s define-word counsel-projectile projectile counsel swiper ivy pkg-info epl column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile packed aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core popup which-key use-package pcre2el org-plus-contrib hydra font-lock+ evil goto-chg undo-tree dotenv-mode diminish bind-map bind-key async)))
- '(pdf-view-midnight-colors (quote ("#b2b2b2" . "#292b2e")))
+   '(org-ref key-chord helm-bibtex biblio parsebib biblio-core helm-org ivy-rich wgrep smex ivy-yasnippet ivy-xref ivy-rtags ivy-purpose ivy-hydra flyspell-correct-ivy swiper-helm graphviz-dot-mode company-quickhelp deft direnv tern nodejs-repl livid-mode js2-refactor multiple-cursors js-doc import-js grizzl counsel-gtags all-the-icons-gnus all-the-icons-dired vimrc-mode dactyl-mode origami org-gcal rainbow-mode nord-theme ssh-agency opencl-mode lsp-treemacs lsp-python-ms helm-rtags helm-lsp helm-ls-git google-c-style glsl-mode flycheck-ycmd flycheck-rtags ediprolog disaster cuda-mode cquery cpp-auto-include company-ycmd ycmd request-deferred company-rtags rtags company-glsl company-c-headers clang-format ccls org-sidebar org-ql peg ov org-super-agenda ts ob-ipython ein skewer-mode polymode websocket js2-mode pdf-tools tablist dap-mode bui tree-mode lsp-python web-mode web-beautify tagedit slim-mode scss-mode sass-mode pug-mode prettier-js impatient-mode simple-httpd helm-css-scss haml-mode emmet-mode counsel-css company-web web-completion-data add-node-modules-path atomic-chrome jedi-core ede-php-autoload-composer-installers jedi company-jedi company-flx atom-one-dark-theme oceanic-theme evil-easymotion gmail-message-mode ham-mode html-to-markdown flymd edit-server csv-mode git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-helm flyspell-correct diff-hl browse-at-remote auto-dictionary lsp-ui company-lsp dracula-theme doom-themes django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme cherry-blossom-theme busybee-theme bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes afternoon-theme yasnippet-snippets yapfify xterm-color unfill smeargle shell-pop pyvenv pytest pyenv-mode py-isort pippel pipenv pip-requirements orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-brain mwim multi-term mmm-mode markdown-toc markdown-mode magit-svn magit-gitflow lsp-julia lsp-mode dash-functional live-py-mode julia-repl julia-mode importmagic epc ctable concurrent deferred htmlize helm-pydoc helm-org-rifle helm-gtags helm-gitignore helm-git-grep helm-company helm-c-yasnippet gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md ggtags fuzzy flycheck-pos-tip pos-tip flycheck evil-org evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help cython-mode company-statistics company-auctex company-anaconda company auto-yasnippet yasnippet auctex-latexmk auctex anaconda-mode pythonic ac-ispell auto-complete ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen treemacs-projectile treemacs-evil treemacs ht pfuture toc-org symon string-inflection spaceline-all-the-icons spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode password-generator paradox spinner overseer org-bullets open-junk-file nameless move-text macrostep lorem-ipsum link-hint indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-xref helm-themes helm-swoop helm-purpose window-purpose imenu-list helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state iedit evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens smartparens paredit evil-args evil-anzu anzu eval-sexp-fu elisp-slime-nav editorconfig dumb-jump doom-modeline eldoc-eval shrink-path all-the-icons memoize f dash s define-word counsel-projectile projectile counsel swiper ivy pkg-info epl column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile packed aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core popup which-key use-package pcre2el org-plus-contrib hydra font-lock+ evil goto-chg undo-tree dotenv-mode diminish bind-map bind-key async))
+ '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e"))
  '(pos-tip-background-color "#eee8d5")
  '(pos-tip-foreground-color "#586e75")
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#eee8d5" 0.2))
@@ -680,8 +1121,7 @@ This function is called at the very end of Spacemacs initialization."
  '(vc-annotate-background nil)
  '(vc-annotate-background-mode nil)
  '(vc-annotate-color-map
-   (quote
-    ((20 . "#dc322f")
+   '((20 . "#dc322f")
      (40 . "#c8805d801780")
      (60 . "#bec073400bc0")
      (80 . "#b58900")
@@ -698,11 +1138,10 @@ This function is called at the very end of Spacemacs initialization."
      (300 . "#28669833af33")
      (320 . "#279993ccbacc")
      (340 . "#26cc8f66c666")
-     (360 . "#268bd2"))))
+     (360 . "#268bd2")))
  '(vc-annotate-very-old-color nil)
  '(weechat-color-list
-   (quote
-    (unspecified "#fdf6e3" "#eee8d5" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#657b83" "#839496")))
+   '(unspecified "#fdf6e3" "#eee8d5" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#657b83" "#839496"))
  '(xterm-color-names
    ["#eee8d5" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#073642"])
  '(xterm-color-names-bright
@@ -712,12 +1151,13 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:background nil))))
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
  '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
- '(org-level-1 ((t (:foreground "#83a598" :height 1.3))))
- '(org-level-2 ((t (:foreground "#fabd2f" :height 1.25))))
- '(org-level-3 ((t (:foreground "#d3869b" :height 1.2))))
- '(org-level-4 ((t (:foreground "#fb4933" :height 1.15))))
- '(org-level-5 ((t (:foreground "#b8bb26" :height 1.1)))))
+ '(org-agenda-structure ((t (:foreground "#ECEFF4" :box (:line-width 1 :style released-button) :weight ultra-bold :height 1.5))))
+ '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
+ '(org-level-2 ((t (:inherit outline-2 :height 1.25))))
+ '(org-level-3 ((t (:inherit outline-3 :height 1.2))))
+ '(org-level-4 ((t (:inherit outline-4 :height 1.15))))
+ '(org-level-5 ((t (:inherit outline-5 :height 1.1))))
+ '(org-super-agenda-header ((t (:inherit org-agenda-structure :box nil :height 0.8)))))
 )

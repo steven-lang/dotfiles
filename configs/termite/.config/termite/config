@@ -40,55 +40,90 @@ scrollback_lines = 10000
 
 # "off", "left" or "right"
 #scrollbar = off
+
+# Copyright (c) 2016-present Arctic Ice Studio <development@arcticicestudio.com>
+# Copyright (c) 2016-present Sven Greb <code@svengreb.de>
+
+# Project:    Nord Termite
+# Repository: https://github.com/arcticicestudio/nord-termite
+# License:    MIT
+
 [colors]
-# Base16 OceanicNext
-# Author: https://github.com/voronianski/oceanic-next-color-scheme
+cursor = #d8dee9
+cursor_foreground = #2e3440
 
-foreground          = #C0C5CE
-foreground_bold     = #CDD3DE
-cursor              = #CDD3DE
-cursor_foreground   = #1B2B34
-background          = rgba(27, 43, 52)
+foreground = #d8dee9
+foreground_bold = #d8dee9
+background = #2e3440
 
-# 16 color space
+highlight = #4c566a
 
-# Black, Gray, Silver, White
-color0  = #1B2B34
-color8  = #65737E
-color7  = #C0C5CE
-color15 = #D8DEE9
+color0  = #3b4252
+color1  = #bf616a
+color2  = #a3be8c
+color3  = #ebcb8b
+color4  = #81a1c1
+color5  = #b48ead
+color6  = #88c0d0
+color7  = #e5e9f0
+color8  = #4c566a
+color9  = #bf616a
+color10 = #a3be8c
+color11 = #ebcb8b
+color12 = #81a1c1
+color13 = #b48ead
+color14 = #8fbcbb
+color15 = #eceff4
 
-# Red
-color1  = #EC5f67
-color9  = #EC5f67
+# [colors]
+# # Base16 OceanicNext
+# # Author: https://github.com/voronianski/oceanic-next-color-scheme
 
-# Green
-color2  = #99C794
-color10 = #99C794
+# foreground          = #C0C5CE
+# foreground_bold     = #CDD3DE
+# cursor              = #CDD3DE
+# cursor_foreground   = #1B2B34
+# background          = rgba(27, 43, 52)
 
-# Yellow
-color3  = #FAC863
-color11 = #FAC863
+# # 16 color space
 
-# Blue
-color4  = #6699CC
-color12 = #6699CC
+# # Black, Gray, Silver, White
+# color0  = #1B2B34
+# color8  = #65737E
+# color7  = #C0C5CE
+# color15 = #D8DEE9
 
-# Purple
-color5  = #C594C5
-color13 = #C594C5
+# # Red
+# color1  = #EC5f67
+# color9  = #EC5f67
 
-# Teal
-color6  = #5FB3B3
-color14 = #5FB3B3
+# # Green
+# color2  = #99C794
+# color10 = #99C794
 
-# Extra colors
-color16 = #F99157
-color17 = #AB7967
-color18 = #343D46
-color19 = #4F5B66
-color20 = #A7ADBA
-color21 = #CDD3DE
+# # Yellow
+# color3  = #FAC863
+# color11 = #FAC863
+
+# # Blue
+# color4  = #6699CC
+# color12 = #6699CC
+
+# # Purple
+# color5  = #C594C5
+# color13 = #C594C5
+
+# # Teal
+# color6  = #5FB3B3
+# color14 = #5FB3B3
+
+# # Extra colors
+# color16 = #F99157
+# color17 = #AB7967
+# color18 = #343D46
+# color19 = #4F5B66
+# color20 = #A7ADBA
+# color21 = #CDD3DE
 
 # [colors]
 # # Base16 Gruvbox dark, soft
