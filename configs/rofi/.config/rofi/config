@@ -1,47 +1,81 @@
-rofi.combi-modi:    window,drun,ssh
-rofi.theme:         oceanicnext 
+rofi.combi-modi:    drun,run,ssh
+rofi.theme:         nord 
 rofi.font:          IBMPlex Mono 20
-rofi.modi:          drun 
+rofi.modi:          combi,drun,run 
+! Base16 Nord
+! Author: arcticicestudio
 
-! Base16 OceanicNext
-! Author: https://github.com/voronianski/oceanic-next-color-scheme
-
-! base00: #1B2B34
-! base01: #343D46
-! base02: #4F5B66
-! base03: #65737E
-! base04: #A7ADBA
-! base05: #C0C5CE
-! base06: #CDD3DE
-! base07: #D8DEE9
-! base08: #EC5f67
-! base09: #F99157
-! base0A: #FAC863
-! base0B: #99C794
-! base0C: #5FB3B3
-! base0D: #6699CC
-! base0E: #C594C5
-! base0F: #AB7967
+! base00: #2e3440
+! base01: #3b4252
+! base02: #434c5e
+! base03: #4c566a
+! base04: #d8dee9
+! base05: #e5e9f0
+! base06: #eceff4
+! base07: #8fbcbb
+! base08: #88c0d0
+! base09: #81a1c1
+! base0A: #5e81ac
+! base0B: #bf616a
+! base0C: #d08770
+! base0D: #ebcb8b
+! base0E: #a3be8c
+! base0F: #b48ead
 
 ! Enable the extended coloring options
 rofi.color-enabled: true
 
 ! Property Name     BG       Border   Separator
-rofi.color-window:  #343D46, #343D46, #1B2B34
+rofi.color-window:  #3b4252, #3b4252, #2e3440
 
 ! Property Name     BG       FG       BG-alt   Head-BG  Head-FG
-rofi.color-normal:  #343D46, #C0C5CE, #343D46, #343D46, #D8DEE9
-rofi.color-active:  #343D46, #6699CC, #343D46, #343D46, #6699CC
-rofi.color-urgent:  #343D46, #EC5f67, #343D46, #343D46, #EC5f67
+rofi.color-normal:  #3b4252, #e5e9f0, #3b4252, #3b4252, #8fbcbb
+rofi.color-active:  #3b4252, #ebcb8b, #3b4252, #3b4252, #ebcb8b
+rofi.color-urgent:  #3b4252, #88c0d0, #3b4252, #3b4252, #88c0d0
 
 ! Set the desired separator style
 rofi.separator-style: solid
 
-rofi.kb-row-up:                      Up,Control+k,Shift+Tab,Shift+ISO_Left_Tab
-rofi.kb-row-down:                    Down,Control+j
-rofi.kb-accept-entry:                Control+m,Return,KP_Enter
-rofi.terminal:                       mate-terminal
-rofi.kb-remove-to-eol:               Control+Shift+e
-rofi.kb-mode-next:                   Shift+Right,Control+Tab,Control+l
-rofi.kb-mode-previous:               Shift+Left,Control+Shift+Tab,Control+h
-rofi.kb-remove-char-back:            BackSpace
+
+! ! Base16 OceanicNext
+! ! Author: https://github.com/voronianski/oceanic-next-color-scheme
+! 
+! ! base00: #1B2B34
+! ! base01: #343D46
+! ! base02: #4F5B66
+! ! base03: #65737E
+! ! base04: #A7ADBA
+! ! base05: #C0C5CE
+! ! base06: #CDD3DE
+! ! base07: #D8DEE9
+! ! base08: #EC5f67
+! ! base09: #F99157
+! ! base0A: #FAC863
+! ! base0B: #99C794
+! ! base0C: #5FB3B3
+! ! base0D: #6699CC
+! ! base0E: #C594C5
+! ! base0F: #AB7967
+! 
+! Enable the extended coloring options
+! rofi.color-enabled: true
+! 
+! ! Property Name     BG       Border   Separator
+! rofi.color-window:  #343D46, #343D46, #1B2B34
+! 
+! ! Property Name     BG       FG       BG-alt   Head-BG  Head-FG
+! rofi.color-normal:  #343D46, #C0C5CE, #343D46, #343D46, #D8DEE9
+! rofi.color-active:  #343D46, #6699CC, #343D46, #343D46, #6699CC
+! rofi.color-urgent:  #343D46, #EC5f67, #343D46, #343D46, #EC5f67
+! 
+! ! Set the desired separator style
+! rofi.separator-style: solid
+! 
+! rofi.kb-row-up:                      Up,Control+k,Shift+Tab,Shift+ISO_Left_Tab
+! rofi.kb-row-down:                    Down,Control+j
+! rofi.kb-accept-entry:                Control+m,Return,KP_Enter
+! rofi.terminal:                       mate-terminal
+! rofi.kb-remove-to-eol:               Control+Shift+e
+! rofi.kb-mode-next:                   Shift+Right,Control+Tab,Control+l
+! rofi.kb-mode-previous:               Shift+Left,Control+Shift+Tab,Control+h
+! rofi.kb-remove-char-back:            BackSpace

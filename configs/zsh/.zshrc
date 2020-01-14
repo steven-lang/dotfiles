@@ -94,16 +94,18 @@ fi
 
 # Check if nvim is available
 if hash nvim 2>/dev/null; then
-  export EDITOR=nvim
-  export VISUAL=nvim
+  # export EDITOR=nvim
+  # export VISUAL=nvim
   alias vim=nvim
 
   # Use nvim for manpages
   export MANPAGER="nvim -c 'set ft=man' -"
 else
-  export EDITOR=vim
-  export VISUAL=vim
+  # export EDITOR=vim
+  # export VISUAL=vim
 fi
+export EDITOR=emacsclient
+export VISUAL=emacsclient
 
 export JAVA_HOME=/usr/lib/jvm/java-10-openjdk
 export TERMINAL=termite
@@ -134,6 +136,14 @@ alias free='free -m'                      # show sizes in MB
 alias np='nano -w PKGBUILD'
 alias more=less
 
+# Emacs client
+function emacsclient() {
+    /usr/bin/emacsclient -c -a '' "$@" &
+    disown
+}
+alias ec="emacsclient -n"
+alias emacsclient-restart="systemctl --user restart emacs"
+
 # Better ls
 # alias ls='ls -lh --color=auto --group-directories-first'
 if hash exa 2>/dev/null; then
@@ -144,24 +154,24 @@ alias grep='grep --color=auto'
 alias pacu='sudo pacman -Syu && yay -Syua'
 alias pacs='sudo pacman -S'
 alias yay='yay --noconfirm'
-alias eZ='vim ~/.zshrc'
+alias eZ='$EDITOR ~/.zshrc'
 alias rZ='source ~/.zshrc'
 alias reboot='sudo systemctl reboot'
 alias poweroff='sudo systemctl poweroff'
-alias i3config='vim ~/.config/i3/config'
-alias i3statusconfig='vim ~/.config/i3status/config'
+alias i3config='$EDITOR ~/.config/i3/config'
+alias i3statusconfig='$EDITOR ~/.config/i3status/config'
 alias xclip='xclip -selection c'
 alias clone='termite -e "bash" 2>&1 >/dev/null & disown %1'
 alias PWD='echo $(pwd) | xclip && pwd && echo "path copied"'
 alias CD='echo "cd $(xclip -o)" && cd $(xclip -o)'
 alias :q='exit'
 alias zathura='zathura --fork'
-alias vimconfig='vim ~/.vimrc'
+alias vimconfig='$EDITOR ~/.vimrc'
 alias vimupdate='vim +PlugClean +PlugUpdate +UpdateRemoteRepositories +qa'
-alias zshconfig='vim ~/.zshrc'
+alias zshconfig='$EDITOR ~/.zshrc'
 alias zshreload='source ~/.zshrc'
-alias i3config='vim ~/.config/i3/config'
-alias xresourcesconfig='vim ~/.Xresources'
+alias i3config='$EDITOR ~/.config/i3/config'
+alias xresourcesconfig='$EDITOR ~/.Xresources'
 alias xresourcesreload='xrdb -merge ~/.Xresources'
 alias gnome-screenshot='gnome-screenshot -a'
 alias envactivate='source ./env/bin/activate'
@@ -284,5 +294,11 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# Disable vim to enforce emacs usage
+alias vim="echo 'Use emacs!'"
+
+
 # Enable fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+test -r "~/.dir_colors" && eval $(dircolors ~/.dir_colors)

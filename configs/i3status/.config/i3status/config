@@ -7,13 +7,14 @@
 # If the above line is not correctly displayed, fix your editor first!
 
 general { colors = true interval = 5
-		color_good = "#77994B"
-        color_bad = "#994b4b"
-		color_degraded = "#55858E"
+          color_good = "#77994B"
+          color_bad = "#994b4b"
+          color_degraded = "#55858E"
 	}
 
-#order += "cpu_usage"
-order += "load"
+order += "cpu_usage"
+order += "memory"
+# order += "load"
 order += "disk /"
 order += "disk /home"
 order += "wireless _first_"
@@ -23,11 +24,17 @@ order += "battery 1"
 order += "tztime local"
 # order += "ipv6"
 # order += "run_watch DHCP"
-# order += "run_watch VPN"
+order += "run_watch VPN"
+
+memory {
+memory_used_method = "memavailable"
+format = "Memory: %used used"
+}
 
 cpu_usage {
-format = " cpu  %usage "
+format = " CPU:  %usage "
 }
+
 load {
 format = " load %1min  %5min  %15min "
 # max_threshold = 0.3

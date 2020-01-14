@@ -46,11 +46,20 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
+if exists('g:started_by_firenvim')
+  set laststatus=0
+else
+  set laststatus=2
+endif
+
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
 
 call plug#begin('~/.vim/plugged')
+" Firenvim for browser integration
+Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+
 " Adds file type icons to Vim plugins
 Plug 'ryanoasis/vim-devicons'
 
@@ -102,6 +111,8 @@ Plug 'jiangmiao/auto-pairs'
 " Gruvbox colorscheme
 Plug 'gruvbox-community/gruvbox'
 Plug 'mhartington/oceanic-next'
+Plug 'romainl/Apprentice'
+Plug 'arcticicestudio/nord-vim'
 
 " USE cgn with dot repeat instead ///Enable multiple cursors with <C-n> in visual mode
 Plug 'terryma/vim-multiple-cursors'
@@ -187,18 +198,29 @@ syntax on                 " Enable syntax highlighting
 "   set background=light
 " else
 "   set background=dark
+"   let g:oceanic_next_terminal_bold = 1
+"   let g:oceanic_next_terminal_italic = 1
+"   colorscheme OceanicNext
 " endif
+
+
+" {{{ Colorscheme
 set background=dark
 let g:oceanic_next_terminal_bold = 1
 let g:oceanic_next_terminal_italic = 1
-colorscheme OceanicNext
+" colorscheme OceanicNext
+colorscheme nord
+
+" }}}
+
+" {{{ Native Editor Settings
 set path=.,,**
 set expandtab
 set tabstop=4
 set softtabstop=2
 set shiftwidth=2
-set nonumber                " Enable numbers
-set norelativenumber        " Enable relative numbers
+set number                " Enable numbers
+set relativenumber        " Enable relative numbers
 set showcmd               " Show command in bottom right position
 set cursorline            " Highlight line where curser is
 " set colorcolumn=100
@@ -206,6 +228,7 @@ set wildmenu
 set showmatch
 set incsearch             " Enable incremental seach; Highlight while typing
 set ignorecase            " Ignore case for searches; temp undo with /\c or /\C
+" }}}
 
 " Allow for visual movements over wrapped lines
 nnoremap j gj
@@ -388,7 +411,7 @@ augroup pythonbindings
   " autocmd Filetype python vnoremap <buffer> <silent> <localleader>d :'<,'>GenPyDoc<CR>
   " Function to insert python PDB debug line
   function! InsertPDB()
-    let trace = expand("__import__(\"pdb\").set_trace()")
+    let trace = expand("__import__(\"ipdb\").set_trace(context=13)")
     execute "normal O".trace
   endfunction
 augroup end
