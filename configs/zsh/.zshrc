@@ -141,7 +141,8 @@ function emacsclient() {
     /usr/bin/emacsclient -c -a '' "$@" &
     disown
 }
-alias ec="emacsclient -n"
+alias ec="/usr/bin/emacsclient -nw -c -a '' "$@""
+# alias ec="emacsclient -n"
 alias emacsclient-restart="systemctl --user restart emacs"
 
 # Better ls
@@ -175,7 +176,6 @@ alias xresourcesconfig='$EDITOR ~/.Xresources'
 alias xresourcesreload='xrdb -merge ~/.Xresources'
 alias gnome-screenshot='gnome-screenshot -a'
 alias envactivate='source ./env/bin/activate'
-alias find='ag -g'
 
 # Update all pip packages
 alias pipupdate="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
@@ -293,9 +293,6 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-
-# Disable vim to enforce emacs usage
-alias vim="echo 'Use emacs!'"
 
 
 # Enable fzf

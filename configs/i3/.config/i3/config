@@ -113,7 +113,7 @@ bindsym $mod+4 workspace number 4
 bindsym $mod+5 workspace number 5
 bindsym $mod+6 workspace number 6
 bindsym $mod+7 workspace number 7 music
-bindsym $mod+8 workspace number 8 org
+bindsym $mod+8 workspace number 8 gtd
 bindsym $mod+9 workspace number 9 mail
 bindsym $mod+0 workspace number 10 chat
 
@@ -125,7 +125,7 @@ bindsym $mod+Shift+4 move container to workspace number 4
 bindsym $mod+Shift+5 move container to workspace number 5
 bindsym $mod+Shift+6 move container to workspace number 6
 bindsym $mod+Shift+7 move container to workspace number 7 music
-bindsym $mod+Shift+8 move container to workspace number 8 org
+bindsym $mod+Shift+8 move container to workspace number 8 gtd
 bindsym $mod+Shift+9 move container to workspace number 9 mail
 bindsym $mod+Shift+0 move container to workspace number 10 chat
 
@@ -351,26 +351,26 @@ set $base0E #A3BE8C
 set $base0F #B48EAD
 
 # Basic bar configuration using the Base16 variables.
-bar {
-    status_command i3status
-    font pango:DejaVu Sans Mono, Icons 12
-    status_command i3status
-    # tray_output primary
-    position top 
+# bar {
+#     status_command i3status
+#     font pango:DejaVu Sans Mono, Icons 12
+#     status_command i3status
+#     # tray_output primary
+#     position top 
 
-    colors {
-        background $base00
-        separator  $base04
-        statusline $base04
+#     colors {
+#         background $base00
+#         separator  $base04
+#         statusline $base04
 
-        # State             Border  BG      Text
-        focused_workspace   $base05 $base09 $base00
-        active_workspace    $base05 $base03 $base00
-        inactive_workspace  $base03 $base01 $base05
-        urgent_workspace    $base08 $base08 $base00
-        binding_mode        $base00 $base0A $base00
-    }
-}
+#         # State             Border  BG      Text
+#         focused_workspace   $base05 $base09 $base00
+#         active_workspace    $base05 $base03 $base00
+#         inactive_workspace  $base03 $base01 $base05
+#         urgent_workspace    $base08 $base08 $base00
+#         binding_mode        $base00 $base0A $base00
+#     }
+# }
 
 # Basic color configuration using the Base16 variables for windows and borders.
 # Property Name         Border  BG      Text    Indicator Child Border
@@ -388,7 +388,7 @@ client.background       $base07
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 # Polybar
-# exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 exec picom -b
 
@@ -399,3 +399,6 @@ bindsym $mod+c exec bash ~/dotfiles/scripts/keys-cheat-sheet.sh
 exec redshift &
 exec pasystray &
 exec volumeicon &
+
+# Move to first workspace on startup
+exec i3-msg workspace 1 web

@@ -1,12 +1,14 @@
 tags
-!./configs/emacs/.emacs.d/*.el
-!./configs/emacs/.emacs.d/layers/**/*
-./configs/emacs/.emacs.d/*
 
+# Ignore auto-save files from emacs
+**/*~
 
 ### Emacs specific
 # Ignore everything
-./configs/emacs/.emacs.d/*
+configs/emacs/.emacs.d/*
 # Except for..
-# !./configs/emacs/.emacs.d/*.el
-# !./configs/emacs/.emacs.d/layers
+!configs/emacs/.emacs.d/*.el
+!configs/emacs/.emacs.d/layers
+
+# Ignore credentials file
+configs/emacs/.emacs.d/layers/org/calendar-credentials.el
