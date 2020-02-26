@@ -21,8 +21,7 @@
             ("C-j" . helm-next-line))
     :config
     
-    (setq helm-follow-mode-persistent t)
-    (define-key helm-find-files-map "\t" 'helm-execute-persistent-action)
+    ;; (define-key helm-find-files-map "\t" 'helm-execute-persistent-action)
     (helm-mode 1))
 
 ;; Helm-ag

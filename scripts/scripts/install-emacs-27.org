@@ -1,0 +1,25 @@
+* Steps to install Emacs 27
+** Build Emacs
+#+begin_src shell
+git clone -b emacs-27 --single-branch https://git.savannah.gnu.org/git/emacs.git
+cd emacs
+./autogen.sh && ./configure && make
+./src/emacs --version
+#+end_src
+
+For global system install, run:
+
+#+begin_src shell
+sudo make install
+#+end_src
+** Install Emacsclient
+The emacsclient binary resides in ~./lib-src~, therefore run
+#+begin_src shell
+cd lib-src
+make
+#+end_src
+
+Again, for global system install, run:
+#+begin_src shell
+sudo make install
+#+end_src

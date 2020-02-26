@@ -279,5 +279,5 @@ format-prefix-foreground = #5b
 
 [module/org-clock]
 type = custom/script
-exec = /usr/bin/emacsclient --eval "(slang/org-clock-output-polybar)" 2&>1 && cat ~/tmp/org-clock-current-task
+exec = /usr/local/bin/emacsclient --eval "(slang/org-clock-output-polybar)" 2&>1 && cat ~/tmp/org-clock-current-task
 interval = 15

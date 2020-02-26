@@ -23,13 +23,16 @@ The prefix map is named 'my-DEF-map'."
     ;; General stuff
     "!"   'shell-command
     ":"   'eval-expression
-    "/"   'helm-do-ag-project-root
+    "/"    slang/ag-project-root
     "TAB" '((lambda () (interactive) (switch-to-buffer nil))
             :which-key "other-buffer")
-    "SPC" 'helm-M-x
+    "SPC"  slang/M-x
     "qq"  'save-buffers-kill-terminal
     "'"   'ansi-term
     "v"   'er/expand-region
+
+
+    ;; 
 
     ;; Window selection
     "1"   'winum-select-window-1
@@ -40,13 +43,29 @@ The prefix map is named 'my-DEF-map'."
     "6"   'winum-select-window-6
     "7"   'winum-select-window-7
     "8"   'winum-select-window-8
-    "9"   'winum-select-window-9)
+    "9"   'winum-select-window-9
+
+    ;; Org capture
+    "c"   'org-capture)
+    ;; "c"   '((lambda () (interactive) (org-capture nil "t")) :which-key "org-capture (todo)"))
+
+
+;; utilitites
+(general-global-menu-definer
+    "utils" "u"
+
+    "h"   'helm-google-suggest  ;; need 'surfraw' binary
+    "t"   'helm-top
+    "y"   'helm-show-kill-ring
+    )
 
 
 ;; Files
 (general-global-menu-definer
     "files" "f"
-    "f"  'helm-find-files
+    ;; "f"    slang/find-files
+    "f"   slang/find-files
+    "F"   slang/find-files-fuzzy
     "ed"  'slang/edit-config
     "er"  'slang/reload-config)
 
@@ -60,8 +79,8 @@ The prefix map is named 'my-DEF-map'."
 ;; Buffers
 (general-global-menu-definer
     "buffers" "b"
-    "b"  'helm-buffers-list
-    "s"  'slang/switch-to-scratch
+    "b" 'helm-mini
+    "s" 'slang/switch-to-scratch
     "M" '((lambda () (interactive) (switch-to-buffer "*Messages*"))
         :which-key "messages-buffer")
     "d"  'kill-this-buffer)
@@ -81,10 +100,11 @@ The prefix map is named 'my-DEF-map'."
 ;; Projectile
 (general-global-menu-definer
  "projectile" "p"
-    "p"  'helm-projectile-switch-project
-    "b"  'helm-projectile-switch-to-buffer
-    "f"  'helm-projectile-find-file
-    "/"  'helm-projectile-ag)
+    "p"   slang/projectile-switch-project
+    "b"   slang/projectile-switch-to-buffer
+    "f"   slang/projectile-find-file
+    "F"   slang/projectile-find-file-fuzzy
+    "/"   slang/projectile-ag)
 
 
 ;; Zetteldeft

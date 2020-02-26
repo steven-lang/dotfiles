@@ -1,5 +1,8 @@
 ;; Emacs config location
-(setq emacs-dir (file-name-as-directory "~/.emacs.d"))
+(setq emacs-dir (file-name-as-directory "~/dotfiles/configs/emacs/.emacs.d"))
+
+;; Ask for y/n instead of yes-no
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; Remove scratch buffer text
 (setq initial-scratch-message nil)
@@ -65,6 +68,10 @@
 ;; Always use spaces for indentation
 (setq-default indent-tabs-mode nil
             tab-width ian/indent-width)
+
+;; Save auto-save files somewhere else
+(setq auto-save-file-name-transforms
+  `((".*" "~/.emacs-saves/" t)))
 
 ;; (use-package autorevert
 ;;   :ensure nil
@@ -142,7 +149,9 @@
                      "python"
                      "evil"
                      "company"
-                     "helm"))
+                     "helm"
+                     "latex"
+                     ))
 
 ;; Magit!
 (use-package magit
@@ -255,6 +264,9 @@
     (autoload 'csv-mode "csv-mode"
     "Major mode for editing comma-separated value files." t)
   )
+(use-package ssh-agency)
+(use-package gitignore-mode)
+(use-package crontab-mode)
 
 
 ;; Enable flyspell mode during latex mode
@@ -276,6 +288,26 @@
 
 ;; Disable follow symlinks warning
 (setq vc-follow-symlinks nil)
+
+
+;; Set theme according to day/night
+;; (defun set-light-theme ()
+;;   "Set the light theme with some customization if needed."
+;;   (interactive)
+;;   (load-theme 'doom-solarized-light t))
+
+;; (defun set-dark-theme ()
+;;   "Set the dark theme with some customization if needed."
+;;   (interactive)
+;;   (load-theme 'doom-nord t))
+
+;; (defun theme-switcher ()
+;;   (interactive)
+;;   (let ((current-hour (string-to-number (format-time-string "%H"))))
+;;     (if (or (< current-hour 6) (> current-hour 20)) (set-dark-theme) (set-light-theme))))
+
+;; ;; Run at every 3600 seconds, after 0s delay
+;; (run-with-timer 0 3600 'theme-switcher)
 
 (load-file (concat emacs-dir "keybindings.el"))
 

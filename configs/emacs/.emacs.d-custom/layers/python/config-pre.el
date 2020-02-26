@@ -6,3 +6,9 @@
   (interactive)
   (call-interactively 'pyvenv-activate)
   (call-interactively 'lsp-restart-workspace))
+
+
+;; (use-package elpy
+;;   :ensure t
+;;   :init
+;;   (elpy-enable))

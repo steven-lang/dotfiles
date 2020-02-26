@@ -30,7 +30,7 @@
 (defun slang/edit-config ()
   "Edit config file."
   (interactive)
-  (find-file (concat emacs-dir "init.el")))
+  (find-file "~/dotfiles/configs/emacs/.emacs.d/init.el"))
 
 (defun slang/reload-config ()
   "Reload config file."

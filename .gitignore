@@ -5,10 +5,13 @@ tags
 
 ### Emacs specific
 # Ignore everything
-configs/emacs/.emacs.d/*
+configs/emacs/.emacs.d-custom/*
+configs/emacs/.doom.d/*
 # Except for..
-!configs/emacs/.emacs.d/*.el
-!configs/emacs/.emacs.d/layers
+!configs/emacs/.emacs.d-custom/*.el
+!configs/emacs/.emacs.d-custom/layers
+!configs/emacs/.doom.d/*.el
 
 # Ignore credentials file
-configs/emacs/.emacs.d/layers/org/calendar-credentials.el
+configs/emacs/.emacs.d-custom/layers/org/calendar-credentials.el
+configs/emacs/.doom.d/org-gcal-credentials.el

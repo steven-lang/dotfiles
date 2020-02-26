@@ -29,6 +29,12 @@
             ;; :clock-in t
             ;; :clock-resume t
             :empty-lines 1)
+
+        ("j"
+         "Journal"
+         entry
+         (file+datetree "~/Dropbox/orgmode/journal.org")
+         "* %?\nEntered on %U\n  %i\n  %a")
         ))
 
 
@@ -74,6 +80,8 @@
 ;; Disable TODO and DONE highlighting in org mode
 (add-hook 'org-mode-hook (lambda () (hl-todo-mode -1)))
 (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
+
+
 
 ;; Save buffer on clocking in/out
 (add-hook 'org-clock-in-hook #'save-buffer)
@@ -147,8 +155,8 @@
                 (org-super-agenda-groups '(
                                             (:discard (:tag "someday")) ;; Don't show todos tagged with "someday"
                                             (:discard (:habit t)) ;; Don't show habits
-                                            (:discard (:todo "WAITING")) ;; Don't show waiting
-                                            ;; (:discard (:todo "NEXT")) ;; Don't show waiting
+                                            (:discard (:todo "WAITING")) ;; Don't show WAITING
+                                            (:discard (:todo "NEXT")) ;; Don't show NEXT
                                             (:auto-outline-path t)
                                             ))
                 (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
@@ -312,7 +320,7 @@
     '(org-modules
     '(ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus ol-info ol-irc ol-mhe org-protocol ol-rmail ol-w3m org-habit org-ql))
     '(org-priority-faces '((66 . "#f99157") (67 . "#65737e")))
-    '(org-super-agenda-mode t)
+    ;; '(org-super-agenda-mode t)
     )
 
 ;; Org babel
@@ -358,3 +366,19 @@
     (replace-regexp-in-string "\\`\\\\[A-Za-z0-9]+" "\\\\textbf" contents)))
 
 (add-to-list 'org-export-filter-bold-functions 'my-beamer-bold)
+
+;; https://emacs.stackexchange.com/questions/21754/how-to-automatically-save-all-org-files-after-marking-a-repeating-item-as-done-i
+(defmacro η (fnc)
+  "Return function that ignores its arguments and invokes FNC."
+  `(lambda (&rest _rest)
+     (funcall ,fnc)))
+
+(defun slang/org-save-all-org-buffers-silent ()
+  "Save all org buffers but suppresses the output message."
+    (let ((inhibit-message t))
+      (org-save-all-org-buffers)))
+
+(advice-add 'org-deadline       :after (η #'slang/org-save-all-org-buffers-silent))
+(advice-add 'org-schedule       :after (η #'slang/org-save-all-org-buffers-silent))
+(advice-add 'org-store-log-note :after (η #'slang/org-save-all-org-buffers-silent))
+(advice-add 'org-todo           :after (η #'slang/org-save-all-org-buffers-silent))

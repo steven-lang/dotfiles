@@ -111,7 +111,7 @@ export JAVA_HOME=/usr/lib/jvm/java-10-openjdk
 export TERMINAL=termite
 export WEKA_HOME=$HOME/wekafiles
 export DOT=$HOME/dotfiles
-export LD_LIBRARY_PATH="/usr/local/cuda-10.1/lib64"
+# export LD_LIBRARY_PATH="/usr/local/cuda-10.1/lib64"
 
 # fzf
 export FZF_DEFAULT_OPTS='--height 40% --border'
@@ -127,7 +127,7 @@ LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/"
 
 # Eval keychain only locally
 if [[ -z $SSH_CONNECTION ]]; then
-  eval $(keychain --eval --quiet id_rsa_mz id_rsa)
+  eval $(keychain --eval --quiet id_rsa)
 fi
 
 # Aliases
@@ -138,10 +138,10 @@ alias more=less
 
 # Emacs client
 function emacsclient() {
-    /usr/bin/emacsclient -c -a '' "$@" &
+    /usr/local/bin/emacsclient -c -a '' "$@" &
     disown
 }
-alias ec="/usr/bin/emacsclient -nw -c -a '' "$@""
+alias ec="/usr/local/bin/emacsclient -c -a '' "$@""
 # alias ec="emacsclient -n"
 alias emacsclient-restart="systemctl --user restart emacs"
 
@@ -152,7 +152,6 @@ if hash exa 2>/dev/null; then
 fi
 
 alias grep='grep --color=auto'
-alias pacu='sudo pacman -Syu && yay -Syua'
 alias pacs='sudo pacman -S'
 alias yay='yay --noconfirm'
 alias eZ='$EDITOR ~/.zshrc'
@@ -166,7 +165,6 @@ alias clone='termite -e "bash" 2>&1 >/dev/null & disown %1'
 alias PWD='echo $(pwd) | xclip && pwd && echo "path copied"'
 alias CD='echo "cd $(xclip -o)" && cd $(xclip -o)'
 alias :q='exit'
-alias zathura='zathura --fork'
 alias vimconfig='$EDITOR ~/.vimrc'
 alias vimupdate='vim +PlugClean +PlugUpdate +UpdateRemoteRepositories +qa'
 alias zshconfig='$EDITOR ~/.zshrc'
@@ -227,9 +225,15 @@ zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
+
+function pacu() {
+  sudo pacman -Syu
+  yay -Syua
+}
+
 # Open pdfs in background by default
 function pdf() {
-  evince "$@" &
+  zathura --fork "$@" &
   disown
 }
 

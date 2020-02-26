@@ -1,2 +1,2 @@
-map <Left> navigate "previous"
-map <Right> navigate "next"
+map h navigate "previous"
+map l navigate "next"

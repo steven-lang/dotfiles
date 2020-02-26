@@ -222,12 +222,12 @@ set $Locker i3lock -c 222222 && sleep 1
 # exec --no-startup-id xautolock -time 30 -locker 'i3lock-fancy -p -- scrot -z' -detectsleep &
 exec --no-startup-id xautolock -time 30 -locker $Locker -detectsleep &
 exec --no-startup-id pulseaudio
-exec --no-startup-id pa-applet
+# exec --no-startup-id pa-applet
 
 # nm-applet
 exec --no-startup-id nm-applet --tray --sm-disable & 
 # Bluetooth
-exec --no-startup-id blueberry-tray &
+# exec --no-startup-id blueberry-tray &
 
 
 # suspend/lock shortcuts
@@ -397,8 +397,13 @@ for_window [title="cheatsheet"] floating enable,resize set 1600 1300, move posit
 bindsym $mod+c exec bash ~/dotfiles/scripts/keys-cheat-sheet.sh
 
 exec redshift &
-exec pasystray &
-exec volumeicon &
+# exec pasystray &
+# exec volumeicon &
 
 # Move to first workspace on startup
 exec i3-msg workspace 1 web
+
+# Gnome integration
+exec --no-startup-id /usr/lib/gsd-xsettings
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec --no-startup-id gnome-flashback
