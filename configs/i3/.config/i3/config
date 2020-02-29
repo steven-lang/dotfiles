@@ -407,3 +407,5 @@ exec i3-msg workspace 1 web
 exec --no-startup-id /usr/lib/gsd-xsettings
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id gnome-flashback
+
+exec keyboard-us
