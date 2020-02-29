@@ -388,5 +388,5 @@
 (map! :localleader
       :map TeX-mode-map
 
-      "j"     #'TeX-view
+      "v"     #'TeX-view
       "b"     #'TeX-command-run-all)

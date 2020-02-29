@@ -28,18 +28,21 @@
 
 ;; Org-Capture Templates
 (setq org-capture-templates
-        '(;; Todo entries
+      '(;; Todo entries
         ("t"
-            "Todo"
-            entry
-            (file+headline org-default-notes-file "Inbox")
-            "** TODO %?\n:PROPERTIES:\n:CREATED:\t%u\n:END:\n"
-            :empty-lines 1)))
+         "Todo"
+         entry
+         (file+headline org-default-notes-file "Inbox")
+         "** TODO %?\n:PROPERTIES:\n:CREATED:\t%u\n:END:\n"
+         :empty-lines 1)
+        ("e" "email" entry (file+headline org-default-notes-file "Inbox")
+         "* TODO Reply: %a %?"))
+      )
 
 
 ;; Set the org refile targets to org agenda files
 (setq org-refile-targets (quote ((nil :maxlevel . 9)
-                                (org-agenda-files :maxlevel . 2))))
+                                 (org-agenda-files :maxlevel . 2))))
 
 ;; Set default column view headings: Task Total-Time Time-Stamp
 ;; (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
@@ -361,25 +364,25 @@
     )
 
 (custom-set-variables
-    '(org-agenda-prefix-format
-    '((agenda . "  %t ")
-        (todo . "  • ")
-        (tags . "  • ")
-        (search . "  • ")))
-    '(org-modules
-    '(ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus ol-info ol-irc ol-mhe org-protocol ol-rmail ol-w3m org-habit org-ql))
-    '(org-priority-faces '((66 . "#f99157") (67 . "#65737e")))
-    )
+ '(org-agenda-prefix-format
+   '((agenda . "  %t ")
+     (todo . "  • ")
+     (tags . "  • ")
+     (search . "  • ")))
+ '(org-modules
+   '(ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus ol-info ol-irc ol-mhe org-protocol ol-rmail ol-w3m org-habit org-ql))
+ '(org-priority-faces '((66 . "#f99157") (67 . "#65737e")))
+ )
 
 ;; Org-ref setup
 (use-package! org-ref
   :after org
   :config
   (setq org-ref-default-bibliography "~/Dropbox/orgmode/bibliography/references.bib"
-          org-ref-pdf-directory "~/pdf/"
-          bibtex-completion-bibliography "~/Dropbox/orgmode/bibliography/references.bib"
-          bibtex-completion-library-path "~/Dropbox/orgmode/bibliography/bibtex-pdfs"
-          bibtex-completion-notes-path "~/Dropbox/orgmode/bibliography/helm-bibtex-notes"))
+        org-ref-pdf-directory "~/pdf/"
+        bibtex-completion-bibliography "~/Dropbox/orgmode/bibliography/references.bib"
+        bibtex-completion-library-path "~/Dropbox/orgmode/bibliography/bibtex-pdfs"
+        bibtex-completion-notes-path "~/Dropbox/orgmode/bibliography/helm-bibtex-notes"))
 
 ;; org-clock output for polybar
 (defun slang/org-clock-output-polybar ()

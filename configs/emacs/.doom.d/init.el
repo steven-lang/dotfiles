@@ -178,3 +178,6 @@
        :config
        ;;literate
        (default +bindings +smartparens))
+
+;; Let j and k go over visual lines
+(setq evil-respect-visual-line-mode t)

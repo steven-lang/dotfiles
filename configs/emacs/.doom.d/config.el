@@ -6,6 +6,9 @@
 ;; Set frame title
 (setq frame-title-format "%b - Emacs")
 
+;; Don't confirm killing emacs
+(setq confirm-kill-emacs nil)
+
 ;; Auto unbind overridden keys
 (general-auto-unbind-keys)
 
@@ -90,6 +93,7 @@
 ;; Doom modeline
 (setq doom-modeline-env-python-executable "python") ; or `python-shell-interpreter'
 (setq doom-modeline-env--command-args "--version")
+(setq doom-modeline-mu4e t) ;; enable mu4e support
 
 ;; Use "SPC v" to expand region
 (map! :n "SPC v" #'er/expand-region)
@@ -127,16 +131,33 @@
 ;; Restore original yank behavior
 (setq evil-want-Y-yank-to-eol nil)
 
+
 ;; Use offlineimap as mu4e backend
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
 (setq +mu4e-backend 'offlineimap)
 (setq +mu4e-mu4e-mail-path "~/.mail")
+(setq mu4e-update-interval 300)
+(setq mu4e-get-mail-command "offlineimap -o")
 (set-email-account! "GMail steven.lang.mz"
                     '((mu4e-sent-folder       . "/[Gmail].Sent Mail")
                       (mu4e-drafts-folder     . "/[Gmail].Drafts")
                       (mu4e-trash-folder      . "/[Gmail].Trash")
                       (smtpmail-smtp-user     . "steven.lang.mz@gmail.com")
+                      (smtpmail-default-smtp-server . "smtp.gmail.com")
+                      (smtpmail-smtp-server . "smtp.gmail.com")
+                      (smtpmail-smtp-service . 587)
+                      (smtpmail-local-domain . "gmail.com")
+                      ;; (smtpmail-auth-credentials . (expand-file-name "~/.authinfo.gpg"))
                       (user-mail-address      . "steven.lang.mz@gmail.com"))
                     t)
+(setq message-send-mail-function 'smtpmail-send-it
+      starttls-use-gnutls t
+      smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+      smtpmail-auth-credentials
+      '(("smtp.gmail.com" 587 "steven.lang.mz@gmail.com" nil))
+      smtpmail-default-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587)
 
 ;; Get back projectile ag
 (advice-remove 'helm-projectile-ag #'+helm/project-search)
@@ -162,3 +183,12 @@
 
 ;; Use aggressive indenting in emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+
+;; Make latex sections have a larger font
+(setq font-latex-fontify-sectioning 1.3)
+
+(use-package! mu4e-alert
+  :after mu4e
+  :init
+  ;; (setq mu4e-alert-interesting-mail-query "flag:unread maildir:/Gmail/INBOX")
+  (mu4e-alert-set-default-style 'libnotify))
