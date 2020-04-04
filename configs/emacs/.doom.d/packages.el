@@ -56,16 +56,19 @@
 (package! mu4e)
 (package! winum)
 (package! edit-server)
-(package! zetteldeft)
 (package! blacken)
-(package! helm-ag)
-(package! helm-evil-markers)
+
 ;; If you want to replace it with yasnippet's default snippets
 (package! yasnippet-snippets)
 (package! lorem-ipsum)
 (package! ssh-agency)
 (package! aggressive-indent)
 (package! mu4e-alert)
+(package! helm-lsp)  ;; since ivy-lsp does not seem to be working
+(package! helm-gtags)
+(package! counsel-gtags)
+(package! org-superstar)
+;; (package! julia-lsp)
 
 ;; Disable packages
 (package! evil-snipe :disable t)
@@ -78,7 +81,8 @@
 (package! org-pomodoro)
 (package! org-fragtog)
 (package! org-roam
-  :recipe (:host github :repo "jethrokuan/org-roam"))
+          :recipe (:host github :repo "jethrokuan/org-roam"))
 
 ;; Unpin packages
+(unpin! lsp-ui)
 

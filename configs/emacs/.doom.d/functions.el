@@ -79,9 +79,25 @@ https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close/110
 
 
   (defun org-roam-date ()
-  "Insert a date at point using `org-read-date' with its optional argument
+    "Insert a date at point using `org-read-date' with its optional argument
   of TO-TIME so that the user can customize the date format more easily.
   Source: https://emacs.stackexchange.com/a/42550."
     (interactive)
     (let ((time (org-read-date nil 'to-time nil "Date:  ")))
       (org-roam-new-file-named (format-time-string "%Y-%m-%d" time)))))
+
+(defun ap/load-doom-theme (theme)
+  "Disable active themes and load a Doom theme."
+  (interactive (list (intern (completing-read "Theme: "
+                                              (->> (custom-available-themes)
+                                                   (-map #'symbol-name)
+                                                   (--select (string-prefix-p "doom-" it)))))))
+  (ap/switch-theme theme))
+
+(defun ap/switch-theme (theme)
+  "Disable active themes and load THEME."
+  (interactive (list (intern (completing-read "Theme: "
+                                              (->> (custom-available-themes)
+                                                   (-map #'symbol-name))))))
+  (mapc #'disable-theme custom-enabled-themes)
+  (load-theme theme 'no-confirm))

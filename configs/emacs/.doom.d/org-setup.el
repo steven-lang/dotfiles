@@ -41,8 +41,7 @@
 
 
 ;; Set the org refile targets to org agenda files
-(setq org-refile-targets (quote ((nil :maxlevel . 9)
-                                 (org-agenda-files :maxlevel . 2))))
+(setq org-refile-targets (quote (("~/Dropbox/orgmode/gtd/gtd.org" :maxlevel . 9))))
 
 ;; Set default column view headings: Task Total-Time Time-Stamp
 ;; (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
@@ -75,15 +74,16 @@
 (defun slang/notify-send (title message)
   "Send a notification."
   (call-process "notify-send"
-                  nil 0 nil
-                  title
-                  message
-                  "--expire-time" "300000" ; 5 minutes
-                  "--app-name" "Emacs"))
+                nil 0 nil
+                title
+                message
+                "--expire-time" "300000" ; 5 minutes
+                "--app-name" "Emacs"))
 
 ;; org-pomodoro mode hooks
+(setq org-pomodoro-clock-break t)  ;; Clock 30 minutes instead of 25
 (add-hook 'org-pomodoro-finished-hook
-            (lambda ()
+          (lambda ()
             (slang/notify-send "Pomodoro completed!" "Time for a break.")))
 
 (add-hook 'org-pomodoro-break-finished-hook
@@ -327,15 +327,15 @@
 ;; 3) Estimate effort
 ;; 4) Refile
 (defun slang/org-agenda-process-inbox-item ()
-    "Process a single item in the org-agenda."
-    (interactive)
-    (org-with-wide-buffer
-      (org-agenda-todo)
-      (org-agenda-set-tags)
-      (org-agenda-priority)
-      (call-interactively 'slang/my-org-agenda-set-effort)
-      (org-agenda-refile)
-      (org-save-all-org-buffers)))
+  "Process a single item in the org-agenda."
+  (interactive)
+  (org-with-wide-buffer
+   (org-agenda-todo)
+   ;; (org-agenda-set-tags)
+   (org-agenda-priority)
+   ;; (call-interactively 'slang/my-org-agenda-set-effort)
+   (org-agenda-refile)
+   (org-save-all-org-buffers)))
 
 ;; Export agenda to html file
 ;; TODO: Send via telegram or upload to server
@@ -472,68 +472,13 @@
         "g" #'org-roam-show-graph))
 ;;;;;;;;;;;;;;;;;;; Org-Roam END
 
-;;;;;;;;;;;;;;;;;;; Zetteldeft START
-;; (use-package! zetteldeft
-;;   :defer
-;;   :config
-;;     ;; Deft config
-;;     (setq deft-directory "~/Dropbox/orgmode/notes/"
-;;         deft-recursive t)
 
-;;     (defun slang/deft-other-window ()
-;;       (interactive)
-;;       (split-window-sensibly)
-;;       (other-window 1)
-;;       (deft)
-;;       (evil-insert 1))
+(defun slang/org-agenda-schedule-today ()
+  "Schedule an agenda element for today."
+  (interactive)
+  (org-agenda-schedule "Hello World" "+0d"))
 
-;;     (defun slang/zetteldeft-new-search-other-window ()
-;;       (interactive)
-;;       (split-window-sensibly)  ;; open in other window
-;;       (other-window 1)  ;; Switch to next window
-;;       (zetteldeft-deft-new-search)  ;; Open deft new search
-;;       (goto-line 3)  ;; Set cursor to second line (first results)
-;;       (evil-insert 1))  ;; Enter insert mode
-
-
-;;     ;; Add title suffix
-;;     (setq zetteldeft-title-suffix "
-;;     #+OPTIONS: toc:nil num:0
-;;     #+STARTUP: latexpreview showall
-
-;;     *
-
-
-;;     * References
-;;     ")
-
-;;     ;; Open preview
-;;     (defun efls/deft-open-preview ()
-;;       (interactive)
-;;       (deft-open-file-other-window))
-;;     ;; Open other window
-;;     (defun efls/deft-open-other ()
-;;       (interactive)
-      ;; (deft-open-file-other-window t)))
-
-;; (map! :leader
-;;       (:prefix ("d" . "Zetteldeft")
-;;         "d" #'slang/zetteldeft-new-search-other-window
-;;         "R" #'deft-refresh
-;;         "s" #'zetteldeft-search-at-point
-;;         "c" #'zetteldeft-search-current-id
-;;         "f" #'zetteldeft-follow-link
-;;         "F" #'zetteldeft-avy-file-search-ace-window
-;;         "l" #'zetteldeft-avy-link-search
-;;         "t" #'zetteldeft-avy-tag-search
-;;         "T" #'zetteldeft-tag-buffer
-;;         "i" #'zetteldeft-find-file-id-insert
-;;         "I" #'zetteldeft-find-file-full-title-insert
-;;         "o" #'zetteldeft-find-file
-;;         "n" #'zetteldeft-new-file
-;;         "N" #'zetteldeft-new-file-and-link
-;;         "r" #'zetteldeft-file-rename
-;;         "x" #'zetteldeft-count-words
-;;         "y" #'zetteldeft-copy-id-current-file
-;;         "L" #'zetteldeft-insert-list-links))
-;;;;;;;;;;;;;;;;;;; Zetteldeft END
+(defun slang/org-agenda-schedule-tomorrow ()
+  "Schedule an agenda element for tomorrow."
+  (interactive)
+  (org-agenda-schedule "Hello World" "+1d"))

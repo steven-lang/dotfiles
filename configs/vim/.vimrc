@@ -57,23 +57,11 @@ endif
 " - Avoid using standard Vim directory names like 'plugin'
 
 call plug#begin('~/.vim/plugged')
-" Firenvim for browser integration
-Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-
-" Adds file type icons to Vim plugins
-Plug 'ryanoasis/vim-devicons'
-
 " Highlight words under cursor
 Plug 'RRethy/vim-illuminate'
 
 " Smooth C-d scrolling
 Plug 'psliwka/vim-smoothie'
-
-" CUDA
-Plug 'bfrg/vim-cuda-syntax'
-
-" Overleaf vim
-Plug 'da-h/AirLatex.vim'
 
 " Make screenshots of code
 Plug 'segeljakt/vim-silicon'
@@ -90,17 +78,8 @@ Plug 'romainl/vim-cool'
 " Additional targets
 Plug 'wellle/targets.vim'
 
-" Python docstrings
-Plug 'kkoomen/vim-doge'
-
 " Python semantic highlighting
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-
-" Vim session handling made easy
-Plug 'thaerkh/vim-workspace'
-
-" CoC vim
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Hex color preview
 Plug 'norcalli/nvim-colorizer.lua'
@@ -132,7 +111,6 @@ Plug 'tpope/vim-surround'
 " Vim git integration
 Plug 'tpope/vim-fugitive' " Git commands
 Plug 'rhysd/committia.vim' " Git commit extension
-Plug 'jreybert/vimagit'
 
 " Comment/uncomment with gc
 Plug 'tpope/vim-commentary'
@@ -252,12 +230,11 @@ vnoremap > >gv
 " Lightline {{{
 let g:lightline = {
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], ['cocstatus', 'readonly', 'relativepath', 'modified'] ],
+      \   'left': [ [ 'mode', 'paste' ], ['readonly', 'relativepath', 'modified'] ],
       \   'right' : [ ['lineinfo'], ['percent']]
       \ },
       \ 'colorscheme': 'oceanicnext',
       \ 'component_function': {
-      \   'cocstatus': 'coc#status',
       \ }
       \ }
 
@@ -618,95 +595,6 @@ let g:silicon = {
 " Gradle syntax highlighting
 au BufNewFile,BufRead *.gradle setf groovy
 
-" CoC Vim {{{
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-" Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
-" Smaller updatetime for CursorHold & CursorHoldI
-set updatetime=300
-" Extensions
-let g:coc_global_extensions=['coc-tag', 'coc-python', 'coc-json', 'coc-pairs', 'coc-r-lsp']
-
-" Remap for do codeAction of current line
-nmap <leader>ca  <Plug>(coc-codeaction)
-" Fix autofix problem of current line
-nmap <leader>cf  <Plug>(coc-fix-current)
-
-" Navigate diagnostics
-nmap <silent> <leader>cdp <Plug>(coc-diagnostic-prev)
-nmap <silent> <leader>cdn <Plug>(coc-diagnostic-next)
-
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Update signature help on jump placeholder
-autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-
-" Use auocmd to force lightline update
-autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
-
-function! CocstatusCustom()
-  return coc#status() . get(b:,'coc_current_function','')
-endfunction
-
-" Remap for rename current word
-nmap <leader>r <Plug>(coc-rename)
-" Format
-nmap <leader>cc :Format<cr>
-
-" Coc error text
-" highlight CocErrorSign ctermfg=9 guifg=#fb4934 " Gruvbox
-highlight CocErrorSign ctermfg=9 guifg=#ec5f67 " OceanicNext
-" }}}
-
-
-" Cuda stuff {{{
-" Highlight keywords from CUDA Runtime API
-let g:cuda_runtime_api_highlight = 1
-
-" Highlight keywords from CUDA Driver API
-let g:cuda_driver_api_highlight = 1
-
-" Highlight keywords from CUDA Thrust library
-let g:cuda_thrust_highlight = 1
-
-" Disable highlighting of CUDA kernel calls
-let g:cuda_no_kernel_highlight = 1
-" }}} 
-
 " Sync
 nnoremap <leader><leader>s :w<CR>:!./sync.sh<CR>
 " Run
@@ -721,8 +609,4 @@ au BufNewFile,BufRead *.cuh set ft=cuda
 " Time in milliseconds (default 250)
 let g:Illuminate_delay = 250
 let g:Illuminate_ftblacklist = ['nerdtree', 'python']
-" }}}
-
-" {{{ ViMagit
-let g:magit_default_fold_level = 0
 " }}}

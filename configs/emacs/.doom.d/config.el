@@ -29,7 +29,10 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "Hack" :size 18))
+(setq doom-font (font-spec :family "Hack" :size 20))
+
+;; Add some more space between the lines
+(setq line-spacing 0.1)
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -91,6 +94,7 @@
 (setq which-key-idle-secondary-delay 0.4)
 
 ;; Doom modeline
+(setq doom-modeline-major-mode-icon t)
 (setq doom-modeline-env-python-executable "python") ; or `python-shell-interpreter'
 (setq doom-modeline-env--command-args "--version")
 (setq doom-modeline-mu4e t) ;; enable mu4e support
@@ -104,13 +108,12 @@
 ;; When in daemon, also run edit-server
 (when (daemonp)
   (use-package! edit-server
-    :defer
     :config
     ;; Set server port
     (setq edit-server-port 9292)
 
     ;; If this is an emacs-daemon, start the edit-server
-    (edit-server-start)))
+    (edit-server-start t)))
 
 (defun slang/notify-send (title message)
   (call-process "notify-send"
@@ -136,12 +139,12 @@
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
 (setq +mu4e-backend 'offlineimap)
 (setq +mu4e-mu4e-mail-path "~/.mail")
-(setq mu4e-update-interval 300)
 (setq mu4e-get-mail-command "offlineimap -o")
 (set-email-account! "GMail steven.lang.mz"
                     '((mu4e-sent-folder       . "/[Gmail].Sent Mail")
                       (mu4e-drafts-folder     . "/[Gmail].Drafts")
                       (mu4e-trash-folder      . "/[Gmail].Trash")
+                      (mu4e-update-interval   . 300)
                       (smtpmail-smtp-user     . "steven.lang.mz@gmail.com")
                       (smtpmail-default-smtp-server . "smtp.gmail.com")
                       (smtpmail-smtp-server . "smtp.gmail.com")
@@ -150,6 +153,7 @@
                       ;; (smtpmail-auth-credentials . (expand-file-name "~/.authinfo.gpg"))
                       (user-mail-address      . "steven.lang.mz@gmail.com"))
                     t)
+(setq mu4e-update-interval 300)
 (setq message-send-mail-function 'smtpmail-send-it
       starttls-use-gnutls t
       smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
@@ -159,27 +163,31 @@
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 587)
 
+(use-package! mu4e-alert
+  :after mu4e
+  :init
+  (setq mu4e-alert-interesting-mail-query "flag:unread maildir:/Gmail/INBOX")
+  (mu4e-alert-set-default-style 'libnotify)
+  (mu4e-alert-enable-notifications))
+
 ;; Get back projectile ag
 (advice-remove 'helm-projectile-ag #'+helm/project-search)
 
 ;; Set latex viewer
 (setq +latex-viewers '(evince))
 
+;; Let evince not steal focus
+(setq TeX-view-evince-keep-focus t)
+
 ;; Python blacken
 (use-package! blacken)
-
-;; Use helm-ag!
-(use-package! helm-ag)
 
 ;; Org setup
 (after! org
   (load! "org-setup.el"))
 
 ;; Disable whitespace buttler (has issues in org-mode when calling org-latex-preview)
-(ws-butler-global-mode -1)
-
-;; Helm markers
-(use-package! helm-evil-markers)
+;; (ws-butler-global-mode -1)
 
 ;; Use aggressive indenting in emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
@@ -187,8 +195,61 @@
 ;; Make latex sections have a larger font
 (setq font-latex-fontify-sectioning 1.3)
 
-(use-package! mu4e-alert
-  :after mu4e
-  :init
-  ;; (setq mu4e-alert-interesting-mail-query "flag:unread maildir:/Gmail/INBOX")
-  (mu4e-alert-set-default-style 'libnotify))
+;; avy
+(setq avy-orders-alist
+      '((avy-goto-char . avy-order-closest)
+        (avy-goto-char-2 . avy-order-closest)
+        (avy-goto-line-above . avy-order-closest)
+        (avy-goto-word-below . avy-order-closest)))
+
+;; Add writegood-mode in latex
+(add-hook! 'LaTeX-mode-hook #'writegood-mode)
+
+;; Langtool
+(setq langtool-java-classpath
+      "/usr/share/languagetool:/usr/share/java/languagetool/*")
+
+(setq flycheck-flake8rc "~/.config/flake8")
+(setq flycheck-python-flake8-executable "flake8")
+
+;; For python
+(add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+(add-hook 'julia-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+
+;; Enable rainbow delimiters in prog mode
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+
+;; Fix company-lsp mspyls wrong completions
+;; https://github.com/tigersoldier/company-lsp/issues/133
+(use-package company-lsp
+  :commands company-lsp
+  :config
+  (setq company-lsp-cache-candidates 'auto)
+  (add-to-list 'company-lsp-filter-candidates '(mspyls . t))
+  (defun company-lsp--on-completion (response prefix)
+    "Handle completion RESPONSE.
+PREFIX is a string of the prefix when the completion is requested.
+Return a list of strings as the completion candidates."
+    (let* ((incomplete (and (hash-table-p response) (gethash "isIncomplete" response)))
+           (items (cond ((hash-table-p response) (gethash "items" response))
+                        ((sequencep response) response)))
+           (candidates (mapcar (lambda (item)
+                                 (company-lsp--make-candidate item prefix))
+                               (lsp--sort-completions items)))
+           (server-id (lsp--client-server-id (lsp--workspace-client lsp--cur-workspace)))
+           (should-filter (or (eq company-lsp-cache-candidates 'auto) ; change from t to 'auto
+                              (and (null company-lsp-cache-candidates)
+                                   (company-lsp--get-config company-lsp-filter-candidates server-id)))))
+      (when (null company-lsp--completion-cache)
+        (add-hook 'company-completion-cancelled-hook #'company-lsp--cleanup-cache nil t)
+        (add-hook 'company-completion-finished-hook #'company-lsp--cleanup-cache nil t))
+      (when (eq company-lsp-cache-candidates 'auto)
+        ;; Only cache candidates on auto mode. If it's t company caches the
+        ;; candidates for us.
+        (company-lsp--cache-put prefix (company-lsp--cache-item-new candidates incomplete)))
+      (if should-filter
+          (company-lsp--filter-candidates candidates prefix)
+        candidates))))
+
+;; Org-superstar
+(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))

@@ -1,7 +1,7 @@
 ! Font
 xterm*font: Hack-Regular 12
 
-/* Xft.dpi: 144 */
+! Xft.dpi: 144
 
 ! These might also be useful depending on your monitor and personal preference:
 Xft.autohint: 0

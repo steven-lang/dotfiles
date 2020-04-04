@@ -27,10 +27,14 @@
       "`" nil
 
       :leader
-      "SPC" #'helm-M-x
-      "/"   #'helm-do-ag-this-file
-      "`"   #'helm-evil-markers
-      "p/"  #'helm-do-ag-project-root)
+      "SPC" #'counsel-M-x
+      ;; "SPC" #'helm-M-x
+
+
+      "x"  nil
+      (:prefix ("x" . "font")
+        "-"  #'doom/decrease-font-size
+        "+"  #'doom/increase-font-size))
 
 ;; Expand region with "SPC v"
 (map! :leader
@@ -46,6 +50,7 @@
       "u" nil ;; unbind first
 
       (:prefix ("u" . "utils")
+        ;; :desc "Search Google" "g" #'counsel-google ;; needs 'surfraw' binary
         :desc "Search Google" "g" #'helm-google-suggest ;; needs 'surfraw' binary
         :desc "top" "t" #'helm-top
         :desc "kill-ring" "y" #'helm-show-kill-ring))
@@ -58,15 +63,18 @@
       :leader (:prefix "b" :desc "Messages" "s" #'(lambda () (interactive) (switch-to-buffer "*scratch*")))
 
       :leader (:prefix "b" "b" nil)
-      :leader (:prefix "b" :desc "Buffers" "b" #'helm-mini))
+      :leader (:prefix "b" :desc "Buffers" "b" #'ivy-switch-buffer)
+      )
+
 
 ;; Windows
 (map! :leader
       (:prefix "w"
         :desc "Maximize" "m" #'toggle-maximize-buffer
+        "w"  #'ace-window
         "/" nil
-        :desc "Split right"  "/" #'split-window-right
-        :desc "Split below"  "-" #'split-window-below))
+        :desc "Split right"  "/" #'(lambda () (interactive)(split-window-horizontally) (other-window 1))
+        :desc "Split below"  "-" #'(lambda () (interactive)(split-window-vertically) (other-window 1))))
 
 
 
@@ -79,8 +87,7 @@
 ;;       :map python-mode-map
 ;;       :localleader
 ;;       "d" nil)
-(map! :after dap
-      :localleader
+(map! :localleader
       :map python-mode-map
       (:prefix ("d" . "DAP")
         ;; transient state
@@ -149,8 +156,8 @@
 ;; Make #'gd' call lsp-goto-definition
 (map! :map python-mode-map
       :n "K"  #'lsp-describe-thing-at-point
-      :n "gr" #'lsp-ui-peek-find-references
-      :n "gd" #'lsp-ui-peek-find-definitions
+      :n "gr" #'lsp-find-references
+      :n "gd" #'lsp-find-definition
       :n "C-k"  #'lsp-ui-doc-glance)
 
 
@@ -162,7 +169,8 @@
       :localleader
       "va" #'slang/pyvenv-activate
       "="  #'blacken-buffer
-      "s"  #'helm-lsp-workspace-symbol
+      "s"  #'ivy-lsp-workspace-symbol
+      ;; "s"  #'helm-lsp-workspace-symbol
 
       (:prefix ("i" . "Insert")
         "b" #'slang/ipdb-insert))
@@ -174,7 +182,15 @@
 
 
 ;; Use avy
-(map! :nv "s" #'avy-goto-char-2)
+(map! 
+ :nv "s" nil
+ (:prefix ("s" .  "jump")
+   :nv "s" #'avy-goto-char-2
+   :nv "j"   #'evil-avy-goto-line-below
+   :nv "k"   #'evil-avy-goto-line-above
+   :nv "w"   #'evil-avy-goto-word-0
+   :nv "t"   #'evil-avy-goto-char-timer
+   ))
 
 
 ;; Org capture
@@ -355,7 +371,14 @@
       "t"    #'org-agenda-todo
       (:prefix ("c" . "Clock")
         "i"    #'org-agenda-clock-in
-        "o"    #'org-agenda-clock-out))
+        "o"    #'org-agenda-clock-out)
+
+      "s" nil
+      (:prefix ("s" . "schedule")
+        "s"  #'org-agenda-schedule
+        :desc "today" "0"  #'slang/org-agenda-schedule-today
+        :desc "tomorrow" "1"  #'slang/org-agenda-schedule-tomorrow))
+
 
 (map! :after org
       :map org-agenda-mode-map
@@ -365,9 +388,11 @@
       :n "p"    #'slang/org-agenda-process-inbox-item
       :n "I"    #'org-agenda-clock-in
       :n "O"    #'org-agenda-clock-out
-      :n "j" nil
+      :n "P"    nil
+      :n "P"    #'org-pomodoro
+      :n "j"    nil
       :n "j"    #'org-agenda-next-item
-      :n "k" nil
+      :n "k"    nil
       :n "k"    #'org-agenda-previous-item
       :n "r"    #'org-agenda-redo)
 
@@ -376,17 +401,34 @@
 
 (map! :leader
       (:prefix ("j" . "Jump")
-        "j"   #'evil-avy-goto-line-below
-        "k"   #'evil-avy-goto-line-above
-        "w"   #'evil-avy-goto-word-0
-        "t"   #'evil-avy-goto-char-timer)
+        )
 
       (:prefix ("h" . "help")
         (:prefix ("r" . "reload")
           "c"  #'slang/reload-config)))
 
+(defun slang/save-tex-file-and-build ()
+  "Save the current file and run the TeX-command-run-all procedure."
+  (interactive)
+  (save-buffer)
+  (TeX-command-run-all nil))
+
 (map! :localleader
       :map TeX-mode-map
 
       "v"     #'TeX-view
-      "b"     #'TeX-command-run-all)
+      "b"     #'slang/save-tex-file-and-build
+      "t"     #'reftex-toc
+
+      (:prefix ("f" . "format")
+        "e"  #'LaTeX-fill-environment
+        "p"  #'LaTeX-fill-paragraph
+        "r"  #'LaTeX-fill-region
+        "s"  #'LaTeX-fill-section))
+
+(map! :localleader
+      :map julia-mode-map
+      "o"  #'+julia/open-repl
+      "b"  #'julia-repl-send-buffer
+      "l"  #'julia-repl-send-line
+      "r"  #'julia-repl-send-region-or-line)
