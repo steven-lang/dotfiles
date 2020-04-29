@@ -64,25 +64,27 @@
 (package! ssh-agency)
 (package! aggressive-indent)
 (package! mu4e-alert)
-(package! helm-lsp)  ;; since ivy-lsp does not seem to be working
-(package! helm-gtags)
-(package! counsel-gtags)
-(package! org-superstar)
-;; (package! julia-lsp)
+(package! mixed-pitch)
+(package! lsp-julia :recipe (:host github :repo "non-jedi/lsp-julia"))
 
 ;; Disable packages
 (package! evil-snipe :disable t)
 
 ;; Org stuff
-(package! org-ref)
+; (package! org-ref)
 (package! org-gcal)
 (package! org-super-agenda)
 (package! org-ql)
 (package! org-pomodoro)
 (package! org-fragtog)
+(package! org-noter)
+(package! org-pdftools)
+(package! org-noter-pdftools
+  :recipe (:host github :repo "fuxialexander/org-pdftools"))
 (package! org-roam
           :recipe (:host github :repo "jethrokuan/org-roam"))
+(package! org-fragtog)
+(package! org-superstar)
 
 ;; Unpin packages
-(unpin! lsp-ui)
-
+;; (unpin! lsp-ui)

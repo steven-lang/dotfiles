@@ -60,14 +60,8 @@ call plug#begin('~/.vim/plugged')
 " Highlight words under cursor
 Plug 'RRethy/vim-illuminate'
 
-" Smooth C-d scrolling
-Plug 'psliwka/vim-smoothie'
-
 " Make screenshots of code
 Plug 'segeljakt/vim-silicon'
-
-" Control Shift S
-Plug 'dyng/ctrlsf.vim'
 
 " Match-Up: vim matchit alternative
 Plug 'andymass/vim-matchup'
@@ -77,9 +71,6 @@ Plug 'romainl/vim-cool'
 
 " Additional targets
 Plug 'wellle/targets.vim'
-
-" Python semantic highlighting
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 
 " Hex color preview
 Plug 'norcalli/nvim-colorizer.lua'
@@ -92,9 +83,6 @@ Plug 'gruvbox-community/gruvbox'
 Plug 'mhartington/oceanic-next'
 Plug 'romainl/Apprentice'
 Plug 'arcticicestudio/nord-vim'
-
-" USE cgn with dot repeat instead ///Enable multiple cursors with <C-n> in visual mode
-Plug 'terryma/vim-multiple-cursors'
 
 " Python autoimport
 Plug 'mgedmin/python-imports.vim'
@@ -136,10 +124,10 @@ Plug 'JuliaEditorSupport/julia-vim'
 
 " UltiSnips
 " Track the engine.
-Plug 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
 
 " Snippets are separated from the engine. Add this if you want them:
-Plug 'honza/vim-snippets'
+" Plug 'honza/vim-snippets'
 
 " Add repeat support for plugins
 Plug 'tpope/vim-repeat'
@@ -526,47 +514,6 @@ if has('nvim')
   lua require'colorizer'.setup()
 endif
 
-
-" Custom semshi Highlights {{{
-function! CustomSemshiHighlightsGruvbox()
-  hi semshiLocal           ctermfg=208 guifg=#fe8019
-  hi semshiGlobal          ctermfg=172 guifg=#d79921
-  hi semshiImported        ctermfg=172 guifg=#d79921 gui=NONE
-  hi semshiParameter       ctermfg=109 guifg=#83a598
-  hi semshiParameterUnused ctermfg=108 guifg=#7c6f64 cterm=underline gui=underline
-  hi semshiFree            ctermfg=176 guifg=#d3869b
-  hi semshiBuiltin         ctermfg=132 guifg=#b16286
-  hi semshiAttribute       ctermfg=108 guifg=#8ec07c
-  hi semshiSelf            ctermfg=248 guifg=#bdae93
-  hi semshiUnresolved      ctermfg=166 guifg=#d65d0e cterm=underline gui=underline
-  hi semshiSelected        ctermfg=230 guifg=#f9f5d7 ctermbg=237 guibg=#504945
-
-  hi semshiErrorSign       ctermfg=230 guifg=#f9f5d7 ctermbg=124 guibg=#fb4934
-  hi semshiErrorChar       ctermfg=230 guifg=#f9f5d7 ctermbg=124 guibg=#fb4934
-  sign define semshiError text=E> texthl=semshiErrorSign
-endfunction
-
-function! CustomSemshiHighlightsOceanicNext()
-  hi semshiLocal           ctermfg=208 guifg=#f99157
-  hi semshiGlobal          ctermfg=172 guifg=#fac863
-  hi semshiImported        ctermfg=172 guifg=#fac863 gui=NONE
-  hi semshiParameter       ctermfg=109 guifg=#5fb3b3
-  hi semshiParameterUnused ctermfg=108 guifg=#65737e cterm=underline gui=underline
-  hi semshiFree            ctermfg=176 guifg=#ec5f67
-  hi semshiBuiltin         ctermfg=132 guifg=#6699cc
-  hi semshiAttribute       ctermfg=108 guifg=#ab7967
-  hi semshiSelf            ctermfg=248 guifg=#ab7967
-  hi semshiUnresolved      ctermfg=166 guifg=#ec5f67 cterm=underline gui=underline
-  " hi semshiSelected        ctermfg=230 guifg=#cdd3de ctermbg=237 guibg=#65737E
-  hi! link semshiSelected CursorColumn
-
-  hi semshiErrorSign       ctermfg=230 guifg=#cdd3de ctermbg=124 guibg=#ec5f67
-  hi semshiErrorChar       ctermfg=230 guifg=#cdd3de ctermbg=124 guibg=#ec5f67
-  sign define semshiError text=E> texthl=semshiErrorSign
-endfunction
-
-autocmd filetype python call CustomSemshiHighlightsOceanicNext()
-" }}}
 
 " Doge document generator {{{
 let g:doge_doc_standard_python = 'google'

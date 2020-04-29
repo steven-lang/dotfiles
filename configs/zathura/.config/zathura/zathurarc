@@ -1,2 +1,4 @@
 map h navigate "previous"
 map l navigate "next"
+
+set selection-clipboard clipboard

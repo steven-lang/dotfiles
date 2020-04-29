@@ -3,6 +3,11 @@
 ;; (add-hook 'org-agenda-mode-hook '(lambda () (evil-set-initial-state 'org-agenda-mode 'normal)))
 (evil-set-initial-state 'org-agenda-mode 'normal)
 
+;; (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+(add-hook 'org-mode-hook 'org-superstar-mode)
+(remove-hook 'org-mode-hook 'writegood-mode)
+(remove-hook 'org-mode-hook 'org-bullets-mode)
+
 ;; Add electric-pair-mode in org-mode
 ;; (add-hook 'org-mode-hook 'electric-pair-mode)
 
@@ -13,8 +18,9 @@
   :config
   (setq org-super-agenda-auto-group-outline-path-separator " | ")
   (org-super-agenda--def-auto-group outline-path "their outline paths"
-      :key-form (org-super-agenda--when-with-marker-buffer (org-super-agenda--get-marker item)
-                  (s-join org-super-agenda-auto-group-outline-path-separator (org-get-outline-path)))))
+    :key-form (org-super-agenda--when-with-marker-buffer (org-super-agenda--get-marker item)
+                (concat (s-join org-super-agenda-auto-group-outline-path-separator (org-get-outline-path))
+                        "\n"))))
 
 
 ;; Bigger latex fragments
@@ -298,41 +304,39 @@
 (defvar slang/org-current-effort "1:00" "Current effort for agenda items.")
 
 (defun slang/my-org-agenda-set-effort (effort)
-    "Set the effort property for the current headline."
-    (interactive
-    (list (read-string (format "Effort [%s]: " slang/org-current-effort) nil nil slang/org-current-effort)))
-    (setq slang/org-current-effort effort)
-    (org-agenda-check-no-diary)
-    (let* ((hdmarker (or (org-get-at-bol 'org-hd-marker)
-                        (org-agenda-error)))
-        (buffer (marker-buffer hdmarker))
-        (pos (marker-position hdmarker))
-        (inhibit-read-only t)
-        newhead)
+  "Set the effort property for the current headline."
+  (interactive
+   (list (read-string (format "Effort [%s]: " slang/org-current-effort) nil nil slang/org-current-effort)))
+  (setq slang/org-current-effort effort)
+  (org-agenda-check-no-diary)
+  (let* ((hdmarker (or (org-get-at-bol 'org-hd-marker)
+                       (org-agenda-error)))
+         (buffer (marker-buffer hdmarker))
+         (pos (marker-position hdmarker))
+         (inhibit-read-only t)
+         newhead)
     (org-with-remote-undo buffer
-                            (with-current-buffer buffer
-                            (widen)
-                            (goto-char pos)
-                            (org-show-context 'agenda)
-                            (funcall-interactively 'org-set-effort nil slang/org-current-effort)
-                            (end-of-line 1)
-                            (setq newhead (org-get-heading)))
-                            (org-agenda-change-all-lines newhead hdmarker))))
+      (with-current-buffer buffer
+        (widen)
+        (goto-char pos)
+        (org-show-context 'agenda)
+        (funcall-interactively 'org-set-effort nil slang/org-current-effort)
+        (end-of-line 1)
+        (setq newhead (org-get-heading)))
+      (org-agenda-change-all-lines newhead hdmarker))))
 
 
 
 ;; Process a single inbox item:
-;; 1) Set tags
-;; 2) Set priority
-;; 3) Estimate effort
-;; 4) Refile
+;; 1) Set todo state
+;; 2) Refile
 (defun slang/org-agenda-process-inbox-item ()
   "Process a single item in the org-agenda."
   (interactive)
   (org-with-wide-buffer
    (org-agenda-todo)
    ;; (org-agenda-set-tags)
-   (org-agenda-priority)
+   ;; (org-agenda-priority)
    ;; (call-interactively 'slang/my-org-agenda-set-effort)
    (org-agenda-refile)
    (org-save-all-org-buffers)))
@@ -375,14 +379,14 @@
  )
 
 ;; Org-ref setup
-(use-package! org-ref
-  :after org
-  :config
-  (setq org-ref-default-bibliography "~/Dropbox/orgmode/bibliography/references.bib"
-        org-ref-pdf-directory "~/pdf/"
-        bibtex-completion-bibliography "~/Dropbox/orgmode/bibliography/references.bib"
-        bibtex-completion-library-path "~/Dropbox/orgmode/bibliography/bibtex-pdfs"
-        bibtex-completion-notes-path "~/Dropbox/orgmode/bibliography/helm-bibtex-notes"))
+;; (use-package! org-ref
+;;   :after org
+;;   :config
+;;   (setq org-ref-default-bibliography "~/Dropbox/orgmode/bibliography/references.bib"
+;;         org-ref-pdf-directory "~/pdf/"
+;;         bibtex-completion-bibliography "~/Dropbox/orgmode/bibliography/references.bib"
+;;         bibtex-completion-library-path "~/Dropbox/orgmode/bibliography/bibtex-pdfs"
+;;         bibtex-completion-notes-path "~/Dropbox/orgmode/bibliography/helm-bibtex-notes"))
 
 ;; org-clock output for polybar
 (defun slang/org-clock-output-polybar ()
@@ -439,7 +443,7 @@
   (remove-hook 'org-tab-first-hook #'+org-cycle-only-current-subtree-h))
 
 ;; Set PDF viewer
-(add-to-list 'org-file-apps '("\\.pdf" . "zathura %s"))
+(add-to-list 'org-file-apps '("\\.pdf" . "emacsclient -c -a '' %s"))
 
 ;; Toggle latex fragments automatically with pointer
 ;; (add-hook 'org-mode-hook 'org-fragtog-mode)
@@ -482,3 +486,50 @@
   "Schedule an agenda element for tomorrow."
   (interactive)
   (org-agenda-schedule "Hello World" "+1d"))
+
+;; Org-superstar
+
+;; Enable mixed-pixed font for org-mode
+;; (add-hook 'org-mode-hook #'mixed-pitch-mode)
+
+;; Hide emphasis markers
+;; (setq org-hide-emphasis-markers t)
+
+(setq org-startup-folded nil)
+
+;; (use-package! org-noter
+;;   :commands (org-noter)
+;;   :config
+;;   (require 'org-noter-pdftools)
+;;   (after! pdf-tools
+;;     (setq pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note))
+;;   (setq org-noter-notes-mode-map (make-sparse-keymap)))
+
+;; (use-package! org-pdftools
+;;   :init (setq org-pdftools-search-string-separator "??")
+;;   :config
+;;   (after! org
+;;     (org-link-set-parameters "pdftools"
+;;                              :follow #'org-pdftools-open
+;;                              :complete #'org-pdftools-complete-link
+;;                              :store #'org-pdftools-store-link
+;;                              :export #'org-pdftools-export)
+;;     (add-hook 'org-store-link-functions 'org-pdftools-store-link)))
+
+;; Set superstart bullet item list
+(setq org-superstar-item-bullet-alist '((45 . 8226)
+                                        (43 . 10148)
+                                        (42 . 8211)))
+
+;; Enable latex previews at startup
+;; (setq org-startup-with-latex-preview nil)
+
+(add-hook 'org-mode-hook 'org-fragtog-mode)
+
+;; Set org agenda face
+(custom-set-faces!
+  '(org-agenda-structure :height 1.5 :weight ultra-bold :foreground "#bbc2cf"
+                         :box
+                         (:line-width 2 :color "grey75" :style released-button)
+                         )
+  '(org-super-agenda-header :height 0.8 :box nil :inherit (org-agenda-structure)))

@@ -104,10 +104,10 @@ else
   # export EDITOR=vim
   # export VISUAL=vim
 fi
-export EDITOR=emacsclient
-export VISUAL=emacsclient
+export EDITOR=vim
+export VISUAL=vim
 
-export JAVA_HOME=/usr/lib/jvm/java-10-openjdk
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
 export TERMINAL=termite
 export WEKA_HOME=$HOME/wekafiles
 export DOT=$HOME/dotfiles
@@ -193,6 +193,7 @@ bindkey '^N' down-line-or-beginning-search
 
 bindkey '^r' history-incremental-search-backward
 
+zmodload -i zsh/complist
 # Use vim keys in tab complete menu:
 bindkey -M menuselect 'h' vi-backward-char
 bindkey -M menuselect 'k' vi-up-line-or-history
@@ -228,13 +229,14 @@ preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
 function pacu() {
   sudo pacman -Syu
-  yay -Syua
+  yay -Syua --aur
 }
 
 # Open pdfs in background by default
 function pdf() {
-  zathura --fork "$@" &
-  disown
+  evince "$@" &
+  # zathura --fork "$@" &
+  # emacsclient -c -a '' "$@" &
 }
 
 # Open images in background by default
@@ -282,6 +284,12 @@ eval "$(direnv hook zsh)"
 
 # Remove history duplicates
 setopt HIST_IGNORE_ALL_DUPS
+
+
+# Enable edit- in commandline
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^X^E" edit-command-line
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

@@ -2,6 +2,7 @@ rofi.combi-modi:    drun,run,ssh
 rofi.theme:         nord 
 rofi.font:          IBMPlex Mono 20
 rofi.modi:          combi,drun,run 
+rofi.show-icons:    true
 ! Base16 Nord
 ! Author: arcticicestudio
 

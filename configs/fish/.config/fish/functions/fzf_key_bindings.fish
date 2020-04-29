@@ -1,0 +1,1 @@
+/home/tak/.fzf/shell/key-bindings.fish

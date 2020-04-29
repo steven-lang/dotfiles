@@ -432,3 +432,7 @@
       "b"  #'julia-repl-send-buffer
       "l"  #'julia-repl-send-line
       "r"  #'julia-repl-send-region-or-line)
+
+(map! :map pdf-view-mode-map
+      "/"  nil
+      "/"  #'pdf-occur)

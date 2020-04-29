@@ -227,7 +227,7 @@ exec --no-startup-id pulseaudio
 # nm-applet
 exec --no-startup-id nm-applet --tray --sm-disable & 
 # Bluetooth
-# exec --no-startup-id blueberry-tray &
+exec --no-startup-id blueberry-tray &
 
 
 # suspend/lock shortcuts

@@ -30,6 +30,8 @@
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
 (setq doom-font (font-spec :family "Hack" :size 20))
+;; (setq doom-variable-pitch-font (font-spec :family "DejaVu Serif" :size 25 :weight 'semi-light))
+(setq doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 28 :weight 'semi-light))
 
 ;; Add some more space between the lines
 (setq line-spacing 0.1)
@@ -37,8 +39,12 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. These are the defaults.
-(setq doom-theme 'doom-one)
-
+;; (let ((h (string-to-number (format-time-string "%H"))))
+;;   (if (or (< h 8)
+;;           (> h 21))
+;;       (setq doom-theme 'doom-nord)
+;;     (setq doom-theme 'doom-nord-light)))
+(setq doom-theme 'doom-nord)
 
 
 ;; If you want to change the style of line numbers, change this to `relative' or
@@ -71,6 +77,9 @@
 
 ;; Enable highlight line
 (global-hl-line-mode 1)
+
+;; Disable auto-fill-mode
+(remove-hook 'text-mode-hook #'auto-fill-mode)
 
 ;; Enable word wrap mode
 (+global-word-wrap-mode)
@@ -163,6 +172,10 @@
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 587)
 
+;; Add action to view in browser
+;; (add-to-list 'mu4e-view-actions
+;;              '("View in Browser" . mu4e-action-view-in-browser) t)
+
 (use-package! mu4e-alert
   :after mu4e
   :init
@@ -200,10 +213,9 @@
       '((avy-goto-char . avy-order-closest)
         (avy-goto-char-2 . avy-order-closest)
         (avy-goto-line-above . avy-order-closest)
-        (avy-goto-word-below . avy-order-closest)))
+        (avy-goto-line-below . avy-order-closest)
+        (avy-goto-word-0 . avy-order-closest)))
 
-;; Add writegood-mode in latex
-(add-hook! 'LaTeX-mode-hook #'writegood-mode)
 
 ;; Langtool
 (setq langtool-java-classpath
@@ -251,5 +263,21 @@ Return a list of strings as the completion candidates."
           (company-lsp--filter-candidates candidates prefix)
         candidates))))
 
-;; Org-superstar
-(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+
+;; Get back old doom tab behaviour
+;; (map! :n [tab] (general-predicate-dispatch nil
+;;                  (and (featurep! :editor fold)
+;;                       (save-excursion (end-of-line) (invisible-p (point))))
+;;                  #'+fold/toggle
+;;                  (fboundp 'evil-jump-item)
+;;                  #'evil-jump-item)
+;;       :v [tab] (general-predicate-dispatch nil
+;;                  (and (bound-and-true-p yas-minor-mode)
+;;                       (or (eq evil-visual-selection 'line)
+;;                           (not (memq (char-after) (list ?\( ?\[ ?\{ ?\} ?\] ?\))))))
+;;                  #'yas-insert-snippet
+;;                  (fboundp 'evil-jump-item)
+;;                  #'evil-jump-item))
+
+;; Set julia lsp environment
+(setq lsp-julia-default-environment "~/.julia/environments/v1.4")
