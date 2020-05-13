@@ -7,7 +7,7 @@ include-file = $HOME/.config/polybar/nord-config
 
 
 [bar/nord-top]
-separator = "  "
+separator = " | "
 monitor = ${env:MONITOR:eDP1}
 width = ${config.width}
 height = ${config.height}

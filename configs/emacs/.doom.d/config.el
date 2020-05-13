@@ -80,6 +80,7 @@
 
 ;; Disable auto-fill-mode
 (remove-hook 'text-mode-hook #'auto-fill-mode)
+(add-hook 'latex-mode-hook #'auto-fill-mode)
 
 ;; Enable word wrap mode
 (+global-word-wrap-mode)

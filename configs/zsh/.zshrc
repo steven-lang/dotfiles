@@ -104,8 +104,8 @@ else
   # export EDITOR=vim
   # export VISUAL=vim
 fi
-export EDITOR=vim
-export VISUAL=vim
+export EDITOR=nvim
+export VISUAL=nvim
 
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
 export TERMINAL=termite
@@ -138,10 +138,10 @@ alias more=less
 
 # Emacs client
 function emacsclient() {
-    /usr/local/bin/emacsclient -c -a '' "$@" &
+    /usr/bin/emacsclient -c -a '' "$@" &
     disown
 }
-alias ec="/usr/local/bin/emacsclient -c -a '' "$@""
+alias ec="/usr/bin/emacsclient -c -a '' "$@""
 # alias ec="emacsclient -n"
 alias emacsclient-restart="systemctl --user restart emacs"
 
@@ -229,7 +229,7 @@ preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
 function pacu() {
   sudo pacman -Syu
-  yay -Syua --aur
+  yay -Syua --noconfirm
 }
 
 # Open pdfs in background by default
@@ -290,21 +290,6 @@ setopt HIST_IGNORE_ALL_DUPS
 autoload -z edit-command-line
 zle -N edit-command-line
 bindkey "^X^E" edit-command-line
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('$HOME/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "$HOME/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "$HOME/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="$HOME/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
 
 
 # Enable fzf

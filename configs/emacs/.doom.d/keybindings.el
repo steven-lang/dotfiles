@@ -33,8 +33,8 @@
 
       "x"  nil
       (:prefix ("x" . "font")
-        "-"  #'doom/decrease-font-size
-        "+"  #'doom/increase-font-size))
+       "-"  #'doom/decrease-font-size
+       "+"  #'doom/increase-font-size))
 
 ;; Expand region with "SPC v"
 (map! :leader
@@ -50,10 +50,10 @@
       "u" nil ;; unbind first
 
       (:prefix ("u" . "utils")
-        ;; :desc "Search Google" "g" #'counsel-google ;; needs 'surfraw' binary
-        :desc "Search Google" "g" #'helm-google-suggest ;; needs 'surfraw' binary
-        :desc "top" "t" #'helm-top
-        :desc "kill-ring" "y" #'helm-show-kill-ring))
+       :desc "Search Google" "g" #'counsel-google ;; needs 'surfraw' binary
+       ;; :desc "Search Google" "g" #'helm-google-suggest ;; needs 'surfraw' binary
+       :desc "top" "t" #'helm-top
+       :desc "kill-ring" "y" #'helm-show-kill-ring))
 
 ;; Buffers
 (map! :leader (:prefix "b" "m" nil)
@@ -63,6 +63,7 @@
       :leader (:prefix "b" :desc "Messages" "s" #'(lambda () (interactive) (switch-to-buffer "*scratch*")))
 
       :leader (:prefix "b" "b" nil)
+      ;; :leader (:prefix "b" :desc "Buffers" "b" #'helm-mini)
       :leader (:prefix "b" :desc "Buffers" "b" #'ivy-switch-buffer)
       )
 
@@ -419,12 +420,13 @@
       "v"     #'TeX-view
       "b"     #'slang/save-tex-file-and-build
       "t"     #'reftex-toc
+      "="     #'LaTeX-fill-section
 
       (:prefix ("f" . "format")
-        "e"  #'LaTeX-fill-environment
-        "p"  #'LaTeX-fill-paragraph
-        "r"  #'LaTeX-fill-region
-        "s"  #'LaTeX-fill-section))
+       "e"  #'LaTeX-fill-environment
+       "p"  #'LaTeX-fill-paragraph
+       "r"  #'LaTeX-fill-region
+       "s"  #'LaTeX-fill-section))
 
 (map! :localleader
       :map julia-mode-map

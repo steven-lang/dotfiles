@@ -221,7 +221,7 @@ let g:lightline = {
       \   'left': [ [ 'mode', 'paste' ], ['readonly', 'relativepath', 'modified'] ],
       \   'right' : [ ['lineinfo'], ['percent']]
       \ },
-      \ 'colorscheme': 'oceanicnext',
+      \ 'colorscheme': 'nord',
       \ 'component_function': {
       \ }
       \ }

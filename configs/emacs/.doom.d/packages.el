@@ -58,6 +58,8 @@
 (package! edit-server)
 (package! blacken)
 
+(package! helm)
+
 ;; If you want to replace it with yasnippet's default snippets
 (package! yasnippet-snippets)
 (package! lorem-ipsum)
