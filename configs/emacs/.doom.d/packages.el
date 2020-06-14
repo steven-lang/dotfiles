@@ -67,7 +67,12 @@
 (package! aggressive-indent)
 (package! mu4e-alert)
 (package! mixed-pitch)
-(package! lsp-julia :recipe (:host github :repo "non-jedi/lsp-julia"))
+;; (package! lsp-julia :recipe (:host github :repo "non-jedi/lsp-julia"))
+;; (package! counsel-gtags)
+(package! cuda-mode)
+(package! dockerfile-mode)
+(package! yaml-mode)
+
 
 ;; Disable packages
 (package! evil-snipe :disable t)
@@ -87,6 +92,3 @@
           :recipe (:host github :repo "jethrokuan/org-roam"))
 (package! org-fragtog)
 (package! org-superstar)
-
-;; Unpin packages
-;; (unpin! lsp-ui)

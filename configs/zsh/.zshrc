@@ -146,9 +146,10 @@ alias ec="/usr/bin/emacsclient -c -a '' "$@""
 alias emacsclient-restart="systemctl --user restart emacs"
 
 # Better ls
-# alias ls='ls -lh --color=auto --group-directories-first'
 if hash exa 2>/dev/null; then
   alias ls='exa -l --group-directories-first --git --color auto'
+else
+  alias ls='ls -lh --color=auto --group-directories-first'
 fi
 
 alias grep='grep --color=auto'

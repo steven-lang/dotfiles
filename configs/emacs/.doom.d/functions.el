@@ -6,29 +6,28 @@
 
 ;; Close compilation buffer on succeed
 (defun slang/bury-compile-buffer-if-successful (buffer string)
-"Bury a compilation buffer if succeeded without warnings
+  "Bury a compilation buffer if succeeded without warnings
 https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close/11059012#11059012"
-    (when (and
-            (buffer-live-p buffer)
-            (string-match "compilation" (buffer-name buffer))
-            (string-match "finished" string)
-            )
+  (when (and
+         (buffer-live-p buffer)
+         (string-match "compilation" (buffer-name buffer))
+         (string-match "finished" string)
+         )
     (run-with-timer 1 nil
                     (lambda (buf)
-                        (bury-buffer buf)
-                        (delete-windows-on buf))
+                      (bury-buffer buf)
+                      (delete-windows-on buf))
                     buffer)))
-(add-hook 'compilation-finish-functions 'slang/bury-compile-buffer-if-successful)
 
 
 ;; https://gist.github.com/mads-hartmann/3402786
 (defun toggle-maximize-buffer () "Maximize buffer"
-  (interactive)
-  (if (= 1 (length (window-list)))
-      (jump-to-register '_) 
-    (progn
-      (window-configuration-to-register '_)
-      (delete-other-windows))))
+       (interactive)
+       (if (= 1 (length (window-list)))
+           (jump-to-register '_)
+         (progn
+           (window-configuration-to-register '_)
+           (delete-other-windows))))
 
 
 (defun slang/pyvenv-activate ()

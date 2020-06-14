@@ -162,9 +162,9 @@
       :n "C-k"  #'lsp-ui-doc-glance)
 
 
-(map! :map python-mode-map
-      :localleader
-      "i" nil)
+;; (map! :map python-mode-map
+;;       :localleader
+;;       "i" nil)
 
 (map! :map python-mode-map
       :localleader
