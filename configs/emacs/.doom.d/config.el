@@ -29,8 +29,9 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "Hack" :size 20))
-;; (setq doom-variable-pitch-font (font-spec :family "DejaVu Serif" :size 25 :weight 'semi-light))
+;; (setq doom-font (font-spec :family "Hack" :size 20))
+(setq doom-font (font-spec :family "IBM Plex Mono" :size 20 :weight 'semi-light))
+(setq doom-variable-pitch-font (font-spec :family "DejaVu Serif" :size 25 :weight 'semi-light))
 (setq doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 28 :weight 'semi-light))
 
 ;; Add some more space between the lines
@@ -308,3 +309,6 @@ Return a list of strings as the completion candidates."
 ;; (setq lsp-enable-symbol-highlighting nil)
 
 ;; (set-face-background 'lsp-face-highlight-read "#4c566a")
+
+(setq lsp-python-ms-executable
+      "~/python-language-server/output/bin/Release/linux-x64/publish/Microsoft.Python.LanguageServer")

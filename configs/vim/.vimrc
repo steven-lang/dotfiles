@@ -135,6 +135,9 @@ Plug 'godlygeek/tabular'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+" Advanced Python colorizer
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+
 " Initialize plugin system
 call plug#end()
 
@@ -615,3 +618,24 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 
 " }}}
+
+function MyCustomHighlights()
+    hi semshiGlobal      ctermfg=red guifg=#BF616A
+    hi semshiLocal           ctermfg=209 guifg=#D08770
+    hi semshiGlobal          ctermfg=214 guifg=#EBCB8B
+    hi semshiImported        ctermfg=214 guifg=#EBCB8B 
+    hi semshiParameter       ctermfg=75  guifg=#B48EAD
+    hi semshiParameterUnused ctermfg=117 guifg=#6d7991 cterm=underline gui=underline
+    hi semshiFree            ctermfg=218 guifg=#B48EAD
+    hi semshiBuiltin         ctermfg=207 guifg=#88C0D0
+    hi semshiAttribute       ctermfg=49  guifg=#8FBCBB
+    hi semshiSelf            ctermfg=249 guifg=#D8DEE9
+    hi semshiUnresolved      ctermfg=226 guifg=#EBCB8B cterm=underline gui=underline
+    hi semshiSelected        ctermfg=231 guifg=#ECEFF4 ctermbg=161 guibg=#6d7991
+
+    hi semshiErrorSign       ctermfg=231 guifg=#ECEFF4 ctermbg=160 guibg=#BF616A
+    hi semshiErrorChar       ctermfg=231 guifg=#ECEFF4 ctermbg=160 guibg=#BF616A
+    sign define semshiError text=E> texthl=semshiErrorSign
+endfunction
+autocmd FileType python call MyCustomHighlights()
+autocmd ColorScheme * call MyCustomHighlights()
