@@ -3,6 +3,17 @@ rofi.theme:         nord
 rofi.font:          IBMPlex Mono 20
 rofi.modi:          combi,drun,run 
 rofi.show-icons:    true
+
+! Vim-like keys
+rofi.kb-row-up:                      Up,Control+k,Shift+Tab,Shift+ISO_Left_Tab
+rofi.kb-row-down:                    Down,Control+j
+rofi.kb-accept-entry:                Control+m,Return,KP_Enter
+rofi.terminal:                       termite
+rofi.kb-remove-to-eol:               Control+Shift+e
+rofi.kb-mode-next:                   Shift+Right,Control+Tab,Control+l
+rofi.kb-mode-previous:               Shift+Left,Control+Shift+Tab,Control+h
+rofi.kb-remove-char-back:            BackSpace
+
 ! Base16 Nord
 ! Author: arcticicestudio
 
@@ -36,47 +47,3 @@ rofi.color-urgent:  #3b4252, #88c0d0, #3b4252, #3b4252, #88c0d0
 
 ! Set the desired separator style
 rofi.separator-style: solid
-
-
-! ! Base16 OceanicNext
-! ! Author: https://github.com/voronianski/oceanic-next-color-scheme
-! 
-! ! base00: #1B2B34
-! ! base01: #343D46
-! ! base02: #4F5B66
-! ! base03: #65737E
-! ! base04: #A7ADBA
-! ! base05: #C0C5CE
-! ! base06: #CDD3DE
-! ! base07: #D8DEE9
-! ! base08: #EC5f67
-! ! base09: #F99157
-! ! base0A: #FAC863
-! ! base0B: #99C794
-! ! base0C: #5FB3B3
-! ! base0D: #6699CC
-! ! base0E: #C594C5
-! ! base0F: #AB7967
-! 
-! Enable the extended coloring options
-! rofi.color-enabled: true
-! 
-! ! Property Name     BG       Border   Separator
-! rofi.color-window:  #343D46, #343D46, #1B2B34
-! 
-! ! Property Name     BG       FG       BG-alt   Head-BG  Head-FG
-! rofi.color-normal:  #343D46, #C0C5CE, #343D46, #343D46, #D8DEE9
-! rofi.color-active:  #343D46, #6699CC, #343D46, #343D46, #6699CC
-! rofi.color-urgent:  #343D46, #EC5f67, #343D46, #343D46, #EC5f67
-! 
-! ! Set the desired separator style
-! rofi.separator-style: solid
-! 
-! rofi.kb-row-up:                      Up,Control+k,Shift+Tab,Shift+ISO_Left_Tab
-! rofi.kb-row-down:                    Down,Control+j
-! rofi.kb-accept-entry:                Control+m,Return,KP_Enter
-! rofi.terminal:                       mate-terminal
-! rofi.kb-remove-to-eol:               Control+Shift+e
-! rofi.kb-mode-next:                   Shift+Right,Control+Tab,Control+l
-! rofi.kb-mode-previous:               Shift+Left,Control+Shift+Tab,Control+h
-! rofi.kb-remove-char-back:            BackSpace

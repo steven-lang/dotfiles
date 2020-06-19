@@ -29,13 +29,13 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "Hack" :size 20))
-(setq doom-font (font-spec :family "IBM Plex Mono" :size 20 :weight 'semi-light))
+(setq doom-font (font-spec :family "Hack" :size 20))
+;; (setq doom-font (font-spec :family "IBM Plex Mono" :size 20 :weight 'semi-light))
 (setq doom-variable-pitch-font (font-spec :family "DejaVu Serif" :size 25 :weight 'semi-light))
 (setq doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 28 :weight 'semi-light))
 
 ;; Add some more space between the lines
-(setq line-spacing 0.1)
+(setq line-spacing 0.12)
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -45,7 +45,8 @@
 ;;           (> h 21))
 ;;       (setq doom-theme 'doom-nord)
 ;;     (setq doom-theme 'doom-nord-light)))
-(setq doom-theme 'doom-nord)
+;; (setq doom-theme 'doom-nord)
+(setq doom-theme 'doom-one)
 
 
 ;; If you want to change the style of line numbers, change this to `relative' or
@@ -312,3 +313,16 @@ Return a list of strings as the completion candidates."
 
 (setq lsp-python-ms-executable
       "~/python-language-server/output/bin/Release/linux-x64/publish/Microsoft.Python.LanguageServer")
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("2f1518e906a8b60fac943d02ad415f1d8b3933a5a7f75e307e6e9a26ef5bf570" default)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

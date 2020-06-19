@@ -69,6 +69,7 @@
 (package! mixed-pitch)
 ;; (package! lsp-julia :recipe (:host github :repo "non-jedi/lsp-julia"))
 ;; (package! counsel-gtags)
+(package! helm-gtags)
 (package! cuda-mode)
 (package! dockerfile-mode)
 (package! yaml-mode)
