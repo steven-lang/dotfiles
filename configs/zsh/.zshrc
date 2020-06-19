@@ -294,6 +294,13 @@ fi
 # Enable direnv
 eval "$(direnv hook zsh)"
 
+# Ensure pip is installed
+
+if hash pip3 2>/dev/null; then
+  curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
+  python3 /tmp/get-pip.py
+fi
+
 # Remove history duplicates
 setopt HIST_IGNORE_ALL_DUPS
 
