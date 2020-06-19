@@ -101,18 +101,16 @@ fi
 
 # Check if nvim is available
 if hash nvim 2>/dev/null; then
-  # export EDITOR=nvim
-  # export VISUAL=nvim
+  export EDITOR=nvim
+  export VISUAL=nvim
   alias vim=nvim
 
   # Use nvim for manpages
   export MANPAGER="nvim -c 'set ft=man' -"
 else
-  # export EDITOR=vim
-  # export VISUAL=vim
+  export EDITOR=vim
+  export VISUAL=vim
 fi
-export EDITOR=nvim
-export VISUAL=nvim
 
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
 export TERMINAL=termite
