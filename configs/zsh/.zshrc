@@ -126,7 +126,10 @@ export FZF_DEFAULT_COMMAND='ag -g .'
 
 # Maven java server debugging
 #export MAVEN_OPTS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
-PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+
+if hash ruby 2>/dev/null; then
+  PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+fi
 PATH="$HOME/bin:$PATH"
 PATH="$PATH:/usr/bin/julia"
 PATH="$PATH:$HOME/.emacs.d/bin"
@@ -282,6 +285,7 @@ function cd() {
 # Check if direnv is installed
 if [ ! -f $HOME/bin/direnv ]; then
   echo "Direnv not found. Installing now ..."
+  mkdir -p $HOME/bin
   wget -O $HOME/bin/direnv https://github.com/direnv/direnv/releases/download/v2.20.0/direnv.linux-amd64 > /dev/null
   chmod +x $HOME/bin/direnv
 fi
