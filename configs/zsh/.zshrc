@@ -112,7 +112,8 @@ else
   export VISUAL=vim
 fi
 
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+# export JAVA_HOME=/usr/lib/jvm/java-11-openjdk # ARCH
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-11.0.7.10-1.fc32.x86_64 # FEDORA
 export TERMINAL=termite
 export WEKA_HOME=$HOME/wekafiles
 export DOT=$HOME/dotfiles
@@ -293,8 +294,7 @@ fi
 eval "$(direnv hook zsh)"
 
 # Ensure pip is installed
-
-if hash pip3 2>/dev/null; then
+if ! hash pip3 2>/dev/null; then
   curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
   python3 /tmp/get-pip.py
 fi

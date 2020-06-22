@@ -174,7 +174,7 @@
       ;; "s"  #'helm-lsp-workspace-symbol
 
       (:prefix ("i" . "Insert")
-        "b" #'slang/ipdb-insert))
+       "b" #'slang/ipdb-insert))
 
 ;; Make jk work in lsp ui peek mode
 (map! :map lsp-ui-peek-mode-map
