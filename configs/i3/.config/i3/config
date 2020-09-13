@@ -15,7 +15,8 @@ set $mod2 Mod1
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
 
-font pango:monospace 12
+# font pango:monospace 12
+font pango:IBM Plex Mono 12
 #font pango: Source Code Pro Semibold, FontAwesome Regular 11 
 #font pango:DejaVu Sans Mono, Terminus Bold Semi-Condensed 11
 #font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -36,6 +37,8 @@ floating_modifier $mod
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Return exec termite
+# bindsym $mod+Return exec kitty
+# bindsym $mod+Return exec i3-sensible-terminal
 
 # mouse focus
 focus_follows_mouse yes 
@@ -148,9 +151,9 @@ bindsym $mod+Ctrl+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Ctrl+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
-bindsym $mod+Ctrl+1 exec "bash ~/.screenlayout/default.sh && i3 'restart' && set-wallpaper"
-bindsym $mod+Ctrl+2 exec "bash ~/.screenlayout/wqhd-only.sh && i3 'restart' && set-wallpaper"
-bindsym $mod+Ctrl+3 exec "bash ~/.screenlayout/office-tud.sh && i3 'restart' && set-wallpaper"
+bindsym $mod+Ctrl+1 exec "bash ~/.screenlayout/default.sh && sleep 1 && i3 'restart' && set-wallpaper"
+bindsym $mod+Ctrl+2 exec "bash ~/.screenlayout/wqhd-only.sh && sleep 1 && i3 'restart' && set-wallpaper"
+bindsym $mod+Ctrl+3 exec "bash ~/.screenlayout/office-tud.sh && sleep 1 && i3 'restart' && set-wallpaper"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -178,11 +181,41 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-mute 0 false && pactl set-sink-volume alsa_output.pci-0000_00_1b.0.analog-stereo +5% && killall -SIGUSR1 i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-mute 0 false && pactl set-sink-volume alsa_output.pci-0000_00_1b.0.analog-stereo -5% && killall -SIGUSR1 i3status
+# bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-mute 0 false && pactl set-sink-volume alsa_output.pci-0000_00_1b.0.analog-stereo +5% && killall -SIGUSR1 i3status
+# bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-mute 0 false && pactl set-sink-volume alsa_output.pci-0000_00_1b.0.analog-stereo -5% && killall -SIGUSR1 i3status
+## Volume control
+
+# Path to volume control, without trailing slash
+set $volumepath ~/i3-volume
+
+# Command for the status line
+#   ie: i3blocks, i3status
+set $statuscmd i3status
+
+# Signal used to update the status line
+#   i3blocks uses SIGRTMIN+10 by default
+#   i3status uses SIGUSR1 by default
+set $statussig SIGUSR1
+
+# Amount to increase/decrease volume as a percentage
+set $volumestep 5
+
+# pulseaudio-utils settings
+#
+# Symbolic name for sink (numeric index not supported)
+#   Recommended: comment out this setting and omit the -s option to use default sink
+#   List sink names: pacmd list-sinks | awk -F "[<>]" '/^\s+name: <.*>/{print $2}'
+#set $sinkname alsa_output.pci-0000_00_1b.0.analog-stereo
+
+# Using pulseaudio-utils (append "-s $sinkname" without quotes to override default sink)
+bindsym XF86AudioRaiseVolume exec $volumepath -np -i $volumestep -t $statuscmd -u $statussig
+bindsym XF86AudioLowerVolume exec $volumepath -np -d $volumestep -t $statuscmd -u $statussig
+bindsym XF86AudioMute        exec $volumepath -mn -t $statuscmd -u $statussig
+
 # Sreen brightness controls
 bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+
 # Screen off/on
 # bindsym $mod+Ctrl+1 exec xbacklight -set 100
 # bindsym $mod+Ctrl+0 exec xbacklight -set 1

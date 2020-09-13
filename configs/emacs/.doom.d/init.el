@@ -19,10 +19,10 @@
        ;;japanese
 
        :completion
-       (company +childframe)            ; the ultimate code completion backend
+       company            ; the ultimate code completion backend
        ;; (helm +fuzzy)              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
-       (ivy +icons +prescient)               ; a search engine for love and life
+       (ivy +flx +childframe +icons +prescient)               ; a search engine for love and life
 
        :ui
        deft              ; notational velocity for Emacs
@@ -46,7 +46,7 @@
        ;; unicode           ; extended unicode support for various languages
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
-       window-select     ; visually switch windows
+       (window-select +numbers)     ; visually switch windows
        workspaces        ; tab emulation, persistence & separate workspaces
        ;;zen               ; distraction-free coding or writing
 
@@ -67,7 +67,7 @@
        :emacs
        dired             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
-       ;; ibuffer           ; interactive buffer management
+       ;; (ibuffer +icons)           ; interactive buffer management
        vc                ; version-control and Emacs, sitting in a tree
 
        :term
@@ -144,13 +144,13 @@
         ;;+jupyter        ; ipython/jupyter support for babel
         ;;+pandoc          ; export-with-pandoc support
         +pomodoro        ; be fruitful with the tomato technique
-        +roam
+        ;; +roam
         +present)        ; using org-mode for presentations
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       (python +lsp +pyenv)            ; beautiful is better than ugly
+       (python +lsp +conda +pyright)            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;rest              ; Emacs as a REST client
@@ -159,7 +159,7 @@
        ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
        ;;scheme            ; a fully conniving family of lisps
-       sh                ; she sells {ba,z,fi}sh shells on the C xor
+       (sh +lsp)                ; she sells {ba,z,fi}sh shells on the C xor
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
@@ -175,6 +175,9 @@
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
+
+       :os
+       ;; tty
 
        :config
        ;;literate

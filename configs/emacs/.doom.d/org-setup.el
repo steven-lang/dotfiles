@@ -41,9 +41,10 @@
          (file+headline org-default-notes-file "Inbox")
          "** TODO %?\n:PROPERTIES:\n:CREATED:\t%u\n:END:\n"
          :empty-lines 1)
+        ("m" "Master Thesis" entry (file+headline "~/Dropbox/orgmode/gtd/gtd.org" "Master Thesis")
+         "* TODO %?")
         ("e" "email" entry (file+headline org-default-notes-file "Inbox")
-         "* TODO Reply: %a %?"))
-      )
+         "* TODO Reply: %a %?")))
 
 
 ;; Set the org refile targets to org agenda files
@@ -129,111 +130,111 @@
 ;; Set org agenda todo view (open with <f1>)
 (setq slang/org-agenda-directory "~/Dropbox/orgmode/gtd/")
 (setq slang/org-agenda-todo-view
-        `("a" "Full Agenda"
+      `("a" "Full Agenda"
         ((agenda ""
-                ((org-agenda-span '7)
-                ;; (org-super-agenda-groups '((:auto-parent t)))
-                (org-deadline-warning-days 365)))
+                 ((org-agenda-span '7)
+                  ;; (org-super-agenda-groups '((:auto-parent t)))
+                  (org-deadline-warning-days 365)))
 
 
-        ;; To be refiled
-        (org-ql-block 
-         ;; Query
-         '(todo)
+         ;; To be refiled
+         (org-ql-block
+          ;; Query
+          '(todo)
           ((org-ql-block-header "To Refile")
-            (org-super-agenda-groups '((:auto-outline-path t)))
-            (org-agenda-files '(,(concat slang/org-agenda-directory "inbox.org")))))
-        
-        ;; TODAY
-        (org-ql-block 
-         ;; Query
-         '(and (not (habit))
-               (todo)
-               (scheduled :on today))
+           (org-super-agenda-groups '((:auto-outline-path t)))
+           (org-agenda-files '(,(concat slang/org-agenda-directory "inbox.org")))))
+
+         ;; TODAY
+         (org-ql-block
+          ;; Query
+          '(and (not (habit))
+                (todo)
+                (scheduled :on today))
           ((org-ql-block-header "Today")
-            (org-super-agenda-groups '((:auto-outline-path t)))
-            (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+           (org-super-agenda-groups '((:auto-outline-path t)))
+           (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
 
-        ;; TOMORROW
-        (org-ql-block 
-         ;; Query
-         '(and (not (habit))
-               (todo)
-               (scheduled :on +1))
+         ;; TOMORROW
+         (org-ql-block
+          ;; Query
+          '(and (not (habit))
+                (todo)
+                (scheduled :on +1))
           ((org-ql-block-header "Tomorrow")
-            (org-super-agenda-groups '((:auto-outline-path t)))
-            (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+           (org-super-agenda-groups '((:auto-outline-path t)))
+           (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
 
-        ;; TOMORROW
-        (org-ql-block 
-         ;; Query
-         '(and (not (habit))
-               (todo)
-               (scheduled :to -1)) ;; Scheduled until yesterday but still todo -> missed
+         ;; Missed items
+         (org-ql-block
+          ;; Query
+          '(and (not (habit))
+                (todo)
+                (scheduled :to -1)) ;; Scheduled until yesterday but still todo -> missed
           ((org-ql-block-header "Missed Items")
-            (org-super-agenda-groups '((:auto-outline-path t)))
-            (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+           (org-super-agenda-groups '((:auto-outline-path t)))
+           (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
 
-        ;; Next Actions Category
-        (org-ql-block 
-         ;; Query
-         '(and (todo "NEXT")
-               ;; (not (or (scheduled :on +1)
-               ;;          (scheudeld :on today)))
-               )
-         ;; Variables
+         ;; Next Actions Category
+         (org-ql-block
+          ;; Query
+          '(and (todo "NEXT")
+                ;; (not (or (scheduled :on +1)
+                ;;          (scheudeld :on today)))
+                )
+          ;; Variables
           ((org-ql-block-header "Next Actions")
-            (org-super-agenda-groups '((:auto-outline-path t)))
-            (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+           (org-super-agenda-groups '((:auto-outline-path t)))
+           (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
 
-        ;; Waiting Category
-        (org-ql-block 
-         ;; Query
-         '(and (todo "WAITING"))
-         ;; Variables
+         ;; Waiting Category
+         (org-ql-block
+          ;; Query
+          '(and (todo "WAITING"))
+          ;; Variables
           ((org-ql-block-header "Waiting For")
-            (org-super-agenda-groups '((:auto-outline-path t)))
-            (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+           (org-super-agenda-groups '((:auto-outline-path t)))
+           (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
 
-        ;; Projects
-        (org-ql-block 
-         ;; Query
-         '(and (not (or (tags "someday")
-                        (habit)
-                        (todo "WAITING")
-                        (todo "NEXT")))
+         ;; Projects
+         (org-ql-block
+          ;; Query
+          '(and (not (or (tags "someday")
+                         (habit)
+                         (todo "WAITING")
+                         (todo "NEXT")))
                 (todo))
-         ;; Variables
+          ;; Variables
           ((org-ql-block-header "Projects")
-            (org-super-agenda-groups '((:auto-outline-path t)))
-            (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+           (org-super-agenda-groups '((:auto-outline-path t)))
+           (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
 
-        ;; All in progress
-        ;; (alltodo ""
-        ;;         ((org-agenda-overriding-header "Projects")
-        ;;         (org-super-agenda-groups '(
-        ;;                                     (:discard (:tag "someday")) ;; Don't show todos tagged with "someday"
-        ;;                                     (:discard (:habit t)) ;; Don't show habits
-        ;;                                     (:discard (:todo "WAITING")) ;; Don't show WAITING
-        ;;                                     (:discard (:todo "NEXT")) ;; Don't show NEXT
-        ;;                                     (:auto-outline-path t)
-        ;;                                     ))
-        ;;         (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+         ;; All in progress
+         ;; (alltodo ""
+         ;;         ((org-agenda-overriding-header "Projects")
+         ;;         (org-super-agenda-groups '(
+         ;;                                     (:discard (:tag "someday")) ;; Don't show todos tagged with "someday"
+         ;;                                     (:discard (:habit t)) ;; Don't show habits
+         ;;                                     (:discard (:todo "WAITING")) ;; Don't show WAITING
+         ;;                                     (:discard (:todo "NEXT")) ;; Don't show NEXT
+         ;;                                     (:auto-outline-path t)
+         ;;                                     ))
+         ;;         (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
 
 
-        (tags "someday" ;; Only show those tagged with someday
-                ((org-agenda-overriding-header "Someday/Maybe")
+         (tags "someday" ;; Only show those tagged with someday
+               ((org-agenda-overriding-header "Someday/Maybe")
                 (org-super-agenda-groups '(
-                                            (:discard (:todo "DONE"))
-                                            (:discard (:todo "CANCELED"))
-                                            (:auto-outline-path t)))
+                                           (:discard (:todo "DONE"))
+                                           (:discard (:todo "CANCELED"))
+                                           (:auto-outline-path t)))
                 (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
 
-        (alltodo ""
-                    ((org-agenda-overriding-header "Reference Material")
-                    (org-super-agenda-groups '((:auto-outline-path t)))
-                    (org-agenda-files '(,(concat slang/org-agenda-directory "reference-material.org")))))
-        )
+         (alltodo ""
+                  ((org-agenda-overriding-header "Reference Material")
+                   (org-super-agenda-groups '((:auto-outline-path t)))
+                   (org-agenda-files '(,(concat slang/org-agenda-directory "reference-material.org")))))
+         )
         nil
         ("/tmp/org-agenda.html")))
 
@@ -300,6 +301,7 @@
 (add-to-list 'org-agenda-custom-commands `,(slang/make-org-agenda-custom-view "@home" "ch" "At Home"))
 (add-to-list 'org-agenda-custom-commands `,(slang/make-org-agenda-custom-view "@studying" "cs" "At Studying"))
 (add-to-list 'org-agenda-custom-commands `,(slang/make-org-agenda-custom-view "@freetime" "cf" "At Free Time"))
+(add-to-list 'org-agenda-custom-commands `,(slang/make-org-agenda-custom-view "thesis" "t" "Master Thesis"))
 
 (defvar slang/org-current-effort "1:00" "Current effort for agenda items.")
 
@@ -449,31 +451,31 @@
 ;; (add-hook 'org-mode-hook 'org-fragtog-mode)
 
 ;;;;;;;;;;;;;;;;;;; Org-Roam START
-(use-package! deft
-      :after org
-      :config
-      (setq deft-recursive t)
-      (setq deft-use-filter-string-for-filename t)
-      (setq deft-default-extension "org")
-      (setq deft-directory "~/Dropbox/orgmode/notes/")
-      (setq deft-use-filename-as-title t))
+;; (use-package! deft
+;;   :after org
+;;   :config
+;;   (setq deft-recursive t)
+;;   (setq deft-use-filter-string-for-filename t)
+;;   (setq deft-default-extension "org")
+;;   (setq deft-directory "~/Dropbox/orgmode/notes/")
+;;   (setq deft-use-filename-as-title t))
 
-(use-package! org-roam
-      :after deft org
-      :hook (org-mode . org-roam-mode)
-      :config
-      (setq org-roam-directory deft-directory))
+;; (use-package! org-roam
+;;       :after deft org
+;;       :hook (org-mode . org-roam-mode)
+;;       :config
+;;       (setq org-roam-directory deft-directory))
 
-(map! :leader
-      (:prefix ("r" . "Roam")
-        "d" #'deft
-        "R" #'deft-refresh
-        "r" #'org-roam
-        "t" #'org-roam-today
-        "f" #'org-roam-find-file
-        "i" #'org-roam-insert
-        "n" #'org-roam-new-file
-        "g" #'org-roam-show-graph))
+;; (map! :leader
+;;       (:prefix ("r" . "Roam")
+;;         "d" #'deft
+;;         "R" #'deft-refresh
+;;         "r" #'org-roam
+;;         "t" #'org-roam-today
+;;         "f" #'org-roam-find-file
+;;         "i" #'org-roam-insert
+;;         "n" #'org-roam-new-file
+;;         "g" #'org-roam-show-graph))
 ;;;;;;;;;;;;;;;;;;; Org-Roam END
 
 
@@ -522,9 +524,9 @@
                                         (42 . 8211)))
 
 ;; Enable latex previews at startup
-;; (setq org-startup-with-latex-preview nil)
+(setq org-startup-with-latex-preview nil)
 
-(add-hook 'org-mode-hook 'org-fragtog-mode)
+;; (add-hook 'org-mode-hook 'org-fragtog-mode)
 
 ;; Set org agenda face
 (custom-set-faces!

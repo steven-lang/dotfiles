@@ -50,3 +50,6 @@ The following section contains personal issues experienced on different hardware
 **Solution**
 
 - Add `quiet mem_sleep_default=deep` to the kernel command line options.
+
+## Screen Tearing
+- https://wiki.archlinux.org/index.php/Intel_graphics#Troubleshooting

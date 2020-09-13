@@ -44,6 +44,9 @@
 ;; Use F1 to open the agenda
 (map! "<f1>"
       #'slang/switch-to-agenda)
+;; Use F2 to open agenda selection
+(map! "<f2>"
+      #'org-agenda)
 
 ;; Utils
 (map! :leader
@@ -83,6 +86,7 @@
 (map! :map helm-map
       "C-h" #'helm-find-files-up-one-level)
 
+
 ;; DAP mode
 ;; (map!
 ;;       :map python-mode-map
@@ -91,74 +95,74 @@
 (map! :localleader
       :map python-mode-map
       (:prefix ("d" . "DAP")
-        ;; transient state
-        "."  #'dap-hydra
+       ;; transient state
+       "."  #'dap-hydra
 
-        ;; repl
-        "d'"  #'dap-ui-repl
+       ;; repl
+       "d'"  #'dap-ui-repl
 
-        ;; abandon
-        "a"  #'dap-disconnect
-        "A"  #'dap-delete-all-sessions
+       ;; abandon
+       "a"  #'dap-disconnect
+       "A"  #'dap-delete-all-sessions
 
-        ;; stepping
-        "c"  #'dap-continue
-        "i"  #'dap-step-in
-        "o"  #'dap-step-out
-        "r"  #'dap-restart-frame
-        ;; "s"  #'dap-next
-        "v"  #'dap-ui-inspect-thing-at-point
+       ;; stepping
+       "c"  #'dap-continue
+       "i"  #'dap-step-in
+       "o"  #'dap-step-out
+       "r"  #'dap-restart-frame
+       ;; "s"  #'dap-next
+       "v"  #'dap-ui-inspect-thing-at-point
 
-        ;; breakpoints
-        (:prefix ("b" . "Breakpoints")
-          "b" #'dap-breakpoint-toggle
-          "c" #'dap-breakpoint-condition
-          "l" #'dap-breakpoint-log-message
-          "h" #'dap-breakpoint-hit-condition
-          "a" #'dap-breakpoint-add
-          "d" #'dap-breakpoint-delete
-          "D" #'dap-breakpoint-delete-all)
+       ;; breakpoints
+       (:prefix ("b" . "Breakpoints")
+        "b" #'dap-breakpoint-toggle
+        "c" #'dap-breakpoint-condition
+        "l" #'dap-breakpoint-log-message
+        "h" #'dap-breakpoint-hit-condition
+        "a" #'dap-breakpoint-add
+        "d" #'dap-breakpoint-delete
+        "D" #'dap-breakpoint-delete-all)
 
-        (:prefix ("d" . "Debug")
-          ;; debuging/running
-          "d" #'dap-debug
-          "e" #'dap-debug-edit-template
-          "l" #'dap-debug-last
-          "r" #'dap-debug-recent)
+       (:prefix ("d" . "Debug")
+        ;; debuging/running
+        "d" #'dap-debug
+        "e" #'dap-debug-edit-template
+        "l" #'dap-debug-last
+        "r" #'dap-debug-recent)
 
-        (:prefix ("e" . "Eval")
-          ;; eval
-          "e" #'dap-eval
-          "r" #'dap-eval-region
-          "t" #'dap-eval-thing-at-point)
+       (:prefix ("e" . "Eval")
+        ;; eval
+        "e" #'dap-eval
+        "r" #'dap-eval-region
+        "t" #'dap-eval-thing-at-point)
 
-        (:prefix ("I" . "Inspect")
-          ;; inspect
-          "i" #'dap-ui-inspect
-          "r" #'dap-ui-inspect-region
-          "t" #'dap-ui-inspect-thing-at-point)
+       (:prefix ("I" . "Inspect")
+        ;; inspect
+        "i" #'dap-ui-inspect
+        "r" #'dap-ui-inspect-region
+        "t" #'dap-ui-inspect-thing-at-point)
 
 
-        ;; switching
-        (:prefix ("s" . "Switch")
-          "s" #'dap-switch-session
-          "t" #'dap-switch-thread
-          "f" #'dap-switch-frame)
+       ;; switching
+       (:prefix ("s" . "Switch")
+        "s" #'dap-switch-session
+        "t" #'dap-switch-thread
+        "f" #'dap-switch-frame)
 
-        (:prefix ("w" . "Windows")
-          ;; windows
-          "o" #'dap-go-to-output-buffer
-          "l" #'dap-ui-locals
-          "s" #'dap-ui-sessions
-          "b" #'dap-ui-breakpoints)))
+       (:prefix ("w" . "Windows")
+        ;; windows
+        "o" #'dap-go-to-output-buffer
+        "l" #'dap-ui-locals
+        "s" #'dap-ui-sessions
+        "b" #'dap-ui-breakpoints)))
 
 
 
 ;; Make #'gd' call lsp-goto-definition
 (map! :map python-mode-map
-      :n "K"  #'lsp-describe-thing-at-point
-      :n "gr" #'lsp-find-references
-      :n "gd" #'lsp-find-definition
+      :n "K"  #'+lookup/documentation
+      :n "gr" #'+lookup/references
+      :n "gd" #'+lookup/definition
       :n "C-k"  #'lsp-ui-doc-glance)
 
 
@@ -168,13 +172,13 @@
 
 (map! :map python-mode-map
       :localleader
-      "va" #'slang/pyvenv-activate
+      "v" #'slang/pyvenv-activate
       "="  #'blacken-buffer
-      "s"  #'ivy-lsp-workspace-symbol
+      "s"  #'lsp-ivy-workspace-symbol
       ;; "s"  #'helm-lsp-workspace-symbol
 
       (:prefix ("i" . "Insert")
-       "b" #'slang/ipdb-insert))
+       "b" #'slang/pdb-insert))
 
 ;; Make jk work in lsp ui peek mode
 (map! :map lsp-ui-peek-mode-map
@@ -186,12 +190,12 @@
 (map! 
  :nv "s" nil
  (:prefix ("s" .  "jump")
-   :nv "s" #'avy-goto-char-2
-   :nv "j"   #'evil-avy-goto-line-below
-   :nv "k"   #'evil-avy-goto-line-above
-   :nv "w"   #'evil-avy-goto-word-0
-   :nv "t"   #'evil-avy-goto-char-timer
-   ))
+  :nv "s"   #'+evil:swiper
+  :nv "j"   #'evil-avy-goto-line-below
+  :nv "k"   #'evil-avy-goto-line-above
+  :nv "w"   #'evil-avy-goto-word-0
+  :nv "t"   #'evil-avy-goto-char-timer
+  ))
 
 
 ;; Org capture

@@ -39,8 +39,9 @@ def check_out_dir(directory: str):
 
 if __name__ == "__main__":
     # Parse arguments
-    parser = argparse.ArgumentParser(description="ArXiv downloader.")
-    parser.add_argument("--url", "-u", type=str, help="ArXiv article URL.")
+    parser = argparse.ArgumentParser(description="ArXiv Paper Downloader.")
+    parser.add_argument("--url", "-u", type=str, default=None, help="ArXiv article URL.")
+    parser.add_argument("--id", "-i", type=str, default=None, help="ArXiv article ID (for https://arxiv.org/abs/2004.13316 this would be 2004.13316).")
     parser.add_argument(
         "--directory", "-d", default="./", type=str, help="Output directory."
     )
@@ -53,11 +54,19 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
+    # xor between url and id
+    assert (args.url is not None) ^ (args.id is not None), "Either URL or ID must be given but not both."
+
     # TODO: add checks for valid urls
     check_out_dir(args.directory)
 
+    # Get ID
+    if args.id is None:
+        article_id = url_to_id(args.url)
+    else:
+        article_id = args.id
+
     # Download
-    article_id = url_to_id(args.url)
     result = arxiv.query(id_list=[article_id])
     print(f'Starting download of article: "{result[0].title}" ({article_id})')
     path = arxiv.download(

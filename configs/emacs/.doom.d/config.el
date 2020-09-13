@@ -29,8 +29,8 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "Hack" :size 20))
-;; (setq doom-font (font-spec :family "IBM Plex Mono" :size 20 :weight 'semi-light))
+;; (setq doom-font (font-spec :family "Hack" :size 20))
+(setq doom-font (font-spec :family "IBM Plex Mono" :size 20 :weight 'semi-light))
 (setq doom-variable-pitch-font (font-spec :family "DejaVu Serif" :size 25 :weight 'semi-light))
 (setq doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 28 :weight 'semi-light))
 
@@ -113,9 +113,6 @@
 
 ;; Use "SPC v" to expand region
 (map! :n "SPC v" #'er/expand-region)
-
-;; Window numbers
-(winum-mode)
 
 ;; When in daemon, also run edit-server
 (when (daemonp)
@@ -252,6 +249,9 @@
 ;; Set julia lsp environment
 (setq lsp-julia-default-environment "~/.julia/environments/v1.4")
 
+;; (after! lsp-python-ms
+;;   (set-lsp-priority! 'mspyls 1))
+
 ;; this macro was copied from here: https://stackoverflow.com/a/22418983/4921402
 (defmacro define-and-bind-quoted-text-object (name key start-regex end-regex)
   (let ((inner-name (make-symbol (concat "evil-inner-" name)))
@@ -280,16 +280,44 @@
 
 ;; (setq lsp-python-ms-executable
 ;;       "~/python-language-server/output/bin/Release/linux-x64/publish/Microsoft.Python.LanguageServer")
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("2f1518e906a8b60fac943d02ad415f1d8b3933a5a7f75e307e6e9a26ef5bf570" default)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; (custom-set-variables
+;;  ;; custom-set-variables was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  '(custom-safe-themes
+;;    '("2f1518e906a8b60fac943d02ad415f1d8b3933a5a7f75e307e6e9a26ef5bf570" default)))
+;; (custom-set-faces
+;;  ;; custom-set-faces was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  )
+
+;; (use-package! golden-ratio
+;;   :after-call pre-command-hook
+;;   :config
+;;   (golden-ratio-mode +1)
+;;   ;; Using this hook for resizing windows is less precise than
+;;   ;; `doom-switch-window-hook'.
+;;   (remove-hook 'window-configuration-change-hook #'golden-ratio)
+;;   (add-hook 'doom-switch-window-hook #'golden-ratio))
+
+;; (setq golden-ratio-exclude-modes
+;;       '("calendar-mode"
+;;         "org-agenda-mode"
+;;         "help-mode"
+;;         "helpful-mode"
+;;         "rxt-help-mode"
+;;         "treemacs-mode" ))
+;; (setq golden-ratio-exclude-buffer-names
+;;       '("*Org tags*"
+;;         "*Org todo*"
+;;         "*info*"
+;;         "*Messages*"))
+
+
+(after! python
+  (setq conda-env-home-directory (expand-file-name "~/.conda"))
+  (custom-set-variables
+   '(conda-anaconda-home (expand-file-name "/opt/miniconda3"))))

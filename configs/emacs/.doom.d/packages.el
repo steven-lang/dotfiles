@@ -53,8 +53,8 @@
 
 
 ;; Misc
-(package! mu4e)
-(package! winum)
+;; (package! mu4e)
+;; (package! mu4e-alert)
 (package! edit-server)
 (package! blacken)
 
@@ -65,14 +65,15 @@
 (package! lorem-ipsum)
 (package! ssh-agency)
 (package! aggressive-indent)
-(package! mu4e-alert)
-(package! mixed-pitch)
+;; (package! mixed-pitch)
 ;; (package! lsp-julia :recipe (:host github :repo "non-jedi/lsp-julia"))
 ;; (package! counsel-gtags)
-(package! helm-gtags)
 (package! cuda-mode)
 (package! dockerfile-mode)
 (package! yaml-mode)
+
+;; (package! golden-ratio)
+
 
 
 ;; Disable packages
@@ -86,10 +87,8 @@
 (package! org-pomodoro)
 (package! org-fragtog)
 (package! org-noter)
-(package! org-pdftools)
-(package! org-noter-pdftools
-  :recipe (:host github :repo "fuxialexander/org-pdftools"))
-(package! org-roam
-          :recipe (:host github :repo "jethrokuan/org-roam"))
-(package! org-fragtog)
+;; (package! org-pdftools)
+;; (package! org-noter-pdftools
+;;   :recipe (:host github :repo "fuxialexander/org-pdftools"))
+;; (package! org-fragtog)
 (package! org-superstar)

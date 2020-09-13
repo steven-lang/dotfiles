@@ -87,6 +87,9 @@ Plug 'arcticicestudio/nord-vim'
 " Python autoimport
 Plug 'mgedmin/python-imports.vim'
 
+" Vim session handling made easy
+Plug 'thaerkh/vim-workspace'
+
 " Tex
 Plug 'lervag/vimtex'
 
@@ -386,7 +389,7 @@ augroup pythonbindings
   " autocmd Filetype python vnoremap <buffer> <silent> <localleader>d :'<,'>GenPyDoc<CR>
   " Function to insert python PDB debug line
   function! InsertPDB()
-    let trace = expand("__import__(\"ipdb\").set_trace(context=13)")
+    let trace = expand("__import__(\"pdb\").set_trace()")
     execute "normal O".trace
   endfunction
 augroup end
@@ -422,43 +425,23 @@ vmap s[ S]i
 vmap s{ S}i
 vmap s} S}i
 
-" " ALE config {{{
-" " Ale fixers
-" let g:ale_fixers = ['black'] 
-" let g:ale_python_black_options = '-l 100' 
-" " let g:ale_fix_on_save = 1
-
-" " Highlights
-" let g:ale_set_highlights = 0
-
-" let g:ale_linters = {
-" \   'python': ['flake8'],
-" \}
-
-" let g:ale_echo_msg_error_str = 'E'
-" let g:ale_echo_msg_warning_str = 'W'
-" let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-" " Lint always in Normal Mode
-" let g:ale_lint_on_text_changed = 'normal'
-" " Lint when leaving Insert Mode but don't lint when in Insert Mode 
-" let g:ale_lint_on_insert_leave = 1
-" " }}}
-
 " Leader mappings {{
-nnoremap <silent> <Leader>b :Buffers<CR>
-nnoremap <silent> <Leader>l :Lines<CR>
-nnoremap <silent> <Leader>L :BLines<CR>
-nnoremap <silent> <Leader>T :BTags<CR>
-nnoremap <silent> <Leader>t :Tags<CR>
+nnoremap <silent> <Leader>bb :Buffers<CR>
+nnoremap <silent> <Leader>bd :bd<CR>
+nnoremap <silent> <Leader>w/ :vsplit<CR>
+nnoremap <silent> <Leader>w- :split<CR>
+nnoremap <silent> <Leader>/ :Ag<CR>
+nnoremap <silent> <Leader>sp :Lines<CR>
+nnoremap <silent> <Leader>sb :BLines<CR>
+nnoremap <silent> <Leader>tb :BTags<CR>
+nnoremap <silent> <Leader>tp :Tags<CR>
 nnoremap <silent> <Leader>f :Files<CR>
 nnoremap <silent> <Leader>h :History<CR>
-nnoremap <silent> <Leader>/ :Ag<CR>
 
 " Jump motions
-map  <Leader>w <Plug>(easymotion-bd-w)
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
-map s <Plug>(easymotion-s2)
+map sw <Plug>(easymotion-bd-w)
+map sj <Plug>(easymotion-j)
+map sk <Plug>(easymotion-k)
 " }}
 
 " Center after search {{{

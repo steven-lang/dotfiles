@@ -38,11 +38,11 @@ https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close/110
   (call-interactively 'lsp))
 
 
-(defun slang/ipdb-insert ()
-  "Insert ipdb statement."
+(defun slang/pdb-insert ()
+  "Insert pdb statement."
   (interactive)
   (evil-open-above 1)
-  (insert "__import__(\"ipdb\").set_trace(context=13)")
+  (insert "__import__(\"pdb\").set_trace()")
   (evil-normal-state)
   (evil-next-line))
 
@@ -70,20 +70,20 @@ https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close/110
 (defun slang/timestamp-today-string-plus-n-days (n)
   (format-time-string "%Y-%m-%d" (time-add (* 60 60 24 n) (current-time))))
 
-(after! org-roam
-  (defun org-roam-tomorrow ()
-    "Create the file for tomorrow."
-    (interactive)
-    (org-roam-new-file-named (format-time-string "%Y-%m-%d" (time-add 86400 (current-time)))))
+;; (after! org-roam
+;;   (defun org-roam-tomorrow ()
+;;     "Create the file for tomorrow."
+;;     (interactive)
+;;     (org-roam-new-file-named (format-time-string "%Y-%m-%d" (time-add 86400 (current-time)))))
 
 
-  (defun org-roam-date ()
-    "Insert a date at point using `org-read-date' with its optional argument
-  of TO-TIME so that the user can customize the date format more easily.
-  Source: https://emacs.stackexchange.com/a/42550."
-    (interactive)
-    (let ((time (org-read-date nil 'to-time nil "Date:  ")))
-      (org-roam-new-file-named (format-time-string "%Y-%m-%d" time)))))
+  ;; (defun org-roam-date ()
+  ;;   "Insert a date at point using `org-read-date' with its optional argument
+  ;; of TO-TIME so that the user can customize the date format more easily.
+  ;; Source: https://emacs.stackexchange.com/a/42550."
+  ;;   (interactive)
+  ;;   (let ((time (org-read-date nil 'to-time nil "Date:  ")))
+  ;;     (org-roam-new-file-named (format-time-string "%Y-%m-%d" time)))))
 
 (defun ap/load-doom-theme (theme)
   "Disable active themes and load a Doom theme."

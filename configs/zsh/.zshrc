@@ -29,6 +29,7 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle mafredri/zsh-async
 antigen bundle sindresorhus/pure
+antigen bundle kutsan/zsh-system-clipboard
 # antigen theme bureau
 antigen apply
 
@@ -112,9 +113,10 @@ else
   export VISUAL=vim
 fi
 
-# export JAVA_HOME=/usr/lib/jvm/java-11-openjdk # ARCH
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-11.0.7.10-1.fc32.x86_64 # FEDORA
-export TERMINAL=termite
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk # ARCH
+# export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-11.0.7.10-1.fc32.x86_64 # FEDORA
+# Variable for i3-sensible-terminal
+export TERMINAL=kitty
 export WEKA_HOME=$HOME/wekafiles
 export DOT=$HOME/dotfiles
 # export LD_LIBRARY_PATH="/usr/local/cuda-10.1/lib64"
@@ -245,6 +247,7 @@ function pacu() {
 # Open pdfs in background by default
 function pdf() {
   evince "$@" &
+  disown
   # zathura --fork "$@" &
   # emacsclient -c -a '' "$@" &
 }
@@ -262,11 +265,11 @@ function cd() {
   if [[ -z "$VIRTUAL_ENV" ]] ; then
     ## If env folder is found then activate the vitualenv
       if [[ -d ./env ]] ; then
-        source ./env/bin/activate
+# source ./env/bin/activate  # commented out by conda initialize
         echo -e "Python virtual environment activated!"
       fi
       if [[ -d ./venv ]] ; then
-        source ./venv/bin/activate
+# source ./venv/bin/activate  # commented out by conda initialize
         echo -e "Python virtual environment activated!"
       fi
   else
@@ -289,12 +292,29 @@ if [ ! -f $HOME/bin/direnv ]; then
   chmod +x $HOME/bin/direnv
 fi
 
+function dark_mode {
+  echo "dark" > ~/.theme-mode
+  cp ~/.config/kitty/themes/nord.conf ~/.config/kitty/theme.conf
+}
+function light_mode {
+  echo "light" > ~/.theme-mode
+  cp ~/.config/kitty/themes/gruvbox-light-medium.conf ~/.config/kitty/theme.conf
+}
+
+# Run kitty theme command depending on day/night mode
+# if grep "dark" ~/.theme-mode
+# then
+#   kitty @ set-colors -a -c "$HOME/.config/kitty/themes/nord.conf"
+# else
+#   kitty @ set-colors -a -c "$HOME/.config/kitty/themes/gruvbox-light-medium.conf"
+# fi
+
 
 # Enable direnv
 eval "$(direnv hook zsh)"
 
 # Ensure pip is installed
-if ! hash pip3 2>/dev/null; then
+if ! hash pip 2>/dev/null; then
   curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
   python3 /tmp/get-pip.py
 fi
@@ -313,3 +333,4 @@ bindkey "^X^E" edit-command-line
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 test -r "~/.dir_colors" && eval $(dircolors ~/.dir_colors)
+[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh

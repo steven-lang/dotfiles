@@ -12,19 +12,19 @@ general { colors = true interval = 5
           color_degraded = "#55858E"
 	}
 
-order += "cpu_usage"
+# order += "cpu_usage"
 order += "memory"
-# order += "load"
+order += "load"
 order += "disk /"
 order += "disk /home"
 order += "wireless _first_"
 #order += "ethernet _first_"
+order += "run_watch VPN"
 order += "volume master"
 order += "battery 1"
 order += "tztime local"
 # order += "ipv6"
 # order += "run_watch DHCP"
-order += "run_watch VPN"
 
 memory {
 memory_used_method = "memavailable"
@@ -49,7 +49,7 @@ format = " /home %avail "
 }
 wireless _first_ {
 # format_up = "W: (%quality at %essid) %ip"
-format_up = "  %essid %quality "
+format_up = " %essid %quality "
 format_down = " no wlan "
 }
 ethernet _first_ {
@@ -82,9 +82,9 @@ format = " %d.%m. %H:%M "
 # run_watch DHCP {
 #         pidfile = "/var/run/dhclient*.pid"
 # }
-# run_watch VPN {
-#         pidfile = "/var/run/vpnc/pid"
-# }
+run_watch VPN {
+        pidfile = "/var/run/vpnc/pid"
+}
 
 
 volume master {

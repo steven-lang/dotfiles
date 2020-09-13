@@ -1,1 +1,1 @@
-/usr/local/bin/emacsclient -nc -a "emacs"
+/usr/bin/emacsclient -nc -a "emacs"
