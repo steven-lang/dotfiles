@@ -46,7 +46,8 @@
 ;;       (setq doom-theme 'doom-nord)
 ;;     (setq doom-theme 'doom-nord-light)))
 ;; (setq doom-theme 'doom-nord)
-(setq doom-theme 'doom-one)
+;; (setq doom-theme 'doom-one)
+(setq doom-theme 'doom-gruvbox-light)
 
 
 ;; If you want to change the style of line numbers, change this to `relative' or
@@ -88,8 +89,8 @@
 (+global-word-wrap-mode)
 
 ;; Company config
-(setq company-minimum-prefix-length 1
-      company-idle-delay 0.1)
+;; (setq company-minimum-prefix-length 1
+;;       company-idle-delay 0.1)
 
 ;; Emacs config location
 (setq emacs-dir (file-name-as-directory "~/.doom.d"))
@@ -109,7 +110,7 @@
 (setq doom-modeline-major-mode-icon t)
 (setq doom-modeline-env-python-executable "python") ; or `python-shell-interpreter'
 ;; (setq doom-modeline-env--command-args "--version")
-(setq doom-modeline-mu4e t) ;; enable mu4e support
+;; (setq doom-modeline-mu4e t) ;; enable mu4e support
 
 ;; Use "SPC v" to expand region
 (map! :n "SPC v" #'er/expand-region)
@@ -139,9 +140,6 @@
 
 ;; Disable evil snipe
 ;; (after! evil-snipe (evil-snipe-mode -1))
-
-;; Restore original yank behavior
-(setq evil-want-Y-yank-to-eol nil)
 
 
 ;; Use offlineimap as mu4e backend
@@ -184,7 +182,7 @@
   (mu4e-alert-enable-notifications))
 
 ;; Get back projectile ag
-(advice-remove 'helm-projectile-ag #'+helm/project-search)
+;; (advice-remove 'helm-projectile-ag #'+helm/project-search)
 
 ;; Set latex viewer
 (setq +latex-viewers '(evince))
@@ -193,14 +191,11 @@
 (setq TeX-view-evince-keep-focus t)
 
 ;; Python blacken
-(use-package! blacken)
+;; (use-package! blacken)
 
 ;; Org setup
 (after! org
   (load! "org-setup.el"))
-
-;; Disable whitespace buttler (has issues in org-mode when calling org-latex-preview)
-;; (ws-butler-global-mode -1)
 
 ;; Use aggressive indenting in emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
@@ -231,26 +226,8 @@
 ;; Enable rainbow delimiters in prog mode
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
-;; Get back old doom tab behaviour
-;; (map! :n [tab] (general-predicate-dispatch nil
-;;                  (and (featurep! :editor fold)
-;;                       (save-excursion (end-of-line) (invisible-p (point))))
-;;                  #'+fold/toggle
-;;                  (fboundp 'evil-jump-item)
-;;                  #'evil-jump-item)
-;;       :v [tab] (general-predicate-dispatch nil
-;;                  (and (bound-and-true-p yas-minor-mode)
-;;                       (or (eq evil-visual-selection 'line)
-;;                           (not (memq (char-after) (list ?\( ?\[ ?\{ ?\} ?\] ?\))))))
-;;                  #'yas-insert-snippet
-;;                  (fboundp 'evil-jump-item)
-;;                  #'evil-jump-item))
-
 ;; Set julia lsp environment
-(setq lsp-julia-default-environment "~/.julia/environments/v1.4")
-
-;; (after! lsp-python-ms
-;;   (set-lsp-priority! 'mspyls 1))
+;; (setq lsp-julia-default-environment "~/.julia/environments/v1.4")
 
 ;; this macro was copied from here: https://stackoverflow.com/a/22418983/4921402
 (defmacro define-and-bind-quoted-text-object (name key start-regex end-regex)
@@ -272,49 +249,6 @@
 
 ;; Bury compilation buffers if successful
 (add-hook 'compilation-finish-functions 'slang/bury-compile-buffer-if-successful)
-
-;; Disable lsp symbol highlighting
-;; (setq lsp-enable-symbol-highlighting nil)
-
-;; (set-face-background 'lsp-face-highlight-read "#4c566a")
-
-;; (setq lsp-python-ms-executable
-;;       "~/python-language-server/output/bin/Release/linux-x64/publish/Microsoft.Python.LanguageServer")
-;; (custom-set-variables
-;;  ;; custom-set-variables was added by Custom.
-;;  ;; If you edit it by hand, you could mess it up, so be careful.
-;;  ;; Your init file should contain only one such instance.
-;;  ;; If there is more than one, they won't work right.
-;;  '(custom-safe-themes
-;;    '("2f1518e906a8b60fac943d02ad415f1d8b3933a5a7f75e307e6e9a26ef5bf570" default)))
-;; (custom-set-faces
-;;  ;; custom-set-faces was added by Custom.
-;;  ;; If you edit it by hand, you could mess it up, so be careful.
-;;  ;; Your init file should contain only one such instance.
-;;  ;; If there is more than one, they won't work right.
-;;  )
-
-;; (use-package! golden-ratio
-;;   :after-call pre-command-hook
-;;   :config
-;;   (golden-ratio-mode +1)
-;;   ;; Using this hook for resizing windows is less precise than
-;;   ;; `doom-switch-window-hook'.
-;;   (remove-hook 'window-configuration-change-hook #'golden-ratio)
-;;   (add-hook 'doom-switch-window-hook #'golden-ratio))
-
-;; (setq golden-ratio-exclude-modes
-;;       '("calendar-mode"
-;;         "org-agenda-mode"
-;;         "help-mode"
-;;         "helpful-mode"
-;;         "rxt-help-mode"
-;;         "treemacs-mode" ))
-;; (setq golden-ratio-exclude-buffer-names
-;;       '("*Org tags*"
-;;         "*Org todo*"
-;;         "*info*"
-;;         "*Messages*"))
 
 
 (after! python

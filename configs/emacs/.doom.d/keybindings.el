@@ -223,8 +223,8 @@
       "J" #'org-shiftdown
       "K" #'org-shiftup
 
-      ;; Enable latex preview
-      "lp" #'org-latex-preview
+      ;; ;; Enable latex preview
+      ;; "lp" #'org-latex-preview
 
       "*" #'org-ctrl-c-star
       "-" #'org-ctrl-c-minus

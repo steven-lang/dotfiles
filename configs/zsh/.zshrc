@@ -292,6 +292,14 @@ if [ ! -f $HOME/bin/direnv ]; then
   chmod +x $HOME/bin/direnv
 fi
 
+# Check if direnv is installed
+if [ ! -d $HOME/.tmux/plugins/tpm ]; then
+  echo "Tmux plugin manager not found. Installing now ..."
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
+
+
 function dark_mode {
   echo "dark" > ~/.theme-mode
   cp ~/.config/kitty/themes/nord.conf ~/.config/kitty/theme.conf
@@ -327,7 +335,6 @@ setopt HIST_IGNORE_ALL_DUPS
 autoload -z edit-command-line
 zle -N edit-command-line
 bindkey "^X^E" edit-command-line
-
 
 # Enable fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
