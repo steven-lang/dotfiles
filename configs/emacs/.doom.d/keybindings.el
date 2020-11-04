@@ -172,7 +172,8 @@
 
 (map! :map python-mode-map
       :localleader
-      "v" #'slang/pyvenv-activate
+      ;; "v" #'slang/pyvenv-activate
+      "v" #'slang/conda-env-activate
       "="  #'blacken-buffer
       "s"  #'lsp-ivy-workspace-symbol
       ;; "s"  #'helm-lsp-workspace-symbol
@@ -406,17 +407,11 @@
 
 (map! :leader
       (:prefix ("j" . "Jump")
-        )
+       )
 
       (:prefix ("h" . "help")
-        (:prefix ("r" . "reload")
-          "c"  #'slang/reload-config)))
-
-(defun slang/save-tex-file-and-build ()
-  "Save the current file and run the TeX-command-run-all procedure."
-  (interactive)
-  (save-buffer)
-  (TeX-command-run-all nil))
+       (:prefix ("r" . "reload")
+        "c"  #'slang/reload-config)))
 
 (map! :localleader
       :map TeX-mode-map

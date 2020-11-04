@@ -1,2 +1,1 @@
 setxkbmap us altgr-intl -option 'caps:escape'
-# xcape -e 'Caps_Lock=Escape'

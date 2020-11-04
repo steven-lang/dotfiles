@@ -2,6 +2,11 @@
 # echo "- Edit in vim : <C-x><C-e>"
 # echo "- Correct last command in editor: fc"
 # Path to your oh-my-zsh installation.
+
+# if [ "$TMUX" = "" ]; then
+#   tmux
+# fi
+
 export ZSH=$HOME/.oh-my-zsh
 
 # Download antigen if not present
@@ -20,16 +25,16 @@ fi
 source ~/antigen.zsh
 antigen use oh-my-zsh
 antigen bundle git
-antigen bundle git-flow-avh
-antigen bundle git-flow-mvn
-antigen bundle gradle
+# antigen bundle git-flow-avh
+# antigen bundle git-flow-mvn
+# antigen bundle gradle
 antigen bundle z 
 antigen bundle fzf
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle mafredri/zsh-async
 antigen bundle sindresorhus/pure
-antigen bundle kutsan/zsh-system-clipboard
+# antigen bundle kutsan/zsh-system-clipboard
 # antigen theme bureau
 antigen apply
 
@@ -102,12 +107,19 @@ fi
 
 # Check if nvim is available
 if hash nvim 2>/dev/null; then
-  export EDITOR=nvim
-  export VISUAL=nvim
+  # Always use neovim instead of vim
   alias vim=nvim
-
   # Use nvim for manpages
   export MANPAGER="nvim -c 'set ft=man' -"
+fi
+
+# Set the proper editor
+if [[ $(ps aux | grep "emacs --[d]aemon") ]]; then
+  export EDITOR=emacsclient
+  export VISUAL=emacsclient
+elif hash nvim 2>/dev/null; then
+  export EDITOR=nvim
+  export VISUAL=nvim
 else
   export EDITOR=vim
   export VISUAL=vim
@@ -116,7 +128,7 @@ fi
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk # ARCH
 # export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-11.0.7.10-1.fc32.x86_64 # FEDORA
 # Variable for i3-sensible-terminal
-export TERMINAL=kitty
+# export TERMINAL=kitty
 export WEKA_HOME=$HOME/wekafiles
 export DOT=$HOME/dotfiles
 # export LD_LIBRARY_PATH="/usr/local/cuda-10.1/lib64"
@@ -162,6 +174,12 @@ if hash exa 2>/dev/null; then
 else
   alias ls='ls -lh --color=auto --group-directories-first'
 fi
+
+# Fedora dnf aliases
+alias dnfi='sudo dnf install'
+alias dnfs='dnf search'
+alias dnfr='sudo dnf remove'
+alias dnfu='sudo dnf update && flatpak update'
 
 alias grep='grep --color=auto'
 alias pacs='sudo pacman -S'
@@ -336,8 +354,10 @@ autoload -z edit-command-line
 zle -N edit-command-line
 bindkey "^X^E" edit-command-line
 
+
 # Enable fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 test -r "~/.dir_colors" && eval $(dircolors ~/.dir_colors)
-[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
+[ -f ~/.conda/etc/profile.d/conda.sh ] && source ~/.conda/etc/profile.d/conda.sh
+

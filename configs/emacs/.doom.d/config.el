@@ -29,13 +29,14 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "Hack" :size 20))
-(setq doom-font (font-spec :family "IBM Plex Mono" :size 20 :weight 'semi-light))
-(setq doom-variable-pitch-font (font-spec :family "DejaVu Serif" :size 25 :weight 'semi-light))
-(setq doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 28 :weight 'semi-light))
+(setq doom-font (font-spec :family "Hack" :size 20))
+;; (setq doom-font (font-spec :family "IBM Plex Mono" :size 20 :weight 'semi-light))
+;; (setq doom-font (font-spec :family "DroidSansMono Nerd Font" :size 20))
+;; (setq doom-variable-pitch-font (font-spec :family "DejaVu Serif" :size 25 :weight 'semi-light))
+;; (setq doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 28 :weight 'semi-light))
 
 ;; Add some more space between the lines
-(setq line-spacing 0.12)
+(setq line-spacing 0.17)
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -47,7 +48,8 @@
 ;;     (setq doom-theme 'doom-nord-light)))
 ;; (setq doom-theme 'doom-nord)
 ;; (setq doom-theme 'doom-one)
-(setq doom-theme 'doom-gruvbox-light)
+;; (setq doom-theme 'doom-nord)
+(setq doom-theme 'doom-one)
 
 
 ;; If you want to change the style of line numbers, change this to `relative' or
@@ -80,6 +82,8 @@
 
 ;; Enable highlight line
 (global-hl-line-mode 1)
+(add-hook! 'rainbow-mode-hook
+  (hl-line-mode (if rainbow-mode -1 +1)))
 
 ;; Disable auto-fill-mode
 (remove-hook 'text-mode-hook #'auto-fill-mode)
@@ -89,8 +93,10 @@
 (+global-word-wrap-mode)
 
 ;; Company config
-;; (setq company-minimum-prefix-length 1
-;;       company-idle-delay 0.1)
+(setq
+ ;; company-minimum-prefix-length 1
+ company-idle-delay 0.1
+ company-tooltip-idle-delay 0.1)
 
 ;; Emacs config location
 (setq emacs-dir (file-name-as-directory "~/.doom.d"))
@@ -115,15 +121,15 @@
 ;; Use "SPC v" to expand region
 (map! :n "SPC v" #'er/expand-region)
 
-;; When in daemon, also run edit-server
-(when (daemonp)
-  (use-package! edit-server
-    :config
-    ;; Set server port
-    (setq edit-server-port 9292)
+;; ;; When in daemon, also run edit-server
+;; (when (daemonp)
+;;   (use-package! edit-server
+;;     :config
+;;     ;; Set server port
+;;     (setq edit-server-port 9292)
 
-    ;; If this is an emacs-daemon, start the edit-server
-    (edit-server-start t)))
+;;     ;; If this is an emacs-daemon, start the edit-server
+;;     (edit-server-start t)))
 
 (defun slang/notify-send (title message)
   (call-process "notify-send"
@@ -181,9 +187,6 @@
   (mu4e-alert-set-default-style 'libnotify)
   (mu4e-alert-enable-notifications))
 
-;; Get back projectile ag
-;; (advice-remove 'helm-projectile-ag #'+helm/project-search)
-
 ;; Set latex viewer
 (setq +latex-viewers '(evince))
 
@@ -227,7 +230,9 @@
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 ;; Set julia lsp environment
-;; (setq lsp-julia-default-environment "~/.julia/environments/v1.4")
+(setq lsp-julia-default-environment "~/.julia/environments/v1.5")
+(setq lsp-enable-folding t)
+(setq lsp-folding-range-limit 100)
 
 ;; this macro was copied from here: https://stackoverflow.com/a/22418983/4921402
 (defmacro define-and-bind-quoted-text-object (name key start-regex end-regex)
@@ -251,7 +256,29 @@
 (add-hook 'compilation-finish-functions 'slang/bury-compile-buffer-if-successful)
 
 
-(after! python
-  (setq conda-env-home-directory (expand-file-name "~/.conda"))
-  (custom-set-variables
-   '(conda-anaconda-home (expand-file-name "/opt/miniconda3"))))
+;; Set correct conda variables
+(setq conda-env-home-directory (expand-file-name "~/.conda"))
+(custom-set-variables
+ `(conda-anaconda-home ,(expand-file-name "~/.conda")))
+
+;; EMACS ANYWHERE
+;; Define a function or use a lambda of the same signature
+(defun popup-handler (app-name window-title x y w h)
+  (markdown-mode))
+
+;; Hook your function
+(add-hook 'ea-popup-hook 'popup-handler)
+
+;; (custom-set-faces!
+;;   ;; Flycheck check symbol and sim-card symbol (right-hand side)
+;;   '(doom-modeline-warning :inherit warning)
+;;   '(doom-modeline-debug :inherit font-lock-doc-face :slant normal)
+
+;;   ;; Insert/normal state (left-hand side)
+;;   '(doom-modeline-evil-emacs-state :inherit font-lock-builtin-face)
+;;   '(doom-modeline-evil-insert-state :inherit font-lock-keyword-face)
+;;   '(doom-modeline-info :inherit success)
+;;   )
+
+;; Increase lsp file watch threshold
+(setq lsp-file-watch-threshold 10000) ;; 1k is default

@@ -1,8 +1,24 @@
+(defun slang/save-tex-file-and-build ()
+  "Save the current file and run the TeX-command-run-all procedure."
+  (interactive)
+  (save-buffer)
+  (TeX-command-run-all nil))
+
+
 (defun slang/switch-to-scratch ()
   "Switch to scratch buffer."
   (interactive)
   (switch-to-buffer "*scratch*"))
 
+
+;; org-clock output for polybar
+(defun slang/org-clock-output-polybar ()
+  (let ((inhibit-message t) ;; Suppress minibuffer output
+        (descr (if (org-no-properties org-clock-current-task)  ;; Check if there is a current task
+                   (concat (org-clock-get-clock-string) " [" (org-pomodoro-format-seconds) "]")
+                 ;; (org-clock-get-clock-string)  ;; Obtain clock-string (has minutes and task name)
+                 "No active task")))  ;; Reminder that there is no active task
+    (write-region descr nil "~/tmp/org-clock-current-task")))  ;; Write to tmp file which is read by polybar
 
 ;; Close compilation buffer on succeed
 (defun slang/bury-compile-buffer-if-successful (buffer string)
@@ -29,6 +45,11 @@ https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close/110
            (window-configuration-to-register '_)
            (delete-other-windows))))
 
+(defun slang/conda-env-activate ()
+  "Wrapper for pyvenv-activate that also restarts the lsp-sessions."
+  (interactive)
+  (call-interactively 'conda-env-activate)
+  (call-interactively 'lsp-restart-workspace))
 
 (defun slang/pyvenv-activate ()
   "Wrapper for pyvenv-activate that also restarts the lsp-sessions."

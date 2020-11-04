@@ -17,6 +17,7 @@ set $mod2 Mod1
 
 # font pango:monospace 12
 font pango:IBM Plex Mono 12
+# font pango:Hack 12
 #font pango: Source Code Pro Semibold, FontAwesome Regular 11 
 #font pango:DejaVu Sans Mono, Terminus Bold Semi-Condensed 11
 #font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -48,8 +49,7 @@ bindsym $mod+q kill
 
 # start dmenu (a program launcher)
 # bindsym $mod+d exec dmenu_run -l 15 -i -p "$" -sb "#2C6A86" -fn "Monospace-18:normal"
-bindsym $mod+d exec zsh -c "rofi -show combi"
-
+bindsym $mod+d exec rofi -show combi
 
 # window navigation
 # bindsym $mod+Left focus left
@@ -151,9 +151,9 @@ bindsym $mod+Ctrl+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Ctrl+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
-bindsym $mod+Ctrl+1 exec "bash ~/.screenlayout/default.sh && sleep 1 && i3 'restart' && set-wallpaper"
-bindsym $mod+Ctrl+2 exec "bash ~/.screenlayout/wqhd-only.sh && sleep 1 && i3 'restart' && set-wallpaper"
-bindsym $mod+Ctrl+3 exec "bash ~/.screenlayout/office-tud.sh && sleep 1 && i3 'restart' && set-wallpaper"
+bindsym $mod+Ctrl+1 exec "bash ~/.screenlayout/default.sh && sleep 1 && i3 'restart'"
+bindsym $mod+Ctrl+2 exec "bash ~/.screenlayout/wqhd-only.sh && sleep 1 && i3 'restart'"
+bindsym $mod+Ctrl+3 exec "bash ~/.screenlayout/office-tud.sh && sleep 1 && i3 'restart'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -190,7 +190,7 @@ set $volumepath ~/i3-volume
 
 # Command for the status line
 #   ie: i3blocks, i3status
-set $statuscmd i3status
+# set $statuscmd i3status
 
 # Signal used to update the status line
 #   i3blocks uses SIGRTMIN+10 by default
@@ -223,31 +223,34 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightne
 # Enable worksapce back and forth
 workspace_auto_back_and_forth yes
 
+
+
 # Floating mod
 floating_modifier $mod
 
 
 #Correct floating handling
-#for_window [window_role="pop-up"] floating enable
-#for_window [window_role="bubble"] floating enable
-#for_window [window_role="task_dialog"] floating enable
-#for_window [window_role="dialog"] floating enable
-#for_window [window_role="menu"] floating enable
-#for_window [window_role="Preferences"] floating enable
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="dialog"] floating enable
+for_window [window_role="menu"] floating enable
+for_window [window_role="Preferences"] floating enable
+for_window [title="Volume Control"] floating enable
+for_window [title="doom-capture"] floating enable
 
 # Browsers
 bindsym $mod+Ctrl+f exec firefox
 
 # Set keyboardlayout 
-exec --no-startup-id setxkbmap us altgr-intl -option ctrl:nocaps
+exec_always --no-startup-id setxkbmap us altgr-intl -option ctrl:nocaps
 
 # Wallpaper 
-exec --no-startup-id ~/bin/set-wallpaper
-# exec --no-startup-id xsetroot -solid "#343d46"
+exec_always --no-startup-id xsetroot -solid "#1d2026"
 
 # locker shortcut
 # set $Locker i3lock && sleep 1
-set $Locker i3lock -c 222222 && sleep 1
+set $Locker i3lock -c 1d2026 && sleep 1
 
 # i3 lock
 exec xautolock -time 30 -locker $Locker -detectsleep &
@@ -258,9 +261,11 @@ exec --no-startup-id nm-applet --tray --sm-disable &
 # Bluetooth
 exec --no-startup-id blueberry-tray &
 
+# Start Pavucontrol with mod+p
+bindsym $mod+p exec pavucontrol
 
 # suspend/lock shortcuts
-bindsym $mod+$mod2+Ctrl+s exec --no-startup-id systemctl suspend && $Locker 
+bindsym $mod+$mod2+Ctrl+s exec --no-startup-id $Locker && systemctl suspend
 bindsym $mod+$mod2+Ctrl+l exec --no-startup-id $Locker
 
 # Emacs anywhere
@@ -277,6 +282,58 @@ for_window [class="Emacs" title="\*Emacs Anywhere\*"] floating enable
 # smart_gaps on
 # smart_borders on
 
+## Base16 OneDark
+# Author: Lalit Magant (http://github.com/tilal6991)
+#
+# You can use these variables anywhere in the i3 configuration file.
+
+set $base00 #282c34
+set $base00_darker_1 #1d2026
+set $base00_darker_2 #14161a
+set $base01 #353b45
+set $base02 #3e4451
+set $base03 #545862
+set $base04 #565c64
+set $base05 #abb2bf
+set $base06 #b6bdca
+set $base07 #c8ccd4
+set $base08 #e06c75
+set $base09 #d19a66
+set $base0A #e5c07b
+set $base0B #98c379
+set $base0C #56b6c2
+set $base0D #61afef
+set $base0D_alt #669ecc
+set $base0E #c678dd
+set $base0F #be5046
+
+# Basic bar configuration using the Base16 variables.
+# bar {
+#     # status_command i3status
+#     position top
+
+#     colors {
+#         background $base00_darker_2
+#         separator  $base01
+#         statusline $base06
+
+#         # State             Border  BG      Text
+#         focused_workspace   $base05 $base0D_alt $base00
+#         active_workspace    $base05 $base03 $base00
+#         inactive_workspace  $base03 $base00_darker_1 $base05
+#         urgent_workspace    $base08 $base08 $base00
+#         binding_mode        $base00 $base0A $base00
+#     }
+# }
+
+# Basic color configuration using the Base16 variables for windows and borders.
+# Property Name         Border  BG      Text    Indicator Child Border
+client.focused          $base05 $base0D_alt $base00_darker_1 $base0D_alt $base0D_alt
+client.focused_inactive $base04 $base02 $base05 $base03 $base01
+client.unfocused        $base01 $base00_darker_1 $base05 $base01 $base01
+client.urgent           $base08 $base08 $base00_darker_1 $base08 $base08
+client.placeholder      $base00_darker_1 $base00_darker_1 $base05 $base00_darker_1 $base00_darker_1
+client.background       $base07
 
 ## Base16 Nord
 # Author: arcticicestudio
@@ -357,23 +414,23 @@ for_window [class="Emacs" title="\*Emacs Anywhere\*"] floating enable
 # set $base0F #d65d0e
 
 # Basic bar configuration using the Base16 variables.
-bar {
-    status_command i3status
-    position top
+# bar {
+#     status_command i3status
+#     position top
 
-    colors {
-        # background $base00
-        # separator  $base01
-        # statusline $base04
+#     colors {
+#         # background $base00
+#         # separator  $base01
+#         # statusline $base04
 
-        # State             Border  BG      Text
-        # focused_workspace   $base05 $base0D $base00
-        # active_workspace    $base05 $base03 $base00
-        # inactive_workspace  $base03 $base01 $base05
-        # urgent_workspace    $base08 $base08 $base00
-        # binding_mode        $base00 $base0A $base00
-    }
-}
+#         # State             Border  BG      Text
+#         # focused_workspace   $base05 $base0D $base00
+#         # active_workspace    $base05 $base03 $base00
+#         # inactive_workspace  $base03 $base01 $base05
+#         # urgent_workspace    $base08 $base08 $base00
+#         # binding_mode        $base00 $base0A $base00
+#     }
+# }
 
 # Basic color configuration using the Base16 variables for windows and borders.
 # Property Name         Border  BG      Text    Indicator Child Border
@@ -388,7 +445,7 @@ bar {
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 # Polybar
-# exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # Keyboard Cheat sheet
 # for_window [title="cheatsheet"] floating enable,resize set 1600 1300, move position center
@@ -404,3 +461,12 @@ exec picom -b  # Picom for window compositions (shadows, transitions, etc)
 exec i3-msg workspace 1 web
 
 
+# read 1 character and mark the current window with this character
+# bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
+bindsym $mod+m exec i3-msg 'mark '$(rofi -dmenu -lines 0 -p 'Mark')
+
+# read 1 character and go to the window with the character
+bindsym $mod+g exec i3-msg '[con_mark="'$(rofi -dmenu -lines 0 -p 'Goto')'"] focus'
+
+# Show marks in window decorations
+show_marks yes

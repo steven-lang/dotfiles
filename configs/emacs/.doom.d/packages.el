@@ -54,7 +54,7 @@
 
 ;; Misc
 ;; (package! mu4e)
-;; (package! mu4e-alert)
+(package! mu4e-alert)
 (package! edit-server)
 (package! blacken)
 
@@ -66,11 +66,13 @@
 (package! ssh-agency)
 (package! aggressive-indent)
 ;; (package! mixed-pitch)
-;; (package! lsp-julia :recipe (:host github :repo "non-jedi/lsp-julia"))
-;; (package! counsel-gtags)
+(package! lsp-julia :recipe (:host github :repo "non-jedi/lsp-julia"))
+(package! counsel-gtags)
+(package! ggtags)
 (package! cuda-mode)
 (package! dockerfile-mode)
 (package! yaml-mode)
+(package! rainbow-mode)
 
 ;; (package! golden-ratio)
 

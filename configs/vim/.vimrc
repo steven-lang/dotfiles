@@ -52,6 +52,10 @@ else
   set laststatus=2
 endif
 
+
+" Disable latex-box from polyglot dependency to make vimtex usable
+let g:polyglot_disabled = ['latex', 'markdown']
+
 " Specify a directory for plugins
 " - For Neovim: ~/.local/share/nvim/plugged
 " - Avoid using standard Vim directory names like 'plugin'
@@ -83,12 +87,13 @@ Plug 'gruvbox-community/gruvbox'
 Plug 'mhartington/oceanic-next'
 Plug 'romainl/Apprentice'
 Plug 'arcticicestudio/nord-vim'
+Plug 'rakr/vim-one'
 
 " Python autoimport
-Plug 'mgedmin/python-imports.vim'
+" Plug 'mgedmin/python-imports.vim'
 
 " Vim session handling made easy
-Plug 'thaerkh/vim-workspace'
+" Plug 'thaerkh/vim-workspace'
 
 " Tex
 Plug 'lervag/vimtex'
@@ -123,7 +128,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'itchyny/lightline.vim'
 
 " Julia support
-Plug 'JuliaEditorSupport/julia-vim'
+" Plug 'JuliaEditorSupport/julia-vim'
 
 " UltiSnips
 " Track the engine.
@@ -136,10 +141,10 @@ Plug 'JuliaEditorSupport/julia-vim'
 Plug 'tpope/vim-repeat'
 Plug 'godlygeek/tabular'
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Advanced Python colorizer
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+" Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 
 " Initialize plugin system
 call plug#end()
@@ -183,7 +188,8 @@ set background=dark
 let g:oceanic_next_terminal_bold = 1
 let g:oceanic_next_terminal_italic = 1
 " colorscheme OceanicNext
-colorscheme nord
+" colorscheme nord
+colorscheme one
 
 " }}}
 
@@ -232,7 +238,7 @@ let g:lightline = {
       \   'left': [ [ 'mode', 'paste' ], ['cocstatus', 'currentfunction','readonly', 'relativepath', 'modified'] ],
       \   'right' : [ ['lineinfo'], ['percent']]
       \ },
-      \ 'colorscheme': 'nord',
+      \ 'colorscheme': 'one',
       \ 'component_function': {
       \   'cocstatus': 'coc#status',
       \   'currentfunction': 'CocCurrentFunction'
@@ -340,8 +346,6 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
 let g:python_highlight_space_errors=0
 
 " LaTeX {{{
-" Disable latex-box from polyglot dependency to make vimtex usable
-let g:polyglot_disabled = ['latex', 'markdown']
 
 let g:tex_flavor='latex'
 let g:vimtex_view_method='zathura'
@@ -552,55 +556,55 @@ let g:Illuminate_ftblacklist = ['nerdtree', 'python']
 " }}}
 
 
-" COC {{{
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" " COC {{{
+" " Use tab for trigger completion with characters ahead and navigate.
+" " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" " other plugin before putting this into your config.
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+" function! s:check_back_space() abort
+"   let col = col('.') - 1
+"   return !col || getline('.')[col - 1]  =~# '\s'
+" endfunction
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
-if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
+" " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" " position. Coc only does snippet and additional edit on confirm.
+" " <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+" if exists('*complete_info')
+"   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+" else
+"   inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" endif
 
 
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+" " GoTo code navigation.
+" nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gr <Plug>(coc-references)
 
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+" " Use K to show documentation in preview window.
+" nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
+" function! s:show_documentation()
+"   if (index(['vim','help'], &filetype) >= 0)
+"     execute 'h '.expand('<cword>')
+"   else
+"     call CocAction('doHover')
+"   endif
+" endfunction
 
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" " Highlight the symbol and its references when holding the cursor.
+" autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
+" " Symbol renaming.
+" nmap <leader>rn <Plug>(coc-rename)
 
-" }}}
+" " }}}
 
 function MyCustomHighlights()
     hi semshiGlobal      ctermfg=red guifg=#BF616A

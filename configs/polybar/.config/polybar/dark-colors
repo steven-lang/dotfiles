@@ -2,15 +2,16 @@
 
 [colors]
 ; background = #2E3440
-background = #1f2126
-buffer = #3B4252
-foreground = #D8DEE9
-nord6 = #ECEFF4
-nord7 = #8FBCBB
-nord8 = #88C0D0
-nord9 = #81A1C1
-urgent = #BF616A
-warning = #D08770
-notify = #EBCB8B
-success = #A3BE8C
-function = #B48EAD
+; background = #1f2126
+background = #14161a
+buffer = #353b45
+foreground = #c8ccd4
+nord6 = #c8ccd4
+nord7 = #98c379
+nord8 = #56b6c2
+nord9 = #61afef
+urgent = #e06c75
+warning = #d19a66
+notify = #e5c07b
+success = #98c379
+function = #c678dd

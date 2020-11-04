@@ -390,25 +390,18 @@
 ;;         bibtex-completion-library-path "~/Dropbox/orgmode/bibliography/bibtex-pdfs"
 ;;         bibtex-completion-notes-path "~/Dropbox/orgmode/bibliography/helm-bibtex-notes"))
 
-;; org-clock output for polybar
-(defun slang/org-clock-output-polybar ()
-    (let ((inhibit-message t) ;; Suppress minibuffer output
-        (descr (if (org-no-properties org-clock-current-task)  ;; Check if there is a current task
-                    (org-clock-get-clock-string)  ;; Obtain clock-string (has minutes and task name)
-                    "No active task")))  ;; Reminder that there is no active task
-    (write-region descr nil "~/tmp/org-clock-current-task")))  ;; Write to tmp file which is read by polybar
-    
+
 
 ;; ox-latex
 (use-package! ox-latex
   :after org
   :config
   (add-to-list 'org-latex-classes
-                  '("tudabeamer"
-                  "\\documentclass\[presentation\]\{tudabeamer\}"
-                  ("\\section\{%s\}" . "\\section*\{%s\}")
-                  ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
-                  ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
+               '("tudabeamer"
+                 "\\documentclass\[presentation\]\{tudabeamer\}"
+                 ("\\section\{%s\}" . "\\section*\{%s\}")
+                 ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
+                 ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
   (add-to-list 'org-latex-packages-alist '("" "listings"))
   (add-to-list 'org-latex-packages-alist '("" "color"))
   (setq org-latex-pdf-process '("latexmk -g -pdf %f"))
@@ -451,32 +444,31 @@
 ;; (add-hook 'org-mode-hook 'org-fragtog-mode)
 
 ;;;;;;;;;;;;;;;;;;; Org-Roam START
-;; (use-package! deft
-;;   :after org
-;;   :config
-;;   (setq deft-recursive t)
-;;   (setq deft-use-filter-string-for-filename t)
-;;   (setq deft-default-extension "org")
-;;   (setq deft-directory "~/Dropbox/orgmode/notes/")
-;;   (setq deft-use-filename-as-title t))
+(use-package! deft
+  :after org
+  :config
+  ;; (setq deft-recursive t)
+  ;; (setq deft-use-filter-string-for-filename t)
+  ;; (setq deft-default-extension "org")
+  (setq deft-directory "~/Dropbox/orgmode/notes/")
+  (setq deft-use-filename-as-title t))
 
-;; (use-package! org-roam
-;;       :after deft org
-;;       :hook (org-mode . org-roam-mode)
-;;       :config
-;;       (setq org-roam-directory deft-directory))
+(use-package! org-roam
+  :after deft org
+  :config
+  (setq org-roam-directory deft-directory))
 
-;; (map! :leader
-;;       (:prefix ("r" . "Roam")
-;;         "d" #'deft
-;;         "R" #'deft-refresh
-;;         "r" #'org-roam
-;;         "t" #'org-roam-today
-;;         "f" #'org-roam-find-file
-;;         "i" #'org-roam-insert
-;;         "n" #'org-roam-new-file
-;;         "g" #'org-roam-show-graph))
-;;;;;;;;;;;;;;;;;;; Org-Roam END
+(map! :leader
+      (:prefix ("r" . "Roam")
+       "d" #'deft
+       "R" #'deft-refresh
+       "r" #'org-roam
+       "t" #'org-roam-today
+       "f" #'org-roam-find-file
+       "i" #'org-roam-insert
+       "n" #'org-roam-new-file
+       "g" #'org-roam-graph-show))
+;;Org-Roam END
 
 
 (defun slang/org-agenda-schedule-today ()

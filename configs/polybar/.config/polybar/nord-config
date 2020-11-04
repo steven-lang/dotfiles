@@ -36,7 +36,7 @@ override-redirect = false
 # show-desktop: Display desktop (i3 only)
 
 # Top modules
-top-left = workspace-name title
+top-left = workspace-name
 top-center = org-clock
 top-right = memory keyboard backlight alsa battery vpn network-short date 
 

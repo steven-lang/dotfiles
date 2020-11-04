@@ -2,6 +2,7 @@
 
 text=$1
 curr_number=$(i3-msg -t get_workspaces  | jq '.[] | select(.focused==true).name' | cut -d"\"" -f2 | cut -d" " -f1)
+new_name=$(rofi -dmenu -lines 0 -p 'New name')
 echo "current number: $curr_number"
-echo "text: $text"
-i3-msg "rename workspace to \"${curr_number} ${text}\""
+echo "new name: $new_name"
+i3-msg "rename workspace to \"${curr_number} ${new_name}\""

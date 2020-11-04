@@ -1,7 +1,8 @@
 rofi.combi-modi:    drun,run,ssh
-rofi.theme:         nord 
+! rofi.theme:         base16-default-dark
 rofi.font:          IBMPlex Mono 20
-rofi.modi:          combi,drun,run 
+rofi.modi:          combi
+rofi.show:          combi
 rofi.show-icons:    true
 
 ! Vim-like keys
@@ -14,36 +15,36 @@ rofi.kb-mode-next:                   Shift+Right,Control+Tab,Control+l
 rofi.kb-mode-previous:               Shift+Left,Control+Shift+Tab,Control+h
 rofi.kb-remove-char-back:            BackSpace
 
-! Base16 Nord
-! Author: arcticicestudio
+! Base16 OneDark
+! Author: Lalit Magant (http://github.com/tilal6991)
 
-! base00: #2e3440
-! base01: #3b4252
-! base02: #434c5e
-! base03: #4c566a
-! base04: #d8dee9
-! base05: #e5e9f0
-! base06: #eceff4
-! base07: #8fbcbb
-! base08: #88c0d0
-! base09: #81a1c1
-! base0A: #5e81ac
-! base0B: #bf616a
-! base0C: #d08770
-! base0D: #ebcb8b
-! base0E: #a3be8c
-! base0F: #b48ead
+! base00: #282c34
+! base01: #353b45
+! base02: #3e4451
+! base03: #545862
+! base04: #565c64
+! base05: #abb2bf
+! base06: #b6bdca
+! base07: #c8ccd4
+! base08: #e06c75
+! base09: #d19a66
+! base0A: #e5c07b
+! base0B: #98c379
+! base0C: #56b6c2
+! base0D: #61afef
+! base0E: #c678dd
+! base0F: #be5046
 
 ! Enable the extended coloring options
 rofi.color-enabled: true
 
 ! Property Name     BG       Border   Separator
-rofi.color-window:  #3b4252, #3b4252, #2e3440
+rofi.color-window:  #353b45, #353b45, #282c34
 
 ! Property Name     BG       FG       BG-alt   Head-BG  Head-FG
-rofi.color-normal:  #3b4252, #e5e9f0, #3b4252, #3b4252, #8fbcbb
-rofi.color-active:  #3b4252, #ebcb8b, #3b4252, #3b4252, #ebcb8b
-rofi.color-urgent:  #3b4252, #88c0d0, #3b4252, #3b4252, #88c0d0
+rofi.color-normal:  #353b45, #abb2bf, #353b45, #61afef, #282c34
+rofi.color-active:  #353b45, #61afef, #353b45, #353b45, #61afef
+rofi.color-urgent:  #353b45, #e06c75, #353b45, #353b45, #e06c75
 
 ! Set the desired separator style
 rofi.separator-style: solid
