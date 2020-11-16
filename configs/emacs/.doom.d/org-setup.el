@@ -64,13 +64,23 @@
 
 ;; Set todo keyword colors
 (setq org-todo-keyword-faces
-        '(
-        ("TODO"      :foreground "#99c794" :weight bold)
-        ("STARTED"   :foreground "#fac863" :weight bold)
-        ("NEXT"      :foreground "#5fb3b3" :weight bold)
-        ("WAITING"   :foreground "#6699cc" :weight bold)
-        ("DONE"      :foreground "#4f5b66" :weight bold)
-        ("CANCELED"  :foreground "#ec5f67" :weight bold)))
+      '(
+        ;; Nord colors
+        ;; ("TODO"      :foreground "#99c794" :weight bold)
+        ;; ("STARTED"   :foreground "#fac863" :weight bold)
+        ;; ("NEXT"      :foreground "#5fb3b3" :weight bold)
+        ;; ("WAITING"   :foreground "#6699cc" :weight bold)
+        ;; ("DONE"      :foreground "#4f5b66" :weight bold)
+        ;; ("CANCELED"  :foreground "#ec5f67" :weight bold)
+
+        ;; one colors
+        ("TODO"      :foreground "#98c379" :weight bold)
+        ("STARTED"   :foreground "#e5c07b" :weight bold)
+        ("NEXT"      :foreground "#56b6c2" :weight bold)
+        ("WAITING"   :foreground "#61afef" :weight bold)
+        ("DONE"      :foreground "#565c64" :weight bold)
+        ("CANCELED"  :foreground "#be5046" :weight bold)
+        ))
 
 
 ;; Save buffer on clocking in/out
@@ -87,28 +97,31 @@
                 "--expire-time" "300000" ; 5 minutes
                 "--app-name" "Emacs"))
 
-;; org-pomodoro mode hooks
-(setq org-pomodoro-clock-break t)  ;; Clock 30 minutes instead of 25
-(add-hook 'org-pomodoro-finished-hook
-          (lambda ()
-            (slang/notify-send "Pomodoro completed!" "Time for a break.")))
-
-(add-hook 'org-pomodoro-break-finished-hook
+(use-package! org-pomodoro
+  :config
+  (setq org-pomodoro-play-sounds nil)
+  ;; org-pomodoro mode hooks
+  (setq org-pomodoro-clock-break t)  ;; Clock 30 minutes instead of 25
+  (add-hook 'org-pomodoro-finished-hook
             (lambda ()
-            (slang/notify-send "Pomodoro Short Break Finished" "Ready for Another?")))
+              (slang/notify-send "Pomodoro completed!" "Time for a break.")))
 
-(add-hook 'org-pomodoro-long-break-finished-hook
+  (add-hook 'org-pomodoro-break-finished-hook
             (lambda ()
-            (slang/notify-send "Pomodoro Long Break Finished" "Ready for Another?")))
+              (slang/notify-send "Pomodoro Short Break Finished" "Ready for Another?")))
 
-(add-hook 'org-pomodoro-killed-hook
+  (add-hook 'org-pomodoro-long-break-finished-hook
             (lambda ()
-            (slang/notify-send "Pomodoro Killed" "One does not simply kill a pomodoro!")))
+              (slang/notify-send "Pomodoro Long Break Finished" "Ready for Another?")))
 
+  (add-hook 'org-pomodoro-killed-hook
+            (lambda ()
+              (slang/notify-send "Pomodoro Killed" "One does not simply kill a pomodoro!")))
+  )
 
 ;; Predefined tags
 (setq org-tag-alist
-        '(("@work" . ?w)
+      '(("@work" . ?w)
         ("@studying" . ?s)
         ("@home" . ?h)
         ("@freetime" . ?f)))

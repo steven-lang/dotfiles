@@ -73,10 +73,12 @@
 (package! dockerfile-mode)
 (package! yaml-mode)
 (package! rainbow-mode)
-
+(package! circadian)
+(package! py-pyment :recipe (:host github :repo "humitos/py-cmd-buffer.el"))
+(package! buftra :recipe (:host github :repo "humitos/buftra.el"))
 ;; (package! golden-ratio)
 
-
+;; Themes
 
 ;; Disable packages
 (package! evil-snipe :disable t)
@@ -94,3 +96,4 @@
 ;;   :recipe (:host github :repo "fuxialexander/org-pdftools"))
 ;; (package! org-fragtog)
 (package! org-superstar)
+

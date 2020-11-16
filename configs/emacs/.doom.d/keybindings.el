@@ -29,6 +29,7 @@
       :leader
       "SPC" #'counsel-M-x
       ;; "SPC" #'helm-M-x
+      "."   #'+ivy/projectile-find-file
 
 
       "x"  nil
@@ -94,7 +95,9 @@
 ;;       "d" nil)
 (map! :localleader
       :map python-mode-map
-      (:prefix ("d" . "DAP")
+      "d"   #'py-pyment-region
+
+      (:prefix ("D" . "DAP")
        ;; transient state
        "."  #'dap-hydra
 

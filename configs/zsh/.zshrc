@@ -32,10 +32,11 @@ antigen bundle z
 antigen bundle fzf
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-history-substring-search
+antigen bundle zsh-users/zsh-completions
 antigen bundle mafredri/zsh-async
 antigen bundle sindresorhus/pure
-# antigen bundle kutsan/zsh-system-clipboard
-# antigen theme bureau
+antigen bundle esc/conda-zsh-completion
 antigen apply
 
 # Set name of the theme to load.

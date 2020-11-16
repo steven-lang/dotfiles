@@ -298,24 +298,28 @@
 
 frame_color = "#3e4451"
 separator_color = "#abb2bf"
+timeout = 5
 
 [base16_low]
     msg_urgency = low
     background = "#353b45"
     foreground = "#545862"
     frame_color = "#3e4451"
+    timeout = 5
 
 [base16_normal]
     msg_urgency = normal
     background = "#3e4451"
     foreground = "#abb2bf"
     frame_color = "#3e4451"
+    timeout = 5
 
 [base16_critical]
     msg_urgency = critical
     background = "#e06c75"
     foreground = "#b6bdca"
     frame_color = "#3e4451"
+    timeout = 5
 
 # Every section that isn't one of the above is interpreted as a rules to
 # override settings for certain messages.

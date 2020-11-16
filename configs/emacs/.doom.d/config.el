@@ -193,9 +193,6 @@
 ;; Let evince not steal focus
 (setq TeX-view-evince-keep-focus t)
 
-;; Python blacken
-;; (use-package! blacken)
-
 ;; Org setup
 (after! org
   (load! "org-setup.el"))
@@ -282,3 +279,23 @@
 
 ;; Increase lsp file watch threshold
 (setq lsp-file-watch-threshold 10000) ;; 1k is default
+
+;; Theme-changer
+;; (use-package! circadian
+;;   :config
+;;   (setq calendar-location-name "Mainz, DE")
+;;   (setq calendar-latitude 49.98)
+;;   (setq calendar-longitude 8.28)
+;;   (setq circadian-themes '((:sunrise . doom-gruvbox-light)
+;;                            (:sunset  . doom-one)))
+;;   (circadian-setup))
+
+(use-package! treemacs
+  :config
+  (treemacs-git-mode 'extended)
+  (with-eval-after-load 'treemacs
+    (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?)))
+
+(use-package! py-pyment
+  :config
+  (setq py-pyment-options '("--output=google")))

@@ -13,13 +13,14 @@ general { colors = true interval = 5
 	}
 
 # order += "cpu_usage"
+# order += "read_file ORG_CLOCK"
 order += "memory"
-order += "load"
-order += "disk /"
-order += "disk /home"
+# order += "load"
+# order += "disk /"
+# order += "disk /home"
 order += "wireless _first_"
 #order += "ethernet _first_"
-order += "run_watch VPN"
+# order += "run_watch VPN"
 order += "volume master"
 order += "battery 1"
 order += "tztime local"
@@ -28,7 +29,7 @@ order += "tztime local"
 
 memory {
 memory_used_method = "memavailable"
-format = "Memory: %used used"
+format = " Memory: %used used "
 }
 
 cpu_usage {
@@ -83,14 +84,19 @@ format = " %d.%m. %H:%M "
 #         pidfile = "/var/run/dhclient*.pid"
 # }
 run_watch VPN {
+        format = " %title: %status "
         pidfile = "/var/run/vpnc/pid"
 }
 
+read_file ORG_CLOCK {
+        format = " task: %content "
+        path = "/home/tak/tmp/org-clock-current-task"
+}
 
 volume master {
         format = " ♪ %volume "
         format_muted = " ♪ muted (%volume) "
-        device = "pulse:1"
+        device = "default"
         mixer = "Master"
         mixer_idx = 0
 }
