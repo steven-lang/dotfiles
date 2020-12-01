@@ -59,6 +59,7 @@
 (package! blacken)
 
 (package! helm)
+(package! helm-lsp)
 
 ;; If you want to replace it with yasnippet's default snippets
 (package! yasnippet-snippets)
@@ -77,6 +78,9 @@
 (package! py-pyment :recipe (:host github :repo "humitos/py-cmd-buffer.el"))
 (package! buftra :recipe (:host github :repo "humitos/buftra.el"))
 ;; (package! golden-ratio)
+
+;; (package! counsel-gtags)
+;; (package! global-tags)
 
 ;; Themes
 

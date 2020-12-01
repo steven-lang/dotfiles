@@ -20,6 +20,11 @@
  "9"   #'winum-select-window-9
  )
 
+;; Map SPC f f to projectwide seach and SPC f F to directory search
+(map! :leader
+      "ff"  #'+ivy/projectile-find-file
+      "fF"  #'counsel-find-file)
+
 ;; Use helm for M-x
 (map! :leader
       ;; unmap first

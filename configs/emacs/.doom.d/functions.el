@@ -121,3 +121,14 @@ https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close/110
                                                    (-map #'symbol-name))))))
   (mapc #'disable-theme custom-enabled-themes)
   (load-theme theme 'no-confirm))
+
+(defun slang/notify-send (title message)
+  "Call notify-send with the given title and message to send
+   a notification to the desktop environment."
+  (call-process "notify-send"
+                nil 0 nil
+                title
+                message
+                "--expire-time" "300000" ; 5 minutes
+                "--app-name" "Emacs"
+                ))

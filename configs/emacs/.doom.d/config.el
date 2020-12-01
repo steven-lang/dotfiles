@@ -86,17 +86,18 @@
   (hl-line-mode (if rainbow-mode -1 +1)))
 
 ;; Disable auto-fill-mode
-(remove-hook 'text-mode-hook #'auto-fill-mode)
-(add-hook 'latex-mode-hook #'auto-fill-mode)
+;; (remove-hook 'text-mode-hook #'auto-fill-mode)
+;; (add-hook 'latex-mode-hook #'auto-fill-mode)
+(add-hook 'TeX-mode-hook #'auto-fill-mode)
 
 ;; Enable word wrap mode
 (+global-word-wrap-mode)
 
 ;; Company config
-(setq
- ;; company-minimum-prefix-length 1
- company-idle-delay 0.1
- company-tooltip-idle-delay 0.1)
+;; (setq
+;;  ;; company-minimum-prefix-length 1
+;;  company-idle-delay 0.1
+;;  company-tooltip-idle-delay 0.1)
 
 ;; Emacs config location
 (setq emacs-dir (file-name-as-directory "~/.doom.d"))
@@ -107,7 +108,6 @@
 ;; Better scrolling
 (setq scroll-margin 3)
 
-
 ;; Set which-key delay
 (setq which-key-idle-delay 0.4)
 (setq which-key-idle-secondary-delay 0.4)
@@ -115,77 +115,49 @@
 ;; Doom modeline
 (setq doom-modeline-major-mode-icon t)
 (setq doom-modeline-env-python-executable "python") ; or `python-shell-interpreter'
-;; (setq doom-modeline-env--command-args "--version")
-;; (setq doom-modeline-mu4e t) ;; enable mu4e support
-
-;; Use "SPC v" to expand region
-(map! :n "SPC v" #'er/expand-region)
-
-;; ;; When in daemon, also run edit-server
-;; (when (daemonp)
-;;   (use-package! edit-server
-;;     :config
-;;     ;; Set server port
-;;     (setq edit-server-port 9292)
-
-;;     ;; If this is an emacs-daemon, start the edit-server
-;;     (edit-server-start t)))
-
-(defun slang/notify-send (title message)
-  (call-process "notify-send"
-                nil 0 nil
-                title
-                message
-                "--expire-time" "300000" ; 5 minutes
-                "--app-name" "Emacs"
-                ))
-
 
 ;; Keybindings
 (load!  "keybindings.el")
 
-;; Disable evil snipe
-;; (after! evil-snipe (evil-snipe-mode -1))
-
 
 ;; Use offlineimap as mu4e backend
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
-(setq +mu4e-backend 'offlineimap)
-(setq +mu4e-mu4e-mail-path "~/.mail")
-(setq mu4e-get-mail-command "offlineimap -o")
-(set-email-account! "GMail steven.lang.mz"
-                    '((mu4e-sent-folder       . "/[Gmail].Sent Mail")
-                      (mu4e-drafts-folder     . "/[Gmail].Drafts")
-                      (mu4e-trash-folder      . "/[Gmail].Trash")
-                      (mu4e-update-interval   . 300)
-                      (smtpmail-smtp-user     . "steven.lang.mz@gmail.com")
-                      (smtpmail-default-smtp-server . "smtp.gmail.com")
-                      (smtpmail-smtp-server . "smtp.gmail.com")
-                      (smtpmail-smtp-service . 587)
-                      (smtpmail-local-domain . "gmail.com")
-                      ;; (smtpmail-auth-credentials . (expand-file-name "~/.authinfo.gpg"))
-                      (user-mail-address      . "steven.lang.mz@gmail.com"))
-                    t)
-(setq mu4e-update-interval 300)
-(setq message-send-mail-function 'smtpmail-send-it
-      starttls-use-gnutls t
-      smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
-      smtpmail-auth-credentials
-      '(("smtp.gmail.com" 587 "steven.lang.mz@gmail.com" nil))
-      smtpmail-default-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 587)
+;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+;; (setq +mu4e-backend 'offlineimap)
+;; (setq +mu4e-mu4e-mail-path "~/.mail")
+;; (setq mu4e-get-mail-command "offlineimap -o")
+;; (set-email-account! "GMail steven.lang.mz"
+;;                     '((mu4e-sent-folder       . "/[Gmail].Sent Mail")
+;;                       (mu4e-drafts-folder     . "/[Gmail].Drafts")
+;;                       (mu4e-trash-folder      . "/[Gmail].Trash")
+;;                       (mu4e-update-interval   . 300)
+;;                       (smtpmail-smtp-user     . "steven.lang.mz@gmail.com")
+;;                       (smtpmail-default-smtp-server . "smtp.gmail.com")
+;;                       (smtpmail-smtp-server . "smtp.gmail.com")
+;;                       (smtpmail-smtp-service . 587)
+;;                       (smtpmail-local-domain . "gmail.com")
+;;                       ;; (smtpmail-auth-credentials . (expand-file-name "~/.authinfo.gpg"))
+;;                       (user-mail-address      . "steven.lang.mz@gmail.com"))
+;;                     t)
+;; (setq mu4e-update-interval 300)
+;; (setq message-send-mail-function 'smtpmail-send-it
+;;       starttls-use-gnutls t
+;;       smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+;;       smtpmail-auth-credentials
+;;       '(("smtp.gmail.com" 587 "steven.lang.mz@gmail.com" nil))
+;;       smtpmail-default-smtp-server "smtp.gmail.com"
+;;       smtpmail-smtp-server "smtp.gmail.com"
+;;       smtpmail-smtp-service 587)
 
 ;; Add action to view in browser
 ;; (add-to-list 'mu4e-view-actions
 ;;              '("View in Browser" . mu4e-action-view-in-browser) t)
 
-(use-package! mu4e-alert
-  :after mu4e
-  :init
-  (setq mu4e-alert-interesting-mail-query "flag:unread maildir:/Gmail/INBOX")
-  (mu4e-alert-set-default-style 'libnotify)
-  (mu4e-alert-enable-notifications))
+;; (use-package! mu4e-alert
+;;   :after mu4e
+;;   :init
+;;   (setq mu4e-alert-interesting-mail-query "flag:unread maildir:/Gmail/INBOX")
+;;   (mu4e-alert-set-default-style 'libnotify)
+;;   (mu4e-alert-enable-notifications))
 
 ;; Set latex viewer
 (setq +latex-viewers '(evince))
@@ -224,12 +196,16 @@
 (add-hook 'julia-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 
 ;; Enable rainbow delimiters in prog mode
-(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+(use-package! rainbow-delimiters
+  :config
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 ;; Set julia lsp environment
-(setq lsp-julia-default-environment "~/.julia/environments/v1.5")
-(setq lsp-enable-folding t)
-(setq lsp-folding-range-limit 100)
+(use-package! lsp-julia
+  :config
+  (setq lsp-julia-default-environment "~/.julia/environments/v1.5")
+  (setq lsp-enable-folding t)
+  (setq lsp-folding-range-limit 100))
 
 ;; this macro was copied from here: https://stackoverflow.com/a/22418983/4921402
 (defmacro define-and-bind-quoted-text-object (name key start-regex end-regex)
@@ -243,6 +219,7 @@
        (define-key evil-inner-text-objects-map ,key #',inner-name)
        (define-key evil-outer-text-objects-map ,key #',outer-name))))
 
+;; Add more textobjects
 (define-and-bind-quoted-text-object "pipe" "|" "|" "|")
 (define-and-bind-quoted-text-object "slash" "/" "/" "/")
 (define-and-bind-quoted-text-object "star" "*" "*" "*")
@@ -254,9 +231,11 @@
 
 
 ;; Set correct conda variables
-(setq conda-env-home-directory (expand-file-name "~/.conda"))
-(custom-set-variables
- `(conda-anaconda-home ,(expand-file-name "~/.conda")))
+(use-package! conda
+  :config
+  (setq conda-env-home-directory (expand-file-name "~/.conda"))
+  (custom-set-variables
+   `(conda-anaconda-home ,(expand-file-name "~/.conda"))))
 
 ;; EMACS ANYWHERE
 ;; Define a function or use a lambda of the same signature
@@ -266,30 +245,7 @@
 ;; Hook your function
 (add-hook 'ea-popup-hook 'popup-handler)
 
-;; (custom-set-faces!
-;;   ;; Flycheck check symbol and sim-card symbol (right-hand side)
-;;   '(doom-modeline-warning :inherit warning)
-;;   '(doom-modeline-debug :inherit font-lock-doc-face :slant normal)
-
-;;   ;; Insert/normal state (left-hand side)
-;;   '(doom-modeline-evil-emacs-state :inherit font-lock-builtin-face)
-;;   '(doom-modeline-evil-insert-state :inherit font-lock-keyword-face)
-;;   '(doom-modeline-info :inherit success)
-;;   )
-
-;; Increase lsp file watch threshold
-(setq lsp-file-watch-threshold 10000) ;; 1k is default
-
-;; Theme-changer
-;; (use-package! circadian
-;;   :config
-;;   (setq calendar-location-name "Mainz, DE")
-;;   (setq calendar-latitude 49.98)
-;;   (setq calendar-longitude 8.28)
-;;   (setq circadian-themes '((:sunrise . doom-gruvbox-light)
-;;                            (:sunset  . doom-one)))
-;;   (circadian-setup))
-
+;; Hide files in treemacs that are listed in .gitignore
 (use-package! treemacs
   :config
   (treemacs-git-mode 'extended)
@@ -299,3 +255,23 @@
 (use-package! py-pyment
   :config
   (setq py-pyment-options '("--output=google")))
+
+;; Make evil substute (:s/foo/bar/) global by default (-> s/foo/bar/g)
+(use-package! evil
+  :config
+  (setq evil-ex-substitute-global t))
+
+(use-package! dap-mode
+  :after python)
+
+;; Fix doom modeline icons (only issue on arch emacs binary)
+(custom-set-faces!
+  ;; Flycheck check symbol and sim-card symbol (right-hand side)
+  '(doom-modeline-warning :inherit warning)
+  '(doom-modeline-debug :inherit font-lock-doc-face :slant normal)
+
+  ;; Insert/normal state (left-hand side)
+  '(doom-modeline-evil-emacs-state :inherit font-lock-builtin-face)
+  '(doom-modeline-evil-insert-state :inherit font-lock-keyword-face)
+  '(doom-modeline-info :inherit success)
+  )

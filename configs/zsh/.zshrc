@@ -34,6 +34,7 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-history-substring-search
 antigen bundle zsh-users/zsh-completions
+antigen bundle kutsan/zsh-system-clipboard
 antigen bundle mafredri/zsh-async
 antigen bundle sindresorhus/pure
 antigen bundle esc/conda-zsh-completion
@@ -115,10 +116,10 @@ if hash nvim 2>/dev/null; then
 fi
 
 # Set the proper editor
-if [[ $(ps aux | grep "emacs --[d]aemon") ]]; then
-  export EDITOR=emacsclient
-  export VISUAL=emacsclient
-elif hash nvim 2>/dev/null; then
+# if [[ $(ps aux | grep "emacs --[d]aemon") ]]; then
+#   export EDITOR=emacsclient
+#   export VISUAL=emacsclient
+if hash nvim 2>/dev/null; then
   export EDITOR=nvim
   export VISUAL=nvim
 else
@@ -177,10 +178,10 @@ else
 fi
 
 # Fedora dnf aliases
-alias dnfi='sudo dnf install'
-alias dnfs='dnf search'
-alias dnfr='sudo dnf remove'
-alias dnfu='sudo dnf update && flatpak update'
+# alias dnfi='sudo dnf install'
+# alias dnfs='dnf search'
+# alias dnfr='sudo dnf remove'
+# alias dnfu='sudo dnf update && flatpak update'
 
 alias grep='grep --color=auto'
 alias pacs='sudo pacman -S'
@@ -205,6 +206,7 @@ alias xresourcesconfig='$EDITOR ~/.Xresources'
 alias xresourcesreload='xrdb -merge ~/.Xresources'
 alias gnome-screenshot='gnome-screenshot -a'
 alias envactivate='source ./env/bin/activate'
+alias rsync='rsync --archive --compress-level=3 --copy-links --partial --inplace --progress --rsh=ssh -r'
 
 # Update all pip packages
 alias pipupdate="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
