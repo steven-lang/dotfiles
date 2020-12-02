@@ -20,11 +20,6 @@
  "9"   #'winum-select-window-9
  )
 
-;; Map SPC f f to projectwide seach and SPC f F to directory search
-(map! :leader
-      "ff"  #'+ivy/projectile-find-file
-      "fF"  #'counsel-find-file)
-
 ;; Use helm for M-x
 (map! :leader
       ;; unmap first
@@ -59,7 +54,7 @@
       "u" nil ;; unbind first
 
       (:prefix ("u" . "utils")
-       :desc "Search Google" "g" #'counsel-google ;; needs 'surfraw' binary
+       :desc "Search Google" "g" #'counsel-search ;; needs 'surfraw' binary
        ;; :desc "Search Google" "g" #'helm-google-suggest ;; needs 'surfraw' binary
        :desc "top" "t" #'helm-top
        :desc "kill-ring" "y" #'helm-show-kill-ring))
@@ -73,18 +68,17 @@
 
       :leader (:prefix "b" "b" nil)
       ;; :leader (:prefix "b" :desc "Buffers" "b" #'helm-mini)
-      :leader (:prefix "b" :desc "Buffers" "b" #'ivy-switch-buffer)
-      )
+      :leader (:prefix "b" :desc "Buffers" "b" #'+ivy/switch-workspace-buffer))
 
 
 ;; Windows
 (map! :leader
       (:prefix "w"
-        :desc "Maximize" "m" #'toggle-maximize-buffer
-        "w"  #'ace-window
-        "/" nil
-        :desc "Split right"  "/" #'(lambda () (interactive)(split-window-horizontally) (other-window 1))
-        :desc "Split below"  "-" #'(lambda () (interactive)(split-window-vertically) (other-window 1))))
+       :desc "Maximize" "m" #'toggle-maximize-buffer
+       "w"  #'ace-window
+       "/" nil
+       :desc "Split right"  "/" #'(lambda () (interactive)(evil-window-vsplit) (other-window 1))
+       :desc "Split below"  "-" #'(lambda () (interactive)(evil-window-split) (other-window 1))))
 
 
 
@@ -186,8 +180,7 @@
       "s"  #'lsp-ivy-workspace-symbol
       ;; "s"  #'helm-lsp-workspace-symbol
 
-      (:prefix ("i" . "Insert")
-       "b" #'slang/pdb-insert))
+      "b" #'slang/pdb-insert)
 
 ;; Make jk work in lsp ui peek mode
 (map! :map lsp-ui-peek-mode-map
@@ -200,10 +193,12 @@
  :nv "s" nil
  (:prefix ("s" .  "jump")
   :nv "s"   #'+evil:swiper
-  :nv "j"   #'evil-avy-goto-line-below
-  :nv "k"   #'evil-avy-goto-line-above
-  :nv "w"   #'evil-avy-goto-word-0
-  :nv "t"   #'evil-avy-goto-char-timer
+  :nv "j"   #'evilem-motion-next-visual-line
+  :nv "k"   #'evilem-motion-previous-visual-line
+  :nv "w"   #'evilem-motion-forward-word-begin
+  :nv "b"   #'evilem-motion-backward-word-begin
+  :nv "c"   #'evilem-motion-find-char-backward
+  :nv "C"   #'evilem-motion-find-char
   ))
 
 

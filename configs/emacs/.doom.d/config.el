@@ -94,10 +94,10 @@
 (+global-word-wrap-mode)
 
 ;; Company config
-;; (setq
-;;  ;; company-minimum-prefix-length 1
-;;  company-idle-delay 0.1
-;;  company-tooltip-idle-delay 0.1)
+(setq
+ ;; company-minimum-prefix-length 1
+ company-idle-delay 0.1
+ company-tooltip-idle-delay 0.1)
 
 ;; Emacs config location
 (setq emacs-dir (file-name-as-directory "~/.doom.d"))
@@ -165,6 +165,10 @@
 ;; Let evince not steal focus
 (setq TeX-view-evince-keep-focus t)
 
+
+;; Set deft directory
+(setq deft-directory "~/Dropbox/orgmode/notes/")
+
 ;; Org setup
 (after! org
   (load! "org-setup.el"))
@@ -174,15 +178,6 @@
 
 ;; Make latex sections have a larger font
 (setq font-latex-fontify-sectioning 1.3)
-
-;; avy
-(setq avy-orders-alist
-      '((avy-goto-char . avy-order-closest)
-        (avy-goto-char-2 . avy-order-closest)
-        (avy-goto-line-above . avy-order-closest)
-        (avy-goto-line-below . avy-order-closest)
-        (avy-goto-word-0 . avy-order-closest)))
-
 
 ;; Langtool
 (setq langtool-java-classpath
@@ -227,7 +222,7 @@
 
 
 ;; Bury compilation buffers if successful
-(add-hook 'compilation-finish-functions 'slang/bury-compile-buffer-if-successful)
+;; (add-hook 'compilation-finish-functions 'slang/bury-compile-buffer-if-successful)
 
 
 ;; Set correct conda variables
@@ -252,6 +247,7 @@
   (with-eval-after-load 'treemacs
     (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?)))
 
+;; Python docstring tool
 (use-package! py-pyment
   :config
   (setq py-pyment-options '("--output=google")))

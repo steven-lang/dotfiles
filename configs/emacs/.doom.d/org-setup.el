@@ -417,7 +417,8 @@
                  ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
   (add-to-list 'org-latex-packages-alist '("" "listings"))
   (add-to-list 'org-latex-packages-alist '("" "color"))
-  (setq org-latex-pdf-process '("latexmk -g -pdf %f"))
+  (add-to-list 'org-latex-packages-alist '("" "tikz"))
+  (setq org-latex-pdf-process '("latexmk -f -pdf %f -output-directory=%o"))
   (setq org-latex-listings t))
 
 ;; ox-beamer translates *bold* to \alert{}, the following function reverts this
@@ -463,7 +464,6 @@
   ;; (setq deft-recursive t)
   ;; (setq deft-use-filter-string-for-filename t)
   ;; (setq deft-default-extension "org")
-  (setq deft-directory "~/Dropbox/orgmode/notes/")
   (setq deft-use-filename-as-title t))
 
 (use-package! org-roam
@@ -471,16 +471,16 @@
   :config
   (setq org-roam-directory deft-directory))
 
-(map! :leader
-      (:prefix ("r" . "Roam")
-       "d" #'deft
-       "R" #'deft-refresh
-       "r" #'org-roam
-       "t" #'org-roam-today
-       "f" #'org-roam-find-file
-       "i" #'org-roam-insert
-       "n" #'org-roam-new-file
-       "g" #'org-roam-graph-show))
+;; (map! :leader
+;;       (:prefix ("r" . "Roam")
+;;        "d" #'deft
+;;        "R" #'deft-refresh
+;;        "r" #'org-roam
+;;        "t" #'org-roam-today
+;;        "f" #'org-roam-find-file
+;;        "i" #'org-roam-insert
+;;        "n" #'org-roam-new-file
+;;        "g" #'org-roam-graph-show))
 ;;Org-Roam END
 
 
@@ -529,7 +529,7 @@
                                         (42 . 8211)))
 
 ;; Enable latex previews at startup
-(setq org-startup-with-latex-preview nil)
+;; (setq org-startup-with-latex-preview nil)
 
 ;; (add-hook 'org-mode-hook 'org-fragtog-mode)
 
@@ -540,3 +540,10 @@
                          (:line-width 2 :color "grey75" :style released-button)
                          )
   '(org-super-agenda-header :height 0.8 :box nil :inherit (org-agenda-structure)))
+
+
+;; Latex tikz
+(eval-after-load "preview"
+  '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
+(setq org-preview-latex-default-process 'imagemagick)
+;; (setq org-preview-latex-process-alist 'imagemagick)
