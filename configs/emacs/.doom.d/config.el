@@ -63,6 +63,7 @@
 (setq display-line-numbers-type t)
 
 (setq org-directory "~/org/")
+(setq org-roam-directory "~/org/notes")
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -306,9 +307,9 @@
 
 
 ;; pdf-tools midnight colors
-(use-package! pdf-tools
-  :defer
-  :config
-  ;; (setq pdf-view-midnight-colors '("#ffffff" . "#000000"))  ;; black-white
-  (setq pdf-view-midnight-colors '("#282c34" . "#bbc2cf"))  ;; doom-one
-  )
+;; (use-package! pdf-tools
+;;   :defer
+;;   :config
+;;   ;; (setq pdf-view-midnight-colors '("#ffffff" . "#000000"))  ;; black-white
+;;   ;; (setq pdf-view-midnight-colors '("#bbc2cf" . "#282c34" ))  ;; doom-one
+;;   )

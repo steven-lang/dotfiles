@@ -455,21 +455,10 @@
   (setq deft-use-filename-as-title t))
 
 (use-package! org-roam
-  :after deft org
+  :after org
   :defer
   :config
-  (setq org-roam-directory deft-directory)
-  )
-
-(package! org-roam-bibtex
-  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
-
-
-(use-package! org-roam-bibtex
-  :after org-roam
-  :defer
-  :hook (org-roam-mode . org-roam-bibtex-mode))
-
+  (setq org-roam-directory deft-directory))
 ;;Org-Roam END
 
 

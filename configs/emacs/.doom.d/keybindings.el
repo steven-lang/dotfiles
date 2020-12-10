@@ -5,25 +5,10 @@
 ;;       :leader
 ;;       "TAB" #'slang/switch-other-buffer)
 
-;; Window selection
-(map!
- :leader
-
- "1"   #'winum-select-window-1
- "2"   #'winum-select-window-2
- "3"   #'winum-select-window-3
- "4"   #'winum-select-window-4
- "5"   #'winum-select-window-5
- "6"   #'winum-select-window-6
- "7"   #'winum-select-window-7
- "8"   #'winum-select-window-8
- "9"   #'winum-select-window-9
- )
-
-(map! "M-h" #'evil-window-left
-      "M-j" #'evil-window-down
-      "M-k" #'evil-window-up
-      "M-l" #'evil-window-right)
+(map! "C-S-h" #'evil-window-left
+      "C-S-j" #'evil-window-down
+      "C-S-k" #'evil-window-up
+      "C-S-l" #'evil-window-right)
 
 ;; Use helm for M-x
 (map! :leader
@@ -45,7 +30,6 @@
 ;; Expand region with "SPC v"
 (map! :leader
       "v"   #'er/expand-region)
-
 
 ;; Use F1 to open the agenda
 (map! "<f1>"
@@ -87,17 +71,7 @@
        :desc "Split below"  "-" #'(lambda () (interactive)(evil-window-split) (other-window 1))))
 
 
-
-;; Make "C-h" go one dir back in helm
-(map! :map helm-map
-      "C-h" #'helm-find-files-up-one-level)
-
-
 ;; DAP mode
-;; (map!
-;;       :map python-mode-map
-;;       :localleader
-;;       "d" nil)
 (map! :localleader
       :map python-mode-map
       "d"   #'py-pyment-region
@@ -174,10 +148,6 @@
       :n "C-k"  #'lsp-ui-doc-glance)
 
 
-;; (map! :map python-mode-map
-;;       :localleader
-;;       "i" nil)
-
 (map! :map python-mode-map
       :localleader
       ;; "v" #'slang/pyvenv-activate
@@ -194,18 +164,16 @@
       "k"  #'lsp-ui-peek--select-prev)
 
 
-;; Use avy
+;; Use avy for buffer wide jumps
 (map! 
  :nv "s" nil
  (:prefix ("s" .  "jump")
   :nv "s"   #'+evil:swiper
-  :nv "j"   #'evilem-motion-next-visual-line
-  :nv "k"   #'evilem-motion-previous-visual-line
-  :nv "w"   #'evilem-motion-forward-word-begin
-  :nv "b"   #'evilem-motion-backward-word-begin
-  :nv "c"   #'evilem-motion-find-char-backward
-  :nv "C"   #'evilem-motion-find-char
-  ))
+  :nv "j"   #'avy-goto-line-below
+  :nv "k"   #'avy-goto-line-below
+  :nv "w"   #'avy-goto-word-0
+  :nv "c"   #'avy-goto-char
+  :nv "t"   #'avy-goto-char-timer))
 
 
 ;; Org capture
@@ -415,9 +383,6 @@
       "C"  #'org-capture)
 
 (map! :leader
-      (:prefix ("j" . "Jump")
-       )
-
       (:prefix ("h" . "help")
        (:prefix ("r" . "reload")
         "c"  #'slang/reload-config)))
@@ -439,13 +404,17 @@
        "r"  #'LaTeX-fill-region
        "s"  #'LaTeX-fill-section))
 
-(map! :localleader
-      :map julia-mode-map
-      "o"  #'+julia/open-repl
-      "b"  #'julia-repl-send-buffer
-      "l"  #'julia-repl-send-line
-      "r"  #'julia-repl-send-region-or-line)
+;; (map! :localleader
+;;       :map julia-mode-map
+;;       "o"  #'+julia/open-repl
+;;       "b"  #'julia-repl-send-buffer
+;;       "l"  #'julia-repl-send-line
+;;       "r"  #'julia-repl-send-region-or-line)
 
 (map! :map pdf-view-mode-map
       "/"  nil
       "/"  #'pdf-occur)
+
+(map! :leader
+      "fD"  nil
+      "fD"  #'(lambda () (interactive) (doom-project-find-file "~/dotfiles")))

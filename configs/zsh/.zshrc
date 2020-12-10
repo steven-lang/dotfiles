@@ -207,6 +207,7 @@ alias xresourcesreload='xrdb -merge ~/.Xresources'
 alias gnome-screenshot='gnome-screenshot -a'
 alias envactivate='source ./env/bin/activate'
 alias rsync='rsync --archive --compress-level=3 --copy-links --partial --inplace --progress --rsh=ssh -r'
+alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
 
 # Update all pip packages
 alias pipupdate="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
