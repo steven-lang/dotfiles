@@ -1,7 +1,7 @@
 ;; Set normal state as default for org-agenda-mode
 ;; TODO: This needs to be evaluated last or something?
-;; (add-hook 'org-agenda-mode-hook '(lambda () (evil-set-initial-state 'org-agenda-mode 'normal)))
-(evil-set-initial-state 'org-agenda-mode 'normal)
+(add-hook 'org-agenda-mode-hook '(lambda () (evil-set-initial-state 'org-agenda-mode 'normal)))
+;; (evil-set-initial-state 'org-agenda-mode 'normal)
 
 ;; (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
 (add-hook 'org-mode-hook 'org-superstar-mode)
@@ -27,10 +27,10 @@
 (plist-put org-format-latex-options :scale 2)
 
 ;; Default org file when using capture (C-c c)
-(setq org-default-notes-file "~/Dropbox/orgmode/gtd/inbox.org")
+(setq org-default-notes-file "~/org/gtd/inbox.org")
 
 ;; Org agenda files: look for all files in the following directory
-(setq org-agenda-files (quote ("~/Dropbox/orgmode/gtd")))
+(setq org-agenda-files (quote ("~/org/gtd")))
 
 ;; Org-Capture Templates
 (setq org-capture-templates
@@ -41,14 +41,14 @@
          (file+headline org-default-notes-file "Inbox")
          "** TODO %?\n:PROPERTIES:\n:CREATED:\t%u\n:END:\n"
          :empty-lines 1)
-        ("m" "Master Thesis" entry (file+headline "~/Dropbox/orgmode/gtd/gtd.org" "Master Thesis")
+        ("m" "Master Thesis" entry (file+headline "~/org/gtd/gtd.org" "Master Thesis")
          "* TODO %?")
         ("e" "email" entry (file+headline org-default-notes-file "Inbox")
          "* TODO Reply: %a %?")))
 
 
 ;; Set the org refile targets to org agenda files
-(setq org-refile-targets (quote (("~/Dropbox/orgmode/gtd/gtd.org" :maxlevel . 9))))
+(setq org-refile-targets (quote (("~/org/gtd/gtd.org" :maxlevel . 9))))
 
 ;; Set default column view headings: Task Total-Time Time-Stamp
 ;; (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
@@ -61,26 +61,6 @@
 
 ;; Org-Mode todo keywords
 (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "WAITING(w)" "|" "DONE(d)" "CANCELED(c)")))
-
-;; Set todo keyword colors
-(setq org-todo-keyword-faces
-      '(
-        ;; Nord colors
-        ;; ("TODO"      :foreground "#99c794" :weight bold)
-        ;; ("STARTED"   :foreground "#fac863" :weight bold)
-        ;; ("NEXT"      :foreground "#5fb3b3" :weight bold)
-        ;; ("WAITING"   :foreground "#6699cc" :weight bold)
-        ;; ("DONE"      :foreground "#4f5b66" :weight bold)
-        ;; ("CANCELED"  :foreground "#ec5f67" :weight bold)
-
-        ;; one colors
-        ("TODO"      :foreground "#98c379" :weight bold)
-        ("STARTED"   :foreground "#e5c07b" :weight bold)
-        ("NEXT"      :foreground "#56b6c2" :weight bold)
-        ("WAITING"   :foreground "#61afef" :weight bold)
-        ("DONE"      :foreground "#565c64" :weight bold)
-        ("CANCELED"  :foreground "#be5046" :weight bold)
-        ))
 
 
 ;; Save buffer on clocking in/out
@@ -98,6 +78,7 @@
                 "--app-name" "Emacs"))
 
 (use-package! org-pomodoro
+  :defer
   :config
   (setq org-pomodoro-play-sounds nil)
   ;; org-pomodoro mode hooks
@@ -141,7 +122,7 @@
 
 
 ;; Set org agenda todo view (open with <f1>)
-(setq slang/org-agenda-directory "~/Dropbox/orgmode/gtd/")
+(setq slang/org-agenda-directory "~/org/gtd/")
 (setq slang/org-agenda-todo-view
       `("a" "Full Agenda"
         ((agenda ""
@@ -251,23 +232,38 @@
         nil
         ("/tmp/org-agenda.html")))
 
+(setq slang/org-agenda-next-view
+      `("n" "Next Actions"
+        (
+         ;; Next Actions Category
+         (org-ql-block
+          ;; Query
+          '(and (todo "NEXT")
+                ;; (not (or (scheduled :on +1)
+                ;;          (scheudeld :on today)))
+                )
+          ;; Variables
+          ((org-ql-block-header "Next Actions")
+           (org-super-agenda-groups '((:auto-outline-path t)))
+           (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+         )))
 
 (setq slang/org-agenda-lower-eq-10-mins-view
-        `("l" "Less than 10 minutes effort"
+      `("l" "Less than 10 minutes effort"
         (
-            (agenda ""
-                    ((org-agenda-span 'day)
-                    (org-super-agenda-groups '(
-                                                (:discard (:effort> "11"))
-                                                (:auto-parent t)))
-                    (org-deadline-warning-days 365)))
-            (alltodo ""
-                    ((org-agenda-overriding-header "Less than 10 minutes effort")
-                    (org-super-agenda-groups '((:discard (:effort> "11"))
-                                                (:discard (:habit t))
-                                                (:auto-parent t)))
-                    (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
-                    )))
+         (agenda ""
+                 ((org-agenda-span 'day)
+                  (org-super-agenda-groups '(
+                                             (:discard (:effort> "11"))
+                                             (:auto-parent t)))
+                  (org-deadline-warning-days 365)))
+         (alltodo ""
+                  ((org-agenda-overriding-header "Less than 10 minutes effort")
+                   (org-super-agenda-groups '((:discard (:effort> "11"))
+                                              (:discard (:habit t))
+                                              (:auto-parent t)))
+                   (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+         )))
 
 
 (defun slang/make-org-agenda-custom-view (tag key description)
@@ -309,6 +305,7 @@
 ;; ;; Set to empty list is necessary or else org-agenda-custom-commands is not defined
 (setq org-agenda-custom-commands (list))
 (add-to-list 'org-agenda-custom-commands `,slang/org-agenda-todo-view)
+(add-to-list 'org-agenda-custom-commands `,slang/org-agenda-next-view)
 (add-to-list 'org-agenda-custom-commands `,slang/org-agenda-lower-eq-10-mins-view)
 (add-to-list 'org-agenda-custom-commands `,(slang/make-org-agenda-custom-view "@work" "cw" "At Work"))
 (add-to-list 'org-agenda-custom-commands `,(slang/make-org-agenda-custom-view "@home" "ch" "At Home"))
@@ -359,8 +356,8 @@
 ;; Export agenda to html file
 ;; TODO: Send via telegram or upload to server
 (defun slang/org-agenda-export ()
-    (interactive)
-    (org-agenda-write "~/Dropbox/orgmode/gtd/export/agenda.html"))
+  (interactive)
+  (org-agenda-write "~/org/gtd/export/agenda.html"))
 
 ;; Enable super agenda mode
 (add-hook 'org-agenda-mode-hook (lambda () (org-super-agenda-mode t)))
@@ -372,36 +369,26 @@
 
 ;; Custom faces
 (custom-set-faces
-    ;; '(org-agenda-structure ((t (:foreground "#ECEFF4" :box (:line-width 1 :style released-button) :weight ultra-bold :height 1.5))))
-    '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
-    '(org-level-2 ((t (:inherit outline-2 :height 1.25))))
-    '(org-level-3 ((t (:inherit outline-3 :height 1.2))))
-    '(org-level-4 ((t (:inherit outline-4 :height 1.15))))
-    '(org-level-5 ((t (:inherit outline-5 :height 1.1))))
-    ;; '(org-super-agenda-header ((t (:inherit org-agenda-structure :box nil :height 0.8))))
-    '(helm-buffer-modified ((t (:inherit font-lock-comment-face :foreground "IndianRed2"))))
-    )
-
-(custom-set-variables
- '(org-agenda-prefix-format
-   '((agenda . "  %t ")
-     (todo . "  • ")
-     (tags . "  • ")
-     (search . "  • ")))
- '(org-modules
-   '(ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus ol-info ol-irc ol-mhe org-protocol ol-rmail ol-w3m org-habit org-ql))
- '(org-priority-faces '((66 . "#f99157") (67 . "#65737e")))
+ ;; '(org-agenda-structure ((t (:foreground "#ECEFF4" :box (:line-width 1 :style released-button) :weight ultra-bold :height 1.5))))
+ '(org-level-1 ((t (:inherit outline-1 :height 1.3))))
+ '(org-level-2 ((t (:inherit outline-2 :height 1.25))))
+ '(org-level-3 ((t (:inherit outline-3 :height 1.2))))
+ '(org-level-4 ((t (:inherit outline-4 :height 1.15))))
+ '(org-level-5 ((t (:inherit outline-5 :height 1.1))))
+ ;; '(org-super-agenda-header ((t (:inherit org-agenda-structure :box nil :height 0.8))))
+ '(helm-buffer-modified ((t (:inherit font-lock-comment-face :foreground "IndianRed2"))))
  )
 
 ;; Org-ref setup
-;; (use-package! org-ref
-;;   :after org
-;;   :config
-;;   (setq org-ref-default-bibliography "~/Dropbox/orgmode/bibliography/references.bib"
-;;         org-ref-pdf-directory "~/pdf/"
-;;         bibtex-completion-bibliography "~/Dropbox/orgmode/bibliography/references.bib"
-;;         bibtex-completion-library-path "~/Dropbox/orgmode/bibliography/bibtex-pdfs"
-;;         bibtex-completion-notes-path "~/Dropbox/orgmode/bibliography/helm-bibtex-notes"))
+(use-package! org-ref
+  :after org
+  :config
+  (setq reftex-default-bibliography '("~/org/bib/refereces.bib")
+        org-ref-bibliography-notes "~/org/bib/notes.org"
+        org-ref-default-bibliography '("~/org/bib/references.bib")
+        bibtex-completion-bibliography "~/org/bib/references.bib"
+        bibtex-completion-library-path "~/org/bib/bibtex-pdfs"
+        bibtex-completion-notes-path "~/org/bib/helm-bibtex-notes"))
 
 
 
@@ -455,11 +442,12 @@
 (add-to-list 'org-file-apps '("\\.pdf" . "emacsclient -c -a '' %s"))
 
 ;; Toggle latex fragments automatically with pointer
-;; (add-hook 'org-mode-hook 'org-fragtog-mode)
+(add-hook 'org-mode-hook 'org-fragtog-mode)
 
 ;;;;;;;;;;;;;;;;;;; Org-Roam START
 (use-package! deft
   :after org
+  :defer
   :config
   ;; (setq deft-recursive t)
   ;; (setq deft-use-filter-string-for-filename t)
@@ -468,19 +456,20 @@
 
 (use-package! org-roam
   :after deft org
+  :defer
   :config
-  (setq org-roam-directory deft-directory))
+  (setq org-roam-directory deft-directory)
+  )
 
-;; (map! :leader
-;;       (:prefix ("r" . "Roam")
-;;        "d" #'deft
-;;        "R" #'deft-refresh
-;;        "r" #'org-roam
-;;        "t" #'org-roam-today
-;;        "f" #'org-roam-find-file
-;;        "i" #'org-roam-insert
-;;        "n" #'org-roam-new-file
-;;        "g" #'org-roam-graph-show))
+(package! org-roam-bibtex
+  :recipe (:host github :repo "org-roam/org-roam-bibtex"))
+
+
+(use-package! org-roam-bibtex
+  :after org-roam
+  :defer
+  :hook (org-roam-mode . org-roam-bibtex-mode))
+
 ;;Org-Roam END
 
 
@@ -535,7 +524,7 @@
 
 ;; Set org agenda face
 (custom-set-faces!
-  '(org-agenda-structure :height 1.5 :weight ultra-bold :foreground "#bbc2cf"
+  '(org-agenda-structure :height 1.5 :weight ultra-bold ;;:foreground "#bbc2cf"
                          :box
                          (:line-width 2 :color "grey75" :style released-button)
                          )
@@ -546,4 +535,53 @@
 (eval-after-load "preview"
   '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
 (setq org-preview-latex-default-process 'imagemagick)
-;; (setq org-preview-latex-process-alist 'imagemagick)
+
+
+(setq slang/doom-one-colors-alist '(("red" . "#ff6c6b")
+                                    ("green" . "#98be65")
+                                    ("yellow" . "#ECBE7B")
+                                    ("blue" . "#51afef")
+                                    ("magenta" . "#c678dd")
+                                    ("cyan" . "#46D9FF")))
+
+(defun slang/set-org-todo-keyword-faces-from-theme-color-alist (theme-colors)
+  "Argument theme-colors is an alist from modus themes."
+  (setq org-todo-keyword-faces
+        `(("TODO"      :foreground ,(cdr (assoc "green" theme-colors)) :weight bold)
+          ("STARTED"   :foreground ,(cdr (assoc "yellow" theme-colors)) :weight bold)
+          ("NEXT"      :foreground ,(cdr (assoc "cyan" theme-colors)) :weight bold)
+          ("WAITING"   :foreground ,(cdr (assoc "magenta" theme-colors)) :weight bold)
+          ("DONE"      :foreground ,(cdr (assoc "blue" theme-colors)) :weight bold)
+          ("CANCELED"  :foreground ,(cdr (assoc "red" theme-colors)) :weight bold))))
+
+(defun slang/set-org-todo-keyword-faces ()
+  "Set org todo keyword face using circadian.el hook on theme loading."
+  (if (eq doom-theme slang/theme-dark)
+      (slang/set-org-todo-keyword-faces-from-theme-color-alist slang/doom-one-colors-alist)
+    (slang/set-org-todo-keyword-faces-from-theme-color-alist modus-operandi-theme-default-colors-alist)))
+
+(slang/set-org-todo-keyword-faces)
+
+;; Register todo-keyword changes when theme changes with circadian.el
+;; (use-package! circadian
+;;   :config
+;;   (add-hook 'circadian-after-load-theme-hook
+;;             #'(lambda (theme)
+;;                 (slang/set-org-todo-keyword-faces))))
+
+;; Disable prettification if symbol is at point and right of point
+(setq prettify-symbols-unprettify-at-point 'right-edge)
+
+;; List of symbols to be prettified
+(setq-default prettify-symbols-alist
+              '(("#+BEGIN_SRC" . ">>")
+                ("#+END_SRC" . ">>")
+                ("#+begin_src" . ">>")
+                ("#+end_src" . ">>")
+                (">=" . "≥")
+                ("=>" . "⇨")
+                ("[ ]"  "☐")
+                ("[X]" . "☑" )
+                ("[-]" . "❍" )
+                ("[ ]" . "☐")
+                ("[X]" . "☑")))

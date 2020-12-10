@@ -289,26 +289,6 @@
 ;; Disable follow symlinks warning
 (setq vc-follow-symlinks nil)
 
-
-;; Set theme according to day/night
-;; (defun set-light-theme ()
-;;   "Set the light theme with some customization if needed."
-;;   (interactive)
-;;   (load-theme 'doom-solarized-light t))
-
-;; (defun set-dark-theme ()
-;;   "Set the dark theme with some customization if needed."
-;;   (interactive)
-;;   (load-theme 'doom-nord t))
-
-;; (defun theme-switcher ()
-;;   (interactive)
-;;   (let ((current-hour (string-to-number (format-time-string "%H"))))
-;;     (if (or (< current-hour 6) (> current-hour 20)) (set-dark-theme) (set-light-theme))))
-
-;; ;; Run at every 3600 seconds, after 0s delay
-;; (run-with-timer 0 3600 'theme-switcher)
-
 (load-file (concat emacs-dir "keybindings.el"))
 
 (provide 'init)

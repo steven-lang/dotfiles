@@ -361,6 +361,6 @@ bindkey "^X^E" edit-command-line
 # Enable fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-test -r "~/.dir_colors" && eval $(dircolors ~/.dir_colors)
+# test -r "~/.dir_colors" && eval $(dircolors ~/.dir_colors)
 [ -f ~/.conda/etc/profile.d/conda.sh ] && source ~/.conda/etc/profile.d/conda.sh
 

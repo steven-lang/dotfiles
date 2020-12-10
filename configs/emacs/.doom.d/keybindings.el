@@ -20,6 +20,11 @@
  "9"   #'winum-select-window-9
  )
 
+(map! "M-h" #'evil-window-left
+      "M-j" #'evil-window-down
+      "M-k" #'evil-window-up
+      "M-l" #'evil-window-right)
+
 ;; Use helm for M-x
 (map! :leader
       ;; unmap first
@@ -49,6 +54,7 @@
 (map! "<f2>"
       #'org-agenda)
 
+
 ;; Utils
 (map! :leader
       "u" nil ;; unbind first
@@ -68,7 +74,7 @@
 
       :leader (:prefix "b" "b" nil)
       ;; :leader (:prefix "b" :desc "Buffers" "b" #'helm-mini)
-      :leader (:prefix "b" :desc "Buffers" "b" #'+ivy/switch-workspace-buffer))
+      :leader (:prefix "b" :desc "Buffers" "b" #'+ivy/switch-buffer))
 
 
 ;; Windows
@@ -415,6 +421,9 @@
       (:prefix ("h" . "help")
        (:prefix ("r" . "reload")
         "c"  #'slang/reload-config)))
+
+(map! :map TeX-mode-map
+      "C-c C-c"         #'slang/save-tex-file-and-build)
 
 (map! :localleader
       :map TeX-mode-map

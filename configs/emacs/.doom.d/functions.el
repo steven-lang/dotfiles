@@ -132,3 +132,13 @@ https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close/110
                 "--expire-time" "300000" ; 5 minutes
                 "--app-name" "Emacs"
                 ))
+
+(defun slang/load-theme-light ()
+  "Load the light theme saved in the slang/theme-light variable."
+  (interactive)
+  (load-theme slang/theme-light))
+
+(defun slang/load-theme-dark ()
+  "Load the light theme saved in the slang/theme-light variable."
+  (interactive)
+  (load-theme slang/theme-dark))

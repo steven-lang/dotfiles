@@ -1,0 +1,71 @@
+[colors]
+# Modus Vivendi Base16 theme
+# Author: Steven Lang
+
+# fg-main
+foreground          = #ffffff
+# fg-alt
+foreground_bold     = #a8a8a8
+# fg-main
+cursor              = #ffffff
+# bg-main
+cursor_foreground   = #000000
+# bg-main
+background          = #000000
+
+# 16 color space
+
+# Black, Gray, Silver, White
+# bg-main
+color0  = #000000
+# fg-inactive
+color8  = #bebebe
+# fg-dim
+color7  = #e0e6f0
+# fg-active
+color15 = #f5f5f5
+
+# Red
+# red
+color1  = #ff8059
+# red
+color9  = #ff8059
+
+# Green
+# green
+color2  = #44bc44
+color10 = #44bc44
+
+# Yellow
+# yellow
+color3  = #eecc00
+color11 = #eecc00
+
+# Blue
+# blue
+color4  = #29aeff
+color12 = #29aeff
+
+# Purple
+# magenta
+color5  = #feacd0
+color13 = #feacd0
+
+# Teal
+# cyan
+color6  = #00d3d0
+color14 = #00d3d0
+
+# Extra colors
+# yellow-intense
+color16 = #ffdd00
+# yellow-subtle-bg
+color17 = #604200
+# bg-dim
+color18 = #110b11
+# bg-active
+color19 = #2f2f2f
+# fg-alt
+color20 = #a8a8a8
+# fg-active
+color21 = #f5f5f5

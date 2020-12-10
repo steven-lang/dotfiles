@@ -17,6 +17,7 @@ set $mod2 Mod1
 
 # font pango:monospace 12
 font pango:IBM Plex Mono 12
+# font pango:DejaVu Sans Mono 12
 # font pango:Hack 12
 #font pango: Source Code Pro Semibold, FontAwesome Regular 11 
 #font pango:DejaVu Sans Mono, Terminus Bold Semi-Condensed 11
@@ -245,11 +246,11 @@ bindsym $mod+Ctrl+f exec firefox
 # Set keyboardlayout 
 exec_always --no-startup-id setxkbmap us altgr-intl -option ctrl:nocaps
 
-# Wallpaper 
-exec_always --no-startup-id xsetroot -solid "#1d2026"
+# Wallpaper (needs hsetroot since xsetroot is incompatible with picom)
+exec_always --no-startup-id hsetroot -solid "#1d2026"
 
 # locker shortcut
-# set $Locker i3lock && sleep 1
+# $Locker i3lock && sleep 1
 set $Locker i3lock -c 1d2026 && sleep 1
 
 # i3 lock
@@ -261,8 +262,9 @@ exec --no-startup-id nm-applet --tray --sm-disable &
 # Bluetooth
 exec --no-startup-id blueberry-tray &
 
-# Start Pavucontrol with mod+p
-bindsym $mod+p exec pavucontrol
+# Start pulseaudio controls with mod+p in floating mode
+bindsym $mod+p exec termite -e "ncpamixer" -t "NCPAMIXER" &
+for_window [title="NCPAMIXER"] floating enable
 
 # suspend/lock shortcuts
 bindsym $mod+$mod2+Ctrl+s exec --no-startup-id $Locker && systemctl suspend

@@ -1,0 +1,71 @@
+[colors]
+# Modus Operandi Base16 theme
+# Author: Steven Lang
+
+# fg-main
+foreground          = #000000
+# fg-alt
+foreground_bold     = #505050
+# fg-main
+cursor              = #000000
+# bg-main
+cursor_foreground   = #ffffff
+# bg-main
+background          = #ffffff
+
+# 16 color space
+
+# Black, Gray, Silver, White
+# bg-main
+color0  = #ffffff
+# fg-inactive
+color8  = #424242
+# fg-dim
+color7  = #282828
+# fg-active
+color15 = #191919
+
+# Red
+# red
+color1  = #a60000
+# red
+color9  = #a60000
+
+# Green
+# green
+color2  = #005e00
+color10 = #005e00
+
+# Yellow
+# yellow
+color3  = #813e00
+color11 = #813e00
+
+# Blue
+# blue
+color4  = #0030a6
+color12 = #0030a6
+
+# Purple
+# magenta
+color5  = #721045
+color13 = #721045
+
+# Teal
+# cyan
+color6  = #00538b
+color14 = #00538b
+
+# Extra colors
+# yellow-intense
+color16 = #904200
+# yellow-subtle-bg
+color17 = #e4c340
+# bg-dim
+color18 = #f8f8f8
+# bg-active
+color19 = #e0e0e0
+# fg-alt
+color20 = #505050
+# fg-active
+color21 = #191919

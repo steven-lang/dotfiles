@@ -29,7 +29,8 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "Hack" :size 20))
+;; (setq doom-font (font-spec :family "Hack" :size 19))
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 19))
 ;; (setq doom-font (font-spec :family "IBM Plex Mono" :size 20 :weight 'semi-light))
 ;; (setq doom-font (font-spec :family "DroidSansMono Nerd Font" :size 20))
 ;; (setq doom-variable-pitch-font (font-spec :family "DejaVu Serif" :size 25 :weight 'semi-light))
@@ -49,14 +50,19 @@
 ;; (setq doom-theme 'doom-nord)
 ;; (setq doom-theme 'doom-one)
 ;; (setq doom-theme 'doom-nord)
-(setq doom-theme 'doom-one)
+;; (setq slang/theme-light 'modus-operandi)
+;; (setq slang/theme-dark 'modus-vivendi)
+;; TODO: use doom-modus-operandi but also load modus-operandi first
+(setq slang/theme-light 'doom-gruvbox-light)
+(setq slang/theme-dark 'doom-one)
+(setq doom-theme slang/theme-dark)
 
 
 ;; If you want to change the style of line numbers, change this to `relative' or
 ;; `nil' to disable it:
 (setq display-line-numbers-type t)
 
-(setq org-directory "~/Dropbox/orgmode/")
+(setq org-directory "~/org/")
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -160,14 +166,15 @@
 ;;   (mu4e-alert-enable-notifications))
 
 ;; Set latex viewer
-(setq +latex-viewers '(evince))
+;; (setq +latex-viewers '(evince))
+(setq +latex-viewers '(pdf-tools))
 
 ;; Let evince not steal focus
 (setq TeX-view-evince-keep-focus t)
 
 
 ;; Set deft directory
-(setq deft-directory "~/Dropbox/orgmode/notes/")
+(setq deft-directory "~/org/notes/")
 
 ;; Org setup
 (after! org
@@ -188,7 +195,7 @@
 
 ;; For python
 (add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
-(add-hook 'julia-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+;; (add-hook 'julia-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 
 ;; Enable rainbow delimiters in prog mode
 (use-package! rainbow-delimiters
@@ -196,11 +203,11 @@
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 ;; Set julia lsp environment
-(use-package! lsp-julia
-  :config
-  (setq lsp-julia-default-environment "~/.julia/environments/v1.5")
-  (setq lsp-enable-folding t)
-  (setq lsp-folding-range-limit 100))
+;; (use-package! lsp-julia
+;;   :config
+;;   (setq lsp-julia-default-environment "~/.julia/environments/v1.5")
+;;   (setq lsp-enable-folding t)
+;;   (setq lsp-folding-range-limit 100))
 
 ;; this macro was copied from here: https://stackoverflow.com/a/22418983/4921402
 (defmacro define-and-bind-quoted-text-object (name key start-regex end-regex)
@@ -227,6 +234,7 @@
 
 ;; Set correct conda variables
 (use-package! conda
+  :after python
   :config
   (setq conda-env-home-directory (expand-file-name "~/.conda"))
   (custom-set-variables
@@ -241,14 +249,15 @@
 (add-hook 'ea-popup-hook 'popup-handler)
 
 ;; Hide files in treemacs that are listed in .gitignore
-(use-package! treemacs
-  :config
-  (treemacs-git-mode 'extended)
-  (with-eval-after-load 'treemacs
-    (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?)))
+;; (use-package! treemacs
+;;   :config
+;;   (treemacs-git-mode 'extended)
+;;   (with-eval-after-load 'treemacs
+;;     (add-to-list 'treemacs-pre-file-insert-predicates #'treemacs-is-file-git-ignored?)))
 
 ;; Python docstring tool
 (use-package! py-pyment
+  :after python
   :config
   (setq py-pyment-options '("--output=google")))
 
@@ -257,8 +266,6 @@
   :config
   (setq evil-ex-substitute-global t))
 
-(use-package! dap-mode
-  :after python)
 
 ;; Fix doom modeline icons (only issue on arch emacs binary)
 (custom-set-faces!
@@ -270,4 +277,38 @@
   '(doom-modeline-evil-emacs-state :inherit font-lock-builtin-face)
   '(doom-modeline-evil-insert-state :inherit font-lock-keyword-face)
   '(doom-modeline-info :inherit success)
+  )
+
+(defun slang/enable-pdf-view-midnight-minor-mode ()
+  (pdf-view-midnight-minor-mode))
+
+;; Theme based on daytime/long/lat
+;; (use-package! circadian
+;;   :config
+;;   (setq calendar-latitude 49.9)
+;;   (setq calendar-longitude 8.2)
+;;   (setq circadian-themes `((:sunrise . ,slang/theme-light)
+;;                            (:sunset  . ,slang/theme-dark)))
+;;   ;; Add pdf view mode hook to enable pdf midnight mode on theme change
+;;   (add-hook 'circadian-after-load-theme-hook
+;;             #'(lambda (theme)
+;;                 (if (eq theme slang/theme-dark )
+;;                     (add-hook 'pdf-view-mode-hook 'slang/enable-pdf-view-midnight-minor-mode)
+;;                   (remove-hook 'pdf-view-mode-hook 'slang/enable-pdf-view-midnight-minor-mode))
+;;                 ))
+
+;;   ;; Set a global variable to the active theme set by circadian el
+;;   (add-hook 'circadian-after-load-theme-hook
+;;             #'(lambda (theme)
+;;                 (setq slang/global-active-theme theme)))
+
+;;   (circadian-setup))
+
+
+;; pdf-tools midnight colors
+(use-package! pdf-tools
+  :defer
+  :config
+  ;; (setq pdf-view-midnight-colors '("#ffffff" . "#000000"))  ;; black-white
+  (setq pdf-view-midnight-colors '("#282c34" . "#bbc2cf"))  ;; doom-one
   )
