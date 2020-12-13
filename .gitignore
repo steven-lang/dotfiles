@@ -3,15 +3,5 @@ tags
 # Ignore auto-save files from emacs
 **/*~
 
-### Emacs specific
-# Ignore everything
-configs/emacs/.emacs.d-custom/*
-configs/emacs/.doom.d/*
-# Except for..
-!configs/emacs/.emacs.d-custom/*.el
-!configs/emacs/.emacs.d-custom/layers
-!configs/emacs/.doom.d/*.el
-
 # Ignore credentials file
-configs/emacs/.emacs.d-custom/layers/org/calendar-credentials.el
-configs/emacs/.doom.d/org-gcal-credentials.el
+configs/emacs/.doom.d/+modules/lang/org/org-gcal-credentials.el
