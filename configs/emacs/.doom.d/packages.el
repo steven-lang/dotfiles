@@ -56,6 +56,7 @@
 ;; (package! mu4e)
 ;; (package! mu4e-alert)
 ;; (package! edit-server)
+(package! s)
 (package! blacken)
 
 ;; If you want to replace it with yasnippet's default snippets
