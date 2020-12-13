@@ -238,8 +238,10 @@
   :after python
   :config
   (setq conda-env-home-directory (expand-file-name "~/.conda"))
-  (custom-set-variables
-   `(conda-anaconda-home ,(expand-file-name "~/.conda"))))
+  (setq conda-anaconda-home (expand-file-name "~/.conda"))
+  ;; (custom-set-variables
+  ;;  `(conda-anaconda-home ,(expand-file-name "~/.conda")))
+  )
 
 ;; EMACS ANYWHERE
 ;; Define a function or use a lambda of the same signature
@@ -313,3 +315,9 @@
 ;;   ;; (setq pdf-view-midnight-colors '("#ffffff" . "#000000"))  ;; black-white
 ;;   ;; (setq pdf-view-midnight-colors '("#bbc2cf" . "#282c34" ))  ;; doom-one
 ;;   )
+
+;; Enable which-func mode in python mode
+;; (add-hook! 'python-mode-hook #'which-func-mode)
+
+;; Enable lsp-header-breadcrumbs (similar to which-func mode but lsp wide)
+(add-hook! 'lsp-mode-hook #'lsp-headerline-breadcrumb-mode)
