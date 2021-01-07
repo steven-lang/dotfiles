@@ -84,8 +84,6 @@
 ;; Emacs config location
 (setq emacs-dir (file-name-as-directory "~/.doom.d"))
 
-;; Load custom functions
-(load! "functions.el")
 
 ;; Better scrolling
 (setq scroll-margin 3)
@@ -98,7 +96,10 @@
 (setq doom-modeline-major-mode-icon t)
 
 ;; Keybindings
-(load!  "keybindings.el")
+(load!  "+keybindings")
+
+;; Load custom functions
+(load! "+functions")
 
 ;; Langtool
 (setq langtool-java-classpath
@@ -132,36 +133,29 @@
   '(doom-modeline-evil-insert-state :inherit font-lock-keyword-face)
   '(doom-modeline-info :inherit success))
 
-;; Use for s-join function
-(use-package! s)
 
-(defun slang/load-module (module-name part)
-  "Load a module."
-  (let ((file (s-join "/" `(,emacs-dir "+modules" ,module-name ,(concat part ".el")))))
-    (if (file-exists-p! file)
-        (load-file file))))
+;; (use-package! s)
+;; ;; Load all private modules
+;; (defun slang/load-private-module (module)
+;;   "Load a specific private module in the config directory."
+;;   (load! (s-join "/" `(,emacs-dir "+modules" ,module "config"))))
 
-(defun slang/load-modules-part (modules part)
-  "Load a particular part of all modules."
-  (cl-loop for module in modules
-           do (progn
-                (slang/load-module module part))))
+;; ;; Set directioreis of org, org-roam and deft
+;; (setq deft-directory "~/org/notes/")
+;; (setq org-directory "~/org/")
+;; (setq org-roam-directory "~/org/notes")
+;; (setq slang/private-modules '("emacs-lisp"
+;;                              "evil"
+;;                              "julia"
+;;                              "latex"
+;;                              "lsp"
+;;                              "mu4e"
+;;                              "org"
+;;                              "pdf"
+;;                              "python"
+;;                              "ui"))
 
-(defun slang/load-modules (modules)
-  "Load a list of modules."
-  ;; Load all functions
-  (slang/load-modules-part modules "functions")
-  ;; Load the main config for this module
-  (slang/load-modules-part modules "config")
-  ;; Load all keybindings
-  (slang/load-modules-part modules "keybindings"))
+;; (dolist (module slang/private-modules)
+;;   (slang/load-private-module module))
 
-(slang/load-modules '("tools/lsp"
-                      "lang/org"
-                      "lang/lisp"
-                      "lang/python"
-                      "lang/latex"
-                      "lang/emacs-lisp"
-                      "editor/evil"
-                      "ui/theme"
-                      "email/mu4e"))
+(use-package! ssh-agency)

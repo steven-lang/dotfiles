@@ -39,7 +39,8 @@ floating_modifier $mod
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Return exec termite
-bindsym $mod+Shift+Return exec emacsclient -c 
+bindsym $mod+Shift+Return exec emacsclient -c
+bindsym $mod+Shift+c exec org-capture
 # bindsym $mod+Return exec kitty
 # bindsym $mod+Return exec i3-sensible-terminal
 
@@ -133,6 +134,12 @@ bindsym $mod+Shift+7 move container to workspace number 7 music
 bindsym $mod+Shift+8 move container to workspace number 8 gtd
 bindsym $mod+Shift+9 move container to workspace number 9 mail
 bindsym $mod+Shift+0 move container to workspace number 10 chat
+
+
+# Assign specific applications to specific workspaces
+for_window [class="Spotify"] move to workspace 7 music
+assign [class="Mattermost"] 10 chat
+assign [class="Telegram"] 10 chat
 
 # Set workspaces to specific monitors
 # workspace 1 output HDMI1
@@ -474,3 +481,8 @@ bindsym $mod+g exec i3-msg '[con_mark="'$(rofi -dmenu -lines 0 -p 'Goto')'"] foc
 
 # Show marks in window decorations
 show_marks yes
+
+
+# Startup
+exec --no-startup-id i3-msg 'mattermost'
+exec --no-startup-id i3-msg 'spotify'

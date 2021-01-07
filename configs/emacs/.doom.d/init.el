@@ -14,7 +14,19 @@
 ;;      Alternatively, press 'gd' (or 'C-c g d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
-(doom! :input
+(doom! :private             ; private module configurations
+       python
+       emacs-lisp
+       evil
+       ;; julia
+       latex
+       lsp
+       mu4e
+       org
+       pdf
+       (ui +circadian)
+
+       :input
        ;;chinese
        ;;japanese
 
@@ -73,10 +85,10 @@
        vc                ; version-control and Emacs, sitting in a tree
 
        :term
-       ;;eshell            ; a consistent, cross-platform shell (WIP)
+       ;; eshell            ; a consistent, cross-platform shell (WIP)
        ;; shell             ; a terminal REPL for Emacs
-       term              ; terminals in Emacs
-       ;;vterm             ; another terminals in Emacs
+       ;; term              ; terminals in Emacs
+       vterm             ; another terminals in Emacs
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
@@ -183,7 +195,9 @@
 
        :config
        ;;literate
-       (default +bindings +smartparens))
+       (default +bindings +smartparens)
+
+       )
 
 ;; Let j and k go over visual lines
 (setq evil-respect-visual-line-mode t)

@@ -53,55 +53,19 @@
 
 
 ;; Misc
-;; (package! mu4e)
-;; (package! mu4e-alert)
-;; (package! edit-server)
 (package! s)
-(package! blacken)
 
 ;; If you want to replace it with yasnippet's default snippets
 (package! yasnippet-snippets)
 (package! lorem-ipsum)
 (package! ssh-agency)
-(package! aggressive-indent)
-;; (package! mixed-pitch)
-;; (package! lsp-julia :recipe (:host github :repo "non-jedi/lsp-julia"))
 (package! cuda-mode)
 (package! dockerfile-mode)
 (package! yaml-mode)
-(package! rainbow-mode)
-;; (package! circadian)
-(package! py-pyment :recipe (:host github :repo "humitos/py-cmd-buffer.el"))
-(package! buftra :recipe (:host github :repo "humitos/buftra.el"))  ;; py-pyment dependency!
-
-;; (package! counsel-gtags)
-;; (package! global-tags)
-
-;; Themes
-(package! modus-operandi-theme)
-(package! modus-vivendi-theme)
 
 ;; Helm
 (package! helm)
 
-;; Disable packages
-(package! evil-snipe :disable t)
-
-;; Org stuff
-; (package! org-ref)
-(package! org-gcal)
-(package! org-super-agenda)
-(package! org-ql)
-(package! org-pomodoro)
-(package! org-fragtog)
-(package! org-noter)
-(package! org-superstar)
-
-(package! org-roam-bibtex)
-(package! org-ref)
-(package! ivy-bibtex)
-;; When using org-roam via the `+roam` flag
-;; (unpin! org-roam company-org-roam)
 
 ;; Collection of Ridiculously Useful eXtensions for Emacs
 (package! crux)
