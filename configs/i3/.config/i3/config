@@ -120,7 +120,7 @@ bindsym $mod+5 workspace number 5
 bindsym $mod+6 workspace number 6
 bindsym $mod+7 workspace number 7 music
 bindsym $mod+8 workspace number 8 gtd
-bindsym $mod+9 workspace number 9 mail
+bindsym $mod+9 workspace number 9 mail+cal
 bindsym $mod+0 workspace number 10 chat
 
 # move focused container to workspace
@@ -132,7 +132,7 @@ bindsym $mod+Shift+5 move container to workspace number 5
 bindsym $mod+Shift+6 move container to workspace number 6
 bindsym $mod+Shift+7 move container to workspace number 7 music
 bindsym $mod+Shift+8 move container to workspace number 8 gtd
-bindsym $mod+Shift+9 move container to workspace number 9 mail
+bindsym $mod+Shift+9 move container to workspace number 9 mail+cal
 bindsym $mod+Shift+0 move container to workspace number 10 chat
 
 
@@ -471,7 +471,6 @@ exec picom -b  # Picom for window compositions (shadows, transitions, etc)
 # Move to first workspace on startup
 exec i3-msg workspace 1 web
 
-
 # read 1 character and mark the current window with this character
 # bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
 bindsym $mod+m exec i3-msg 'mark '$(rofi -dmenu -lines 0 -p 'Mark')
@@ -486,3 +485,5 @@ show_marks yes
 # Startup
 exec --no-startup-id i3-msg 'mattermost'
 exec --no-startup-id i3-msg 'spotify'
+# Start gmail and calendar on workspace 9 in horizontal split
+exec --no-startup-id i3-msg 'workspace 9 mail+cal; split h; exec firefox --new-window mail.google.com; exec firefox --new-window calendar.google.com; exec sleep 1; workspace 1 web'
