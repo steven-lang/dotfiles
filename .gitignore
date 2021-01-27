@@ -5,3 +5,5 @@ tags
 
 # Ignore credentials file
 configs/emacs/.doom.d/+modules/lang/org/org-gcal-credentials.el
+
+.mypy_cache
