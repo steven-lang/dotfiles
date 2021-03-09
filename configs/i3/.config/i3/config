@@ -161,8 +161,7 @@ bindsym $mod+Ctrl+r restart
 bindsym $mod+Ctrl+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 bindsym $mod+Ctrl+1 exec "bash ~/.screenlayout/default.sh && sleep 1 && i3 'restart'"
-bindsym $mod+Ctrl+2 exec "bash ~/.screenlayout/wqhd-only.sh && sleep 1 && i3 'restart'"
-bindsym $mod+Ctrl+3 exec "bash ~/.screenlayout/office-tud.sh && sleep 1 && i3 'restart'"
+bindsym $mod+Ctrl+2 exec "bash ~/.screenlayout/home.sh && sleep 1 && i3 'restart'"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -271,19 +270,22 @@ exec --no-startup-id nm-applet --tray --sm-disable &
 exec --no-startup-id blueberry-tray &
 
 # Start pulseaudio controls with mod+p in floating mode
-bindsym $mod+p exec termite -e "ncpamixer" -t "NCPAMIXER" &
-for_window [title="NCPAMIXER"] floating enable
+bindsym $mod+p exec termite -e "bash -c '~/.local/bin/pulsemixer'" -t "PULSEMIXER" &
+for_window [title="PULSEMIXER"] floating enable
 
 # suspend/lock shortcuts
 bindsym $mod+$mod2+Ctrl+s exec --no-startup-id $Locker && systemctl suspend
 bindsym $mod+$mod2+Ctrl+l exec --no-startup-id $Locker
 
 # Emacs anywhere
-bindsym $mod+Shift+e exec ~/.emacs_anywhere/bin/run
-for_window [class="Emacs" title="\*Emacs Anywhere\*"] floating enable
+# bindsym $mod+Shift+e exec ~/.emacs_anywhere/bin/run
+# for_window [class="Emacs" title="\*Emacs Anywhere\*"] floating enable
+bindsym $mod+Shift+e exec doom everywhere
+for_window [class="Emacs" title="^Emacs Everywhere.*"] floating enable
+for_window [class="Emacs" title="^Emacs Everywhere.*"] resize set 800 600
 
 # Set default border size
-# default_border pixel 4
+# border pixel 10
 
 # i3-gaps setup
 # for_window [class="^.*"] border pixel 3
@@ -317,140 +319,14 @@ set $base0D_alt #669ecc
 set $base0E #c678dd
 set $base0F #be5046
 
-# Basic bar configuration using the Base16 variables.
-# bar {
-#     # status_command i3status
-#     position top
-
-#     colors {
-#         background $base00_darker_2
-#         separator  $base01
-#         statusline $base06
-
-#         # State             Border  BG      Text
-#         focused_workspace   $base05 $base0D_alt $base00
-#         active_workspace    $base05 $base03 $base00
-#         inactive_workspace  $base03 $base00_darker_1 $base05
-#         urgent_workspace    $base08 $base08 $base00
-#         binding_mode        $base00 $base0A $base00
-#     }
-# }
-
-# Basic color configuration using the Base16 variables for windows and borders.
-# Property Name         Border  BG      Text    Indicator Child Border
-# client.focused          $base05 $base0D_alt $base00_darker_1 $base0D_alt $base0D_alt
-# client.focused_inactive $base04 $base02 $base05 $base03 $base01
-# client.unfocused        $base01 $base00_darker_1 $base05 $base01 $base01
-# client.urgent           $base08 $base08 $base00_darker_1 $base08 $base08
-# client.placeholder      $base00_darker_1 $base00_darker_1 $base05 $base00_darker_1 $base00_darker_1
-# client.background       $base07
-
-## Base16 Nord
-# Author: arcticicestudio
-#
-# You can use these variables anywhere in the i3 configuration file.
-
-# set $base00 #2E3440
-# set $base000 #282d36
-# set $base01 #3B4252
-# set $base02 #434C5E
-# set $base03 #4C566A
-# set $baseb3 #6d7991
-# set $base04 #D8DEE9
-# set $base05 #E5E9F0
-# set $base06 #ECEFF4
-# set $base07 #8FBCBB
-# set $base08 #88C0D0
-# set $base09 #81A1C1
-# set $base0A #5E81AC
-# set $base0B #BF616A
-# set $base0C #D08770
-# set $base0D #EBCB8B
-# set $base0E #A3BE8C
-# set $base0F #B48EAD
-
-# # Basic bar configuration using the Base16 variables.
-# bar {
-#     status_command i3status
-#     font pango:DejaVu Sans Mono, Icons 12
-#     status_command i3status
-#     # tray_output primary
-#     position top 
-
-#     colors {
-#         background $base00
-#         separator  $base04
-#         statusline $base04
-
-#         # State             Border  BG      Text
-#         focused_workspace   $base05 $base09 $base00
-#         active_workspace    $base05 $base03 $base00
-#         inactive_workspace  $base03 $base01 $base05
-#         urgent_workspace    $base08 $base08 $base00
-#         binding_mode        $base00 $base0A $base00
-#     }
-# }
-
-# # Basic color configuration using the Base16 variables for windows and borders.
-# # Property Name         Border  BG      Text    Indicator Child Border
-# client.focused          $baseb3 $base09 $base00 $base09 $baseb3
-# client.focused_inactive $base01 $base01 $base05 $base03 $base01
-# client.unfocused        $base01 $base000 $base05 $base01 $base01
-# client.urgent           $base08 $base08 $base00 $base08 $base08
-# client.placeholder      $base00 $base00 $base05 $base00 $base00
-# client.background       $base07
-
-
-## Base16 Gruvbox light, medium
-# Author: Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
-#
-# You can use these variables anywhere in the i3 configuration file.
-
-# set $base00 #fbf1c7
-# set $base01 #ebdbb2
-# set $base02 #d5c4a1
-# set $base03 #bdae93
-# set $base04 #665c54
-# set $base05 #504945
-# set $base06 #3c3836
-# set $base07 #282828
-# set $base08 #9d0006
-# set $base09 #af3a03
-# set $base0A #b57614
-# set $base0B #79740e
-# set $base0C #427b58
-# set $base0D #076678
-# set $base0E #8f3f71
-# set $base0F #d65d0e
 
 # Basic bar configuration using the Base16 variables.
 bar {
     # status_command ~/dotfiles/configs/i3status/.config/i3status/i3status_custom.sh
     status_command i3status
     position top
-
-    colors {
-        # background $base00
-        # separator  $base01
-        # statusline $base04
-
-        # State             Border  BG      Text
-        # focused_workspace   $base05 $base0D $base00
-        # active_workspace    $base05 $base03 $base00
-        # inactive_workspace  $base03 $base01 $base05
-        # urgent_workspace    $base08 $base08 $base00
-        # binding_mode        $base00 $base0A $base00
-    }
 }
 
-# Basic color configuration using the Base16 variables for windows and borders.
-# Property Name         Border  BG      Text    Indicator Child Border
-# client.focused          $base05 $base0D $base00 $base0D $base0C
-# client.focused_inactive $base01 $base01 $base05 $base03 $base01
-# client.unfocused        $base01 $base00 $base05 $base01 $base01
-# client.urgent           $base08 $base08 $base00 $base08 $base08
-# client.placeholder      $base00 $base00 $base05 $base00 $base00
-# client.background       $base07
 
 
 # Start i3bar to display a workspace bar (plus the system information i3status
@@ -471,15 +347,6 @@ exec picom -b  # Picom for window compositions (shadows, transitions, etc)
 # Move to first workspace on startup
 exec i3-msg workspace 1 web
 
-# read 1 character and mark the current window with this character
-# bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
-bindsym $mod+m exec i3-msg 'mark '$(rofi -dmenu -lines 0 -p 'Mark')
-
-# read 1 character and go to the window with the character
-bindsym $mod+g exec i3-msg '[con_mark="'$(rofi -dmenu -lines 0 -p 'Goto')'"] focus'
-
-# Show marks in window decorations
-show_marks yes
 
 
 # Startup

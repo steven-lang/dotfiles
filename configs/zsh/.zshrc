@@ -162,11 +162,11 @@ alias np='nano -w PKGBUILD'
 alias more=less
 
 # Emacs client
-function emacsclient() {
-    /usr/bin/emacsclient -c -a '' "$@" &
-    disown
-}
-alias ec="/usr/bin/emacsclient -c -a '' "$@""
+# function emacsclient() {
+#     /usr/bin/emacsclient -c -a '' "$@" &
+#     disown
+# }
+# alias ec="/usr/bin/emacsclient -c -a '' "$@""
 # alias ec="emacsclient -n"
 alias emacsclient-restart="systemctl --user restart emacs"
 
@@ -178,10 +178,10 @@ else
 fi
 
 # Fedora dnf aliases
-# alias dnfi='sudo dnf install'
-# alias dnfs='dnf search'
-# alias dnfr='sudo dnf remove'
-# alias dnfu='sudo dnf update && flatpak update'
+alias dnfi='sudo dnf install'
+alias dnfs='dnf search'
+alias dnfr='sudo dnf remove'
+alias dnfu='sudo dnf update && flatpak update'
 
 alias grep='grep --color=auto'
 alias pacs='sudo pacman -S'

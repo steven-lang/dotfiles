@@ -118,8 +118,8 @@ Plug 'junegunn/fzf.vim'
 " Sensible vim config
 Plug 'tpope/vim-sensible'
 
-" CTag automation
-Plug 'ludovicchabant/vim-gutentags'
+" " CTag automation
+" Plug 'ludovicchabant/vim-gutentags'
 
 " Advanced syntax highlighting
 Plug 'sheerun/vim-polyglot'

@@ -4,8 +4,8 @@
   (load! "+keybindings")
 
   ;; Set latex viewer
-  ;; (setq +latex-viewers '(evince))
-  (setq +latex-viewers '(pdf-tools))
+  ;; (setq +latex-viewers '(zathura))
+  (setq +latex-viewers '(pdf-tools))  ;; Results in wrong-type-argument bufferp, nil error for now
 
   ;; Let evince not steal focus
   (setq TeX-view-evince-keep-focus t)
@@ -17,7 +17,5 @@
   (add-hook 'TeX-mode-hook #'auto-fill-mode)
 
   ;; Also fontify commonly custom commands defined by \newcomand
-  ;; (push '("\citeauthorandref" "[{") font-latex-match-reference-keywords)
-  ;; (setq font-latex-match-reference-keywords
-  ;;       '(("\citeauthorandref" "[{")))
-)
+  (add-hook 'TeX-mode-hook #'(lambda () (push '("citeauthorandref" "[{") font-latex-match-reference-keywords)))
+  )

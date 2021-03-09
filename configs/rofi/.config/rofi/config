@@ -1,6 +1,6 @@
 rofi.combi-modi:    drun,run,ssh
 ! rofi.theme:         base16-default-dark
-rofi.font:          IBMPlex Mono 20
+rofi.font:          IBMPlex Mono 16
 rofi.modi:          combi
 rofi.show:          combi
 rofi.show-icons:    true

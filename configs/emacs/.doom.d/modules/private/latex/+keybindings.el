@@ -1,19 +1,24 @@
 ;;; ../dotfiles/configs/emacs/.doom.d/+modules/lang/latex/keybindings.el -*- lexical-binding: t; -*-
 
 (map! :map TeX-mode-map
-      "C-c C-c"         #'slang/save-tex-file-and-build)
-      ;; "C-c C-m"         #'helm-insert-latex-math)
+      :localleader
 
-(map! :localleader
-      :map TeX-mode-map
+      :desc "View" "v"     #'TeX-view
+      :desc "Table of Contents" "t"     #'reftex-toc
+      :desc "Format Section" ","     #'LaTeX-fill-section
 
-      "v"     #'TeX-view
-      "b"     #'slang/save-tex-file-and-build
-      "t"     #'reftex-toc
-      "="     #'LaTeX-fill-section
+      (:prefix ("c" . "compile")
+      :desc "Project" "p"     #'slang/save-tex-file-and-compile
+      :desc "Buffer" "b"     #'slang/tex-compile-buffer
+      :desc "Region" "r"     #'slang/tex-compile-region
+      :desc "Section" "s"     #'slang/tex-compile-section
+      :desc "Environment" "e"     #'slang/tex-compile-environment
+      )
+
 
       (:prefix ("f" . "format")
-       "e"  #'LaTeX-fill-environment
-       "p"  #'LaTeX-fill-paragraph
-       "r"  #'LaTeX-fill-region
-       "s"  #'LaTeX-fill-section))
+       :desc "Environment" "e"  #'LaTeX-fill-environment
+       :desc "Paragraph" "p"  #'LaTeX-fill-paragraph
+       :desc "Region" "r"  #'LaTeX-fill-region
+       :desc "Section" "s"  #'LaTeX-fill-section)
+      )

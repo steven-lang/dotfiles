@@ -82,7 +82,7 @@
       :localleader
       ;; "v" #'slang/pyvenv-activate
       "v" #'slang/conda-env-activate
-      "="  #'blacken-buffer
+      ","  #'+format/buffer
       "s"  #'lsp-ivy-workspace-symbol
       ;; "s"  #'helm-lsp-workspace-symbol
 

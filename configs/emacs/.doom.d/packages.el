@@ -63,9 +63,17 @@
 (package! dockerfile-mode)
 (package! yaml-mode)
 
+;; Julia LSP
+(package! lsp-julia :recipe (:host github :repo "non-jedi/lsp-julia"))
+
 ;; Helm
 (package! helm)
 
 
 ;; Collection of Ridiculously Useful eXtensions for Emacs
 (package! crux)
+
+;; Thesaurus
+(package! powerthesaurus)
+
+(package! modus-themes)

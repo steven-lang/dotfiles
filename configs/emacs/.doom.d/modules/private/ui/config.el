@@ -8,8 +8,8 @@
 ;; (setq slang/theme-light 'modus-operandi)
 ;; (setq slang/theme-dark 'modus-vivendi)
 (setq slang/theme-light 'modus-operandi)
-(setq slang/theme-dark 'doom-one)
-(setq doom-theme slang/theme-dark)
+(setq slang/theme-dark 'modus-vivendi)
+(setq doom-theme slang/theme-light)
 
 ;; Theme based on daytime/long/lat
 (when (featurep! +circadian)
@@ -32,5 +32,7 @@
               #'(lambda (theme)
                   (setq slang/global-active-theme theme)))
 
-    (circadian-setup))
-  )
+
+    (after! modus-themes
+      (modus-themes-load-themes)
+      (circadian-setup))))

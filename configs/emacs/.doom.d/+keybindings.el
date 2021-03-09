@@ -93,4 +93,5 @@
 ;; Shortcut to find dotfiles
 (map! :leader
       "fD"  nil
-      "fD"  #'(lambda () (interactive) (doom-project-find-file "~/dotfiles")))
+      :desc "Dotfiles"  "fD"  #'(lambda () (interactive) (doom-project-find-file "~/dotfiles"))
+      :desc "PhD Org." "np" #'(lambda () (interactive) (doom-project-find-file "~/org/notes/phd")))

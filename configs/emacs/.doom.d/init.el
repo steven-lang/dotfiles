@@ -18,10 +18,10 @@
        python
        emacs-lisp
        evil
-       ;; julia
+       julia
        latex
        lsp
-       mu4e
+       ; mu4e
        org
        pdf
        (ui +circadian)
@@ -45,7 +45,8 @@
        ;; fill-column       ; a `fill-column' indicator
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        hydra
-                                        ; indent-guides     ; highlighted indent columns
+
+       ;; indent-guides     ; highlighted indent columns
        modeline          ; snazzy, Atom-inspired modeline, plus API
        nav-flash         ; blink the current line after jumping
        ;;neotree           ; a project drawer, like NERDTree for vim
@@ -61,7 +62,7 @@
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        ;; (window-select +numbers)     ; visually switch windows
        workspaces        ; tab emulation, persistence & separate workspaces
-       ;; zen               ; distraction-free coding or writing
+       zen               ; distraction-free coding or writing
 
        :editor
        (evil +everywhere); come to the dark side, we have cookies
@@ -70,7 +71,7 @@
        format  ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
        ;;lispy             ; vim for lisp, for people who don't like vim
-       multiple-cursors  ; editing in many places at once
+       ;; multiple-cursors  ; editing in many places at once
        ;; objed             ; text object editing for the innocent
        ;;parinfer          ; turn lisp into python, sort of
        ;; rotate-text       ; cycle region at point between text candidates
@@ -87,11 +88,11 @@
        :term
        ;; eshell            ; a consistent, cross-platform shell (WIP)
        ;; shell             ; a terminal REPL for Emacs
-       ;; term              ; terminals in Emacs
-       vterm             ; another terminals in Emacs
+       term              ; terminals in Emacs
+       ;; vterm             ; another terminals in Emacs
 
        :checkers
-       syntax              ; tasing you for every semicolon you forget
+       (syntax +childframe)              ; tasing you for every semicolon you forget
        (spell +flyspell +aspell)             ; tasing you for misspelling mispelling
        grammar           ; tasing grammar mistake every you make
 
@@ -101,7 +102,7 @@
        direnv
        ;;docker
        ;;editorconfig      ; let someone else argue about tabs vs spaces
-       ein               ; tame Jupyter notebooks with emacs
+       ; ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
        (lookup           ; helps you navigate your code and documentation
@@ -141,7 +142,7 @@
        ;;idris             ;
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
        ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
-       ;; (julia +lsp)             ; a better, faster MATLAB
+       (julia +lsp)             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
        (latex +latexmk +cdlatex +lsp)             ; writing papers in Emacs has never been so fun
        ;;lean
@@ -180,7 +181,7 @@
        ;;web               ; the tubes
 
        :email
-       (mu4e +gmail)
+       ; (mu4e +gmail)
        ;;notmuch
        ;;(wanderlust +gmail)
 
@@ -189,6 +190,7 @@
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
+       everywhere
 
        :os
        ;; tty

@@ -3,21 +3,21 @@
 # Author: Steven Lang
 
 # fg-main
-foreground          = #282828
+foreground          = #000000
 # fg-alt
-foreground_bold     = #282828
+foreground_bold     = #505050
 # fg-main
-cursor              = #282828
+cursor              = #000000
 # bg-main
-cursor_foreground   = #f0f0f0
+cursor_foreground   = #ffffff
 # bg-main
-background          = #f0f0f0
+background          = #ffffff
 
 # 16 color space
 
 # Black, Gray, Silver, White
 # bg-main
-color0  = #f0f0f0
+color0  = #ffffff
 # fg-inactive
 color8  = #424242
 # fg-dim
@@ -27,34 +27,34 @@ color15 = #191919
 
 # Red
 # red
-color1  = #7f1010
+color1  = #a60000
 # red
-color9  = #7f1010
+color9  = #a60000
 
 # Green
 # green
-color2  = #104410
-color10 = #104410
+color2  = #005e00
+color10 = #005e00
 
 # Yellow
 # yellow
-color3  = #5f4400
-color11 = #5f4400
+color3  = #813e00
+color11 = #813e00
 
 # Blue
 # blue
-color4  = #002f88
-color12 = #002f88
+color4  = #0030a6
+color12 = #0030a6
 
 # Purple
 # magenta
-color5  = #752f50
-color13 = #752f50
+color5  = #721045
+color13 = #721045
 
 # Teal
 # cyan
-color6  = #12506f
-color14 = #12506f
+color6  = #00538b
+color14 = #00538b
 
 # Extra colors
 # yellow-intense
