@@ -69,7 +69,6 @@
 ;; Helm
 (package! helm)
 
-
 ;; Collection of Ridiculously Useful eXtensions for Emacs
 (package! crux)
 
@@ -77,3 +76,7 @@
 (package! powerthesaurus)
 
 (package! modus-themes)
+
+;; Load private module packages
+(dolist (file (directory-files "~/.doom.d/private/" t directory-files-no-dot-files-regexp))
+        (load! (concat file "/packages.el")))

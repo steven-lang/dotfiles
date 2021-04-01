@@ -73,15 +73,13 @@
   (hl-line-mode (if rainbow-mode -1 +1)))
 
 ;; Enable word wrap mode
-(+global-word-wrap-mode)
+;; (+global-word-wrap-mode)
 
 ;; Company config
 (setq
  company-minimum-prefix-length 2
- company-idle-delay 0.5
+ company-idle-delay 0.2
  company-tooltip-idle-delay 1.0)
-
-(setq-mode-local prog-mode company-idle-delay 0.1)
 
 ;; Emacs config location
 (setq emacs-dir (file-name-as-directory "~/.doom.d"))
@@ -179,3 +177,23 @@
 ;;         modus-themes-completions 'moderate
 ;;         modus-themes-subtle-line-numbers t
 ;;         modus-themes-paren-match 'subtle-bold))
+
+(use-package! modus-themes
+  :ensure
+  :init
+  ;; Add all your customizations prior to loading the themes
+  (setq modus-themes-slanted-constructs t
+        modus-themes-syntax 'faint
+        modus-themes-bold-constructs nil)
+
+  ;; Load the theme files before enabling a theme
+  (modus-themes-load-themes)
+  :config
+  (modus-themes-load-operandi)
+  ;; Load the theme of your choice:
+  :bind ("<f5>" . modus-themes-toggle))
+
+
+;; Load private modules
+(dolist (file (directory-files "~/.doom.d/private/" t directory-files-no-dot-files-regexp))
+        (load! (concat file "/config.el")))

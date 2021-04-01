@@ -14,19 +14,7 @@
 ;;      Alternatively, press 'gd' (or 'C-c g d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
-(doom! :private             ; private module configurations
-       python
-       emacs-lisp
-       evil
-       julia
-       latex
-       lsp
-       ; mu4e
-       org
-       pdf
-       (ui +circadian)
-
-       :input
+(doom! :input
        ;;chinese
        ;;japanese
 
@@ -181,7 +169,7 @@
        ;;web               ; the tubes
 
        :email
-       ; (mu4e +gmail)
+       (mu4e +gmail)
        ;;notmuch
        ;;(wanderlust +gmail)
 

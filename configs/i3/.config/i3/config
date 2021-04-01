@@ -281,8 +281,9 @@ bindsym $mod+$mod2+Ctrl+l exec --no-startup-id $Locker
 # bindsym $mod+Shift+e exec ~/.emacs_anywhere/bin/run
 # for_window [class="Emacs" title="\*Emacs Anywhere\*"] floating enable
 bindsym $mod+Shift+e exec doom everywhere
-for_window [class="Emacs" title="^Emacs Everywhere.*"] floating enable
-for_window [class="Emacs" title="^Emacs Everywhere.*"] resize set 800 600
+# for_window [class="Emacs" title="^Emacs Everywhere.*"] floating enable
+# for_window [class="Emacs" title="^Emacs Everywhere.*"] resize set 1200 800
+# for_window [class="Emacs" title="^Emacs Everywhere.*"] move position center
 
 # Set default border size
 # border pixel 10

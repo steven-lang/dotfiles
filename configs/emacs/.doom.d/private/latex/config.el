@@ -18,4 +18,6 @@
 
   ;; Also fontify commonly custom commands defined by \newcomand
   (add-hook 'TeX-mode-hook #'(lambda () (push '("citeauthorandref" "[{") font-latex-match-reference-keywords)))
+
+  (setq-default TeX-master "main")
   )

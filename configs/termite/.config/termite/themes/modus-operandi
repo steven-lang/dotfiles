@@ -4,6 +4,7 @@
 
 # fg-main
 foreground          = #282828
+
 # fg-alt
 foreground_bold     = #282828
 # fg-main

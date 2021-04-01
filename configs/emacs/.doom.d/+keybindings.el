@@ -37,6 +37,9 @@
 (map! :leader
       "v"   #'er/expand-region)
 
+;; More sophisticated "paste"
+(map! "M-p" #'helm-show-kill-ring)
+
 ;; Utils
 (map! :leader
       "u" nil ;; unbind first
