@@ -266,19 +266,21 @@ function pacu() {
   yay -Syua --noconfirm
 }
 
-# Open pdfs in background by default
+# # Open pdfs in background by default
+compdef pdf=okular
 function pdf() {
-  evince "$@" &
+  okular "$@" &
   disown
   # zathura --fork "$@" &
   # emacsclient -c -a '' "$@" &
 }
 
-# Open images in background by default
-function img() {
-  eog "$@" &
-  disown
-}
+
+# # Open images in background by default
+# function img() {
+#   eog "$@" &
+#   disown
+# }
 
 # Check for virtual environments when cd'ing into directories
 function cd() {
