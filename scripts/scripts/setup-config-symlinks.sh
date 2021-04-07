@@ -35,18 +35,18 @@ function link {
 dotfiles_dir="$HOME/dotfiles"
 
 # Setup links 
-link "zsh" $dotfiles_dir/config/zsh/.zshrc $HOME/.zshrc
-link "i3" $dotfiles_dir/config/i3 $HOME/.config/i3
-link "i3status" $dotfiles_dir/config/i3status $HOME/.config/i3status
-link "vim" $dotfiles_dir/config/vim/.vimrc $HOME/.vimrc
-link "polybar" $dotfiles_dir/config/polybar $HOME/.config/polybar
-link "flake8" $dotfiles_dir/config/flake/flake8 $HOME/.flake8
-link "rofi" $dotfiles_dir/config/rofi $HOME/.config/rofi
-link "compton" $dotfiles_dir/config/compton.conf $HOME/.config/compton.conf
-link "pylint" $dotfiles_dir/config/pylint/.pylintrc $HOME/.pylintrc
-link "bash" $dotfiles_dir/config/bash/.bashrc $HOME/.bashrc
-link "emacs" $dotfiles_dir/config/emacs/.spacemacs $HOME/.spacemacs
-link "dircolors-gruvbox" $dotfiles_dir/config/dircolors-gruvbox.db $HOME/.config/dircolors-gruvbox.db
-link "termite" $dotfiles_dir/config/termite/config $HOME/.config/termite/config
-link "tmux" $dotfiles_dir/config/tmux.conf $HOME/.tmux.conf
-link "zathura" $dotfiles_dir/config/zathura/zathurarc $HOME/.config/zathura/zathurarc
+link "zsh" $dotfiles_dir/configs/zsh/.zshrc $HOME/.zshrc
+link "i3" $dotfiles_dir/configs/i3 $HOME/.config/i3
+link "i3status" $dotfiles_dir/configs/i3status $HOME/.config/i3status
+link "vim" $dotfiles_dir/configs/vim/.vimrc $HOME/.vimrc
+link "polybar" $dotfiles_dir/configs/polybar $HOME/.config/polybar
+link "flake8" $dotfiles_dir/configs/flake/flake8 $HOME/.flake8
+link "rofi" $dotfiles_dir/configs/rofi $HOME/.config/rofi
+link "compton" $dotfiles_dir/configs/compton.conf $HOME/.config/compton.conf
+link "pylint" $dotfiles_dir/configs/pylint/.pylintrc $HOME/.pylintrc
+link "bash" $dotfiles_dir/configs/bash/.bashrc $HOME/.bashrc
+link "emacs" $dotfiles_dir/configs/emacs/.spacemacs $HOME/.spacemacs
+link "dircolors-gruvbox" $dotfiles_dir/configs/dircolors-gruvbox.db $HOME/.config/dircolors-gruvbox.db
+link "termite" $dotfiles_dir/configs/termite/config $HOME/.config/termite/config
+link "tmux" $dotfiles_dir/configs/tmux.conf $HOME/.tmux.conf
+link "zathura" $dotfiles_dir/configs/zathura/zathurarc $HOME/.config/zathura/zathurarc
