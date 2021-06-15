@@ -59,7 +59,7 @@
 
       :leader (:prefix "b" "b" nil)
       :leader (:prefix "b" :desc "Workspace Buffers" "b" #'+ivy/switch-workspace-buffer)
-      :leader (:prefix "b" :desc "All Buffers" "B" #'+ivy/switch-buffer))
+      :leader (:prefix "b" :desc "All Buffers" "a" #'+ivy/switch-buffer))
 
 
 ;; Windows

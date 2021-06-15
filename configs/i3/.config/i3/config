@@ -16,7 +16,7 @@ set $mod2 Mod1
 # is used in the bar {} block below.
 
 # font pango:monospace 12
-font pango:IBM Plex Mono 12
+font pango:IBM Plex Mono 13
 # font pango:DejaVu Sans Mono 12
 # font pango:Hack 12
 #font pango: Source Code Pro Semibold, FontAwesome Regular 11 
@@ -137,9 +137,10 @@ bindsym $mod+Shift+0 move container to workspace number 10 chat
 
 
 # Assign specific applications to specific workspaces
-for_window [class="Spotify"] move to workspace 7 music
+# for_window [class="Spotify"] move to workspace 7 music
 assign [class="Mattermost"] 10 chat
 assign [class="Telegram"] 10 chat
+assign [class="Signal"] 10 chat
 
 # Set workspaces to specific monitors
 # workspace 1 output HDMI1
@@ -281,9 +282,9 @@ bindsym $mod+$mod2+Ctrl+l exec --no-startup-id $Locker
 # bindsym $mod+Shift+e exec ~/.emacs_anywhere/bin/run
 # for_window [class="Emacs" title="\*Emacs Anywhere\*"] floating enable
 bindsym $mod+Shift+e exec doom everywhere
-# for_window [class="Emacs" title="^Emacs Everywhere.*"] floating enable
-# for_window [class="Emacs" title="^Emacs Everywhere.*"] resize set 1200 800
-# for_window [class="Emacs" title="^Emacs Everywhere.*"] move position center
+for_window [class="Emacs" title="^Emacs Everywhere.*"] floating enable
+for_window [class="Emacs" title="^Emacs Everywhere.*"] resize set 600 480
+for_window [class="Emacs" title="^Emacs Everywhere.*"] move absolute position center
 
 # Set default border size
 # border pixel 10
@@ -319,6 +320,8 @@ set $base0D #61afef
 set $base0D_alt #669ecc
 set $base0E #c678dd
 set $base0F #be5046
+
+
 
 
 # Basic bar configuration using the Base16 variables.

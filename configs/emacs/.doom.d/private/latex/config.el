@@ -5,7 +5,14 @@
 
   ;; Set latex viewer
   ;; (setq +latex-viewers '(zathura))
-  (setq +latex-viewers '(pdf-tools))  ;; Results in wrong-type-argument bufferp, nil error for now
+  ;; (setq +latex-viewers '(pdf-tools))  ;; Results in wrong-type-argument bufferp, nil error for now
+  (setq +latex-viewers '(evince))
+
+ ;; to use pdfview with auctex
+ ;; (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+ ;;    TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
+ ;;    ;; TeX-source-correlate-start-server t
+ ;;    ) ;; not sure if last line is neccessary
 
   ;; Let evince not steal focus
   (setq TeX-view-evince-keep-focus t)

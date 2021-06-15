@@ -11,4 +11,5 @@
 
   ;; Set file-watcher higher
   (setq lsp-file-watch-threshold 2000)
+  (setq lsp-enable-folding t)
   )

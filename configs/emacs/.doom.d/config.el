@@ -31,7 +31,7 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "Hack" :size 19))
 (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 19))
-;; (setq doom-font (font-spec :family "IBM Plex Mono" :size 20 :weight 'semi-light))
+;; (setq doom-font (font-spec :family "IBM Plex Mono" :size 19 :weight 'semi-light))
 ;; (setq doom-font (font-spec :family "DroidSansMono Nerd Font" :size 20))
 ;; (setq doom-variable-pitch-font (font-spec :family "DejaVu Serif" :size 25 :weight 'semi-light))
 ;; (setq doom-variable-pitch-font (font-spec :family "Source Sans Pro" :size 28 :weight 'semi-light))
@@ -73,11 +73,11 @@
   (hl-line-mode (if rainbow-mode -1 +1)))
 
 ;; Enable word wrap mode
-;; (+global-word-wrap-mode)
+(+global-word-wrap-mode)
 
 ;; Company config
 (setq
- company-minimum-prefix-length 2
+ company-minimum-prefix-length 3
  company-idle-delay 0.2
  company-tooltip-idle-delay 1.0)
 
@@ -163,20 +163,12 @@
   (push "GitHub" emacs-everywhere-markdown-windows))
 
 (after! magit
-  ;; Enable magit log margin
-  (setq magit-log-margin '(t age magit-log-margin-width t 18)))
+  ;; Set magit log margin
+  (setq magit-log-margin '(t age magit-log-margin-width t 18))
 
+  ;; Set magit status margin
+  (setq magit-status-margin '(t age magit-log-margin-width t 18)))
 
-;; (use-package! modus-themes
-;;   :ensure
-;;   :init
-;;   (setq modus-themes-bold-constructs nil
-;;         modus-themes-slanted-constructs t
-;;         modus-themes-syntax 'faint
-;;         modus-themes-mode-line '3d
-;;         modus-themes-completions 'moderate
-;;         modus-themes-subtle-line-numbers t
-;;         modus-themes-paren-match 'subtle-bold))
 
 (use-package! modus-themes
   :ensure

@@ -15,7 +15,7 @@ if [[ ! -f $HOME/antigen.zsh ]]; then
 fi
 
 # Download and install fzf
-if [[ ! -$HOME/fzf.zsh ]]; then
+if [[ ! -d $HOME/.fzf ]]; then
   git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
   ~/.fzf/install
 fi
@@ -208,6 +208,7 @@ alias gnome-screenshot='gnome-screenshot -a'
 alias envactivate='source ./env/bin/activate'
 alias rsync='rsync --archive --compress-level=3 --copy-links --partial --inplace --progress --rsh=ssh -r'
 alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
+alias sync-thesis="~/master-thesis/sync.sh"
 
 # Update all pip packages
 alias pipupdate="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
@@ -275,6 +276,10 @@ function pdf() {
   # emacsclient -c -a '' "$@" &
 }
 
+function ssh-gpustat() {
+  ssh -t $1 "gpustat -cp --interval 5"
+}
+
 
 # # Open images in background by default
 # function img() {
@@ -283,29 +288,29 @@ function pdf() {
 # }
 
 # Check for virtual environments when cd'ing into directories
-function cd() {
-  builtin cd "$@"
+# function cd() {
+#   builtin cd "$@"
 
-  if [[ -z "$VIRTUAL_ENV" ]] ; then
-    ## If env folder is found then activate the vitualenv
-      if [[ -d ./env ]] ; then
-# source ./env/bin/activate  # commented out by conda initialize
-        echo -e "Python virtual environment activated!"
-      fi
-      if [[ -d ./venv ]] ; then
-# source ./venv/bin/activate  # commented out by conda initialize
-        echo -e "Python virtual environment activated!"
-      fi
-  else
-    ## check the current folder belong to earlier VIRTUAL_ENV folder
-    # if yes then do nothing
-    # else deactivate
-      parentdir="$(dirname "$VIRTUAL_ENV")"
-      if [[ "$PWD"/ != "$parentdir"/* ]] ; then
-        deactivate
-      fi
-  fi
-}
+#   if [[ -z "$VIRTUAL_ENV" ]] ; then
+#     ## If env folder is found then activate the vitualenv
+#       if [[ -d ./env ]] ; then
+# # source ./env/bin/activate  # commented out by conda initialize
+#         echo -e "Python virtual environment activated!"
+#       fi
+#       if [[ -d ./venv ]] ; then
+# # source ./venv/bin/activate  # commented out by conda initialize
+#         echo -e "Python virtual environment activated!"
+#       fi
+#   else
+#     ## check the current folder belong to earlier VIRTUAL_ENV folder
+#     # if yes then do nothing
+#     # else deactivate
+#       parentdir="$(dirname "$VIRTUAL_ENV")"
+#       if [[ "$PWD"/ != "$parentdir"/* ]] ; then
+#         deactivate
+#       fi
+#   fi
+# }
 
 
 # Check if direnv is installed
@@ -324,22 +329,6 @@ fi
 
 
 
-function dark_mode {
-  echo "dark" > ~/.theme-mode
-  cp ~/.config/kitty/themes/nord.conf ~/.config/kitty/theme.conf
-}
-function light_mode {
-  echo "light" > ~/.theme-mode
-  cp ~/.config/kitty/themes/gruvbox-light-medium.conf ~/.config/kitty/theme.conf
-}
-
-# Run kitty theme command depending on day/night mode
-# if grep "dark" ~/.theme-mode
-# then
-#   kitty @ set-colors -a -c "$HOME/.config/kitty/themes/nord.conf"
-# else
-#   kitty @ set-colors -a -c "$HOME/.config/kitty/themes/gruvbox-light-medium.conf"
-# fi
 
 
 # Enable direnv
@@ -366,4 +355,3 @@ bindkey "^X^E" edit-command-line
 
 # test -r "~/.dir_colors" && eval $(dircolors ~/.dir_colors)
 [ -f ~/.conda/etc/profile.d/conda.sh ] && source ~/.conda/etc/profile.d/conda.sh
-
