@@ -42,9 +42,9 @@
 
 ;; Utils
 (map! :leader
-      "u" nil ;; unbind first
+      "U" nil ;; unbind first
 
-      (:prefix ("u" . "utils")
+      (:prefix ("U" . "utils")
        :desc "Search Google" "g" #'counsel-search ;; needs 'surfraw' binary
        ;; :desc "Search Google" "g" #'helm-google-suggest ;; needs 'surfraw' binary
        :desc "top" "t" #'helm-top

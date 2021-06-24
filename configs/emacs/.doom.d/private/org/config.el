@@ -5,6 +5,7 @@
 (setq org-directory "~/org/")
 (setq org-roam-directory "~/org/notes")
 
+
 ;; Org setup
 (after! org
   (load! "+functions")
