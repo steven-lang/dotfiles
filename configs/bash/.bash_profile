@@ -6,3 +6,4 @@
 
 # Use gtk3 for telegram file UI
 export QT_QPA_PLATFORMTHEME=gtk3
+

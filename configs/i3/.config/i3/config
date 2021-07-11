@@ -38,7 +38,7 @@ floating_modifier $mod
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec termite
+bindsym $mod+Return exec alacritty
 bindsym $mod+Shift+Return exec emacsclient -c
 bindsym $mod+Shift+c exec org-capture
 # bindsym $mod+Return exec kitty
@@ -118,7 +118,7 @@ bindsym $mod+3 workspace number 3 sub
 bindsym $mod+4 workspace number 4
 bindsym $mod+5 workspace number 5
 bindsym $mod+6 workspace number 6
-bindsym $mod+7 workspace number 7 music
+bindsym $mod+7 workspace number 7
 bindsym $mod+8 workspace number 8 gtd
 bindsym $mod+9 workspace number 9 mail+cal
 bindsym $mod+0 workspace number 10 chat
@@ -130,7 +130,7 @@ bindsym $mod+Shift+3 move container to workspace number 3 sub
 bindsym $mod+Shift+4 move container to workspace number 4
 bindsym $mod+Shift+5 move container to workspace number 5
 bindsym $mod+Shift+6 move container to workspace number 6
-bindsym $mod+Shift+7 move container to workspace number 7 music
+bindsym $mod+Shift+7 move container to workspace number 7
 bindsym $mod+Shift+8 move container to workspace number 8 gtd
 bindsym $mod+Shift+9 move container to workspace number 9 mail+cal
 bindsym $mod+Shift+0 move container to workspace number 10 chat
@@ -142,17 +142,19 @@ assign [class="Mattermost"] 10 chat
 assign [class="Telegram"] 10 chat
 assign [class="Signal"] 10 chat
 
+set $secondmon DP-0
+
 # Set workspaces to specific monitors
-# workspace 1 output HDMI1
-# workspace 2 output HDMI1
-# workspace 3 output HDMI1
-# workspace 4 output HDMI1
-# workspace 5 output HDMI1
-# workspace 6 output HDMI1
-# workspace 7 output HDMI1
-# workspace 8 output eDP1 # Run monitoring stuff here
-# workspace 9 output HDMI1
-# workspace 10 output HDMI1
+workspace 1 output HDMI-0
+workspace 2 output HDMI-0
+workspace 3 output HDMI-0
+workspace 4 output HDMI-0
+workspace 5 output HDMI-0
+workspace 6 output $secondmon
+workspace 7 output $secondmon
+workspace 8 output $secondmon
+workspace 9 output $secondmon
+workspace 10 output $secondmon
 
 # reload the configuration file
 # bindsym $mod+Shift+c reload
@@ -163,6 +165,9 @@ bindsym $mod+Ctrl+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut
 
 bindsym $mod+Ctrl+1 exec "bash ~/.screenlayout/default.sh && sleep 1 && i3 'restart'"
 bindsym $mod+Ctrl+2 exec "bash ~/.screenlayout/home.sh && sleep 1 && i3 'restart'"
+
+exec "bash ~/.screenlayout/default.sh"
+
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -190,36 +195,6 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-mute 0 false && pactl set-sink-volume alsa_output.pci-0000_00_1b.0.analog-stereo +5% && killall -SIGUSR1 i3status
-# bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-mute 0 false && pactl set-sink-volume alsa_output.pci-0000_00_1b.0.analog-stereo -5% && killall -SIGUSR1 i3status
-## Volume control
-
-# Path to volume control, without trailing slash
-set $volumepath ~/i3-volume
-
-# Command for the status line
-#   ie: i3blocks, i3status
-# set $statuscmd i3status
-
-# Signal used to update the status line
-#   i3blocks uses SIGRTMIN+10 by default
-#   i3status uses SIGUSR1 by default
-set $statussig SIGUSR1
-
-# Amount to increase/decrease volume as a percentage
-set $volumestep 5
-
-# pulseaudio-utils settings
-#
-# Symbolic name for sink (numeric index not supported)
-#   Recommended: comment out this setting and omit the -s option to use default sink
-#   List sink names: pacmd list-sinks | awk -F "[<>]" '/^\s+name: <.*>/{print $2}'
-#set $sinkname alsa_output.pci-0000_00_1b.0.analog-stereo
-
-# Using pulseaudio-utils (append "-s $sinkname" without quotes to override default sink)
-bindsym XF86AudioRaiseVolume exec $volumepath -np -i $volumestep -t $statuscmd -u $statussig
-bindsym XF86AudioLowerVolume exec $volumepath -np -d $volumestep -t $statuscmd -u $statussig
-bindsym XF86AudioMute        exec $volumepath -mn -t $statuscmd -u $statussig
 
 # Sreen brightness controls
 bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
@@ -262,7 +237,9 @@ exec_always --no-startup-id hsetroot -solid "#1d2026"
 set $Locker i3lock -c 1d2026 && sleep 1
 
 # i3 lock
-exec --no-startup-id xautolock -time 30 -locker $Locker -detectsleep &
+# exec --no-startup-id xautolock -time 30 -locker $Locker -detectsleep &
+exec --no-startup-id xautolock -time 15 -locker $Locker -notify 20 -notifier 'xset dpms force off' &
+exec --no-startup-id xautolock -time 30 -locker "systemctl suspend" &
 # exec --no-startup-id pulseaudio
 
 # nm-applet
@@ -271,7 +248,7 @@ exec --no-startup-id nm-applet --tray --sm-disable &
 exec --no-startup-id blueberry-tray &
 
 # Start pulseaudio controls with mod+p in floating mode
-bindsym $mod+p exec termite -e "bash -c '~/.local/bin/pulsemixer'" -t "PULSEMIXER" &
+bindsym $mod+p exec alacritty -e "bash -c '~/.local/bin/pulsemixer'" -t "PULSEMIXER" &
 for_window [title="PULSEMIXER"] floating enable
 
 # suspend/lock shortcuts
@@ -283,11 +260,13 @@ bindsym $mod+$mod2+Ctrl+l exec --no-startup-id $Locker
 # for_window [class="Emacs" title="\*Emacs Anywhere\*"] floating enable
 bindsym $mod+Shift+e exec doom everywhere
 for_window [class="Emacs" title="^Emacs Everywhere.*"] floating enable
-for_window [class="Emacs" title="^Emacs Everywhere.*"] resize set 600 480
+for_window [class="Emacs" title="^Emacs Everywhere.*"] resize set 800 680
 for_window [class="Emacs" title="^Emacs Everywhere.*"] move absolute position center
 
 # Set default border size
 # border pixel 10
+
+# for_window [class=".*"] border pixel 5
 
 # i3-gaps setup
 # for_window [class="^.*"] border pixel 3
@@ -329,6 +308,7 @@ bar {
     # status_command ~/dotfiles/configs/i3status/.config/i3status/i3status_custom.sh
     status_command i3status
     position top
+    tray_output primary
 }
 
 
@@ -354,7 +334,37 @@ exec i3-msg workspace 1 web
 
 
 # Startup
-exec --no-startup-id i3-msg 'mattermost'
-exec --no-startup-id i3-msg 'spotify'
+# exec --no-startup-id i3-msg 'mattermost'
+# exec --no-startup-id i3-msg 'spotify'
 # Start gmail and calendar on workspace 9 in horizontal split
-exec --no-startup-id i3-msg 'workspace 9 mail+cal; split h; exec firefox --new-window mail.google.com; exec firefox --new-window calendar.google.com; exec sleep 1; workspace 1 web'
+# exec --no-startup-id i3-msg 'workspace 9 mail+cal; split h; exec firefox --new-window mail.google.com; exec firefox --new-window calendar.google.com; exec sleep 1; workspace 1 web'
+#
+
+## Volume control
+
+# Path to volume control, without trailing slash
+set $volumepath ~/i3-volume
+
+# Command for the status line
+#   ie: i3blocks, i3status
+set $statuscmd i3status
+
+# Signal used to update the status line
+#   i3blocks uses SIGRTMIN+10 by default
+#   i3status uses SIGUSR1 by default
+set $statussig SIGUSR1
+
+# Amount to increase/decrease volume as a percentage
+set $volumestep 5
+
+# pulseaudio-utils settings
+#
+# Symbolic name for sink (numeric index not supported)
+#   Recommended: comment out this setting and omit the -s option to use default sink
+#   List sink names: pacmd list-sinks | awk -F "[<>]" '/^\s+name: <.*>/{print $2}'
+#set $sinkname alsa_output.pci-0000_00_1b.0.analog-stereo
+
+# Using pulseaudio-utils (append "-s $sinkname" without quotes to override default sink)
+bindsym XF86AudioRaiseVolume exec --no-startup-id $volumepath/volume -n -t $statuscmd -u $statussig up $volumestep
+bindsym XF86AudioLowerVolume exec --no-startup-id $volumepath/volume -n -t $statuscmd -u $statussig down $volumestep
+bindsym XF86AudioMute        exec --no-startup-id $volumepath/volume -n -t $statuscmd -u $statussig mute

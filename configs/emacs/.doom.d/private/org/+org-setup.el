@@ -89,7 +89,7 @@
 (add-to-list 'org-file-apps '("\\.pdf" . "emacsclient -c -a '' %s"))
 
 ;; Toggle latex fragments automatically with pointer
-(add-hook 'org-mode-hook 'org-fragtog-mode)
+;; (add-hook 'org-mode-hook 'org-fragtog-mode)
 
 ;;;;;;;;;;;;;;;;;;; Org-Roam START
 (use-package! deft
@@ -204,3 +204,10 @@
                 ("[-]" . "❍" )
                 ("[ ]" . "☐")
                 ("[X]" . "☑")))
+
+;; (add-to-list 'org-emphasis-alist '("!" (:foreground "red")))
+
+
+(after! org-journal
+  (setq org-journal-dir "~/org/journal/")
+  (setq org-journal-file-type 'monthly))

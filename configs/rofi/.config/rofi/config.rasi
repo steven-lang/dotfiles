@@ -1,0 +1,19 @@
+configuration {
+	modi: "combi";
+	font: "IBMPlex Mono 16";
+	show-icons: true;
+	terminal: "termite";
+	combi-modi: "drun,run,ssh";
+	separator-style: "solid";
+	color-normal: "#353b45, #abb2bf, #353b45, #61afef, #282c34";
+	color-urgent: "#353b45, #e06c75, #353b45, #353b45, #e06c75";
+	color-active: "#353b45, #61afef, #353b45, #353b45, #61afef";
+	color-window: "#353b45, #353b45, #282c34";
+	kb-remove-char-back: "BackSpace";
+	kb-remove-to-eol: "Control+Shift+e";
+	kb-accept-entry: "Control+m,Return,KP_Enter";
+	kb-mode-next: "Shift+Right,Control+Tab,Control+l";
+	kb-mode-previous: "Shift+Left,Control+Shift+Tab,Control+h";
+	kb-row-up: "Up,Control+k,Shift+Tab,Shift+ISO_Left_Tab";
+	kb-row-down: "Down,Control+j";
+}

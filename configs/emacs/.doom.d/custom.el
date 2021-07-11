@@ -10,7 +10,7 @@
  '(awesome-tray-mode-line-active-color "#2fafff")
  '(awesome-tray-mode-line-inactive-color "#323232")
  '(custom-safe-themes
-   '("6c386d159853b0ee6695b45e64f598ed45bd67c47f671f69100817d7db64724d" "f302eb9c73ead648aecdc1236952b1ceb02a3e7fcd064073fb391c840ef84bca" "2b502f6e3bf0cba42fe7bf83a000f2d358a7020a7780a8682fcfed0c9dbffb5f" "076ee9f2c64746aac7994b697eb7dbde23ac22988d41ef31b714fc6478fee224" "75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "21388667ce5ee0b375e6282f0d6c6b61588da6604d343bbb19389e6a54d3d00d" "8f5a7a9a3c510ef9cbb88e600c0b4c53cdcdb502cfe3eb50040b7e13c6f4e78e" "c7f364aeea0458b6368815558cbf1f54bbdcc1dde8a14b5260eb82b76c0ffc7b" default))
+   '("34760b1313eac574a0caf85fd41b271d8cb2f97cb6bccfc889c972fe99ab7c11" "8eeb028ce8812246210ff710d017ce6e514cf36f4359424d8b6d7d5a87f5b2af" "1704976a1797342a1b4ea7a75bdbb3be1569f4619134341bd5a4c1cfb16abad4" "7a7b1d475b42c1a0b61f3b1d1225dd249ffa1abb1b7f726aec59ac7ca3bf4dae" "6c386d159853b0ee6695b45e64f598ed45bd67c47f671f69100817d7db64724d" "f302eb9c73ead648aecdc1236952b1ceb02a3e7fcd064073fb391c840ef84bca" "2b502f6e3bf0cba42fe7bf83a000f2d358a7020a7780a8682fcfed0c9dbffb5f" "076ee9f2c64746aac7994b697eb7dbde23ac22988d41ef31b714fc6478fee224" "75b8719c741c6d7afa290e0bb394d809f0cc62045b93e1d66cd646907f8e6d43" "21388667ce5ee0b375e6282f0d6c6b61588da6604d343bbb19389e6a54d3d00d" "8f5a7a9a3c510ef9cbb88e600c0b4c53cdcdb502cfe3eb50040b7e13c6f4e78e" "c7f364aeea0458b6368815558cbf1f54bbdcc1dde8a14b5260eb82b76c0ffc7b" default))
  '(exwm-floating-border-color "#646464")
  '(fci-rule-color "#5B6268")
  '(flymake-error-bitmap '(flymake-double-exclamation-mark modus-themes-fringe-red))
@@ -45,22 +45,11 @@
  '(jdee-db-spec-breakpoint-face-colors (cons "#1B2229" "#3f444a"))
  '(objed-cursor-color "#ff6c6b")
  '(org-agenda-files
-   '("~/master-thesis/thesis/results-other-papers.org" "/home/tak/org/gtd/calendar.org" "/home/tak/org/gtd/dlcv.org" "/home/tak/org/gtd/einsum-networks.org" "/home/tak/org/gtd/gtd.org" "/home/tak/org/gtd/inbox.org" "/home/tak/org/gtd/journal.org" "/home/tak/org/gtd/lily58-keyboard.org" "/home/tak/org/gtd/linux.org" "/home/tak/org/gtd/notes.org" "/home/tak/org/gtd/reference-material.org" "/home/tak/org/gtd/split-keyboard-workshop.org" "/home/tak/org/gtd/stat-ml-exam-prep.org" "/home/tak/org/gtd/tracking.org" "/home/tak/org/gtd/weekly-review.org"))
+   '("/home/tak/org/gtd/calendar.org" "/home/tak/org/gtd/dlcv.org" "/home/tak/org/gtd/einsum-networks.org" "/home/tak/org/gtd/gtd.org" "/home/tak/org/gtd/inbox.org" "/home/tak/org/gtd/journal.org" "/home/tak/org/gtd/lily58-keyboard.org" "/home/tak/org/gtd/linux.org" "/home/tak/org/gtd/notes.org" "/home/tak/org/gtd/reference-material.org" "/home/tak/org/gtd/split-keyboard-workshop.org" "/home/tak/org/gtd/stat-ml-exam-prep.org" "/home/tak/org/gtd/tracking.org" "/home/tak/org/gtd/weekly-review.org"))
  '(org-src-block-faces 'nil)
  '(pdf-view-midnight-colors (cons "#bbc2cf" "#282c34"))
  '(rustic-ansi-faces
    ["#282c34" "#ff6c6b" "#98be65" "#ECBE7B" "#51afef" "#c678dd" "#46D9FF" "#bbc2cf"])
- '(safe-local-variable-values
-   '((org-ref-default-bibliography "/home/tak/master-thesis/thesis/bibliography.bib")
-     (org-ref-default-bibliography "~/master-thesis/thesis/bibliography.bib")
-     (org-ref-default-bibliography quote
-                                   ("~/master-thesis/thesis/bibliography.bib"))
-     (org-ref-default-bibliography quote
-                                   ("./bibliography.bib"))
-     (org-ref-default-bibliography
-      '("./bibliography.bib"))
-     (projectile-project-root . "~/master-thesis/thesis")
-     (git-commit-major-mode . git-commit-elisp-text-mode)))
  '(vc-annotate-background "#282c34")
  '(vc-annotate-background-mode nil)
  '(vc-annotate-color-map

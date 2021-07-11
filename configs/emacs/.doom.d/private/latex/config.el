@@ -5,8 +5,8 @@
 
   ;; Set latex viewer
   ;; (setq +latex-viewers '(zathura))
-  ;; (setq +latex-viewers '(pdf-tools))  ;; Results in wrong-type-argument bufferp, nil error for now
-  (setq +latex-viewers '(evince))
+  (setq +latex-viewers '(pdf-tools))  ;; Results in wrong-type-argument bufferp, nil error for now
+  ;; (setq +latex-viewers '(evince))
 
  ;; to use pdfview with auctex
  ;; (setq TeX-view-program-selection '((output-pdf "PDF Tools"))

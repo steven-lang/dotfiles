@@ -112,19 +112,6 @@
            (org-super-agenda-groups '((:auto-outline-path t)))
            (org-agenda-files '(,(concat slang/org-agenda-directory "inbox.org")))))
 
-         ;; Next Actions Category
-         (org-ql-block
-          ;; Query
-          '(and (todo "NEXT")
-                ;; (not (or (scheduled :on +1)
-                ;;          (scheudeld :on today)))
-                )
-          ;; Variables
-          ((org-ql-block-header "Next Actions")
-           (org-super-agenda-groups '((:auto-outline-path t)))
-           (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
-
-
          ;; TODAY
          (org-ql-block
           ;; Query
@@ -144,6 +131,20 @@
           ((org-ql-block-header "Tomorrow")
            (org-super-agenda-groups '((:auto-outline-path t)))
            (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+
+         ;; Next Actions Category
+         (org-ql-block
+          ;; Query
+          '(and (todo "NEXT")
+                (not (scheduled :on +1))
+                (not (scheduled :on today))
+                )
+          ;; Variables
+          ((org-ql-block-header "Next Actions")
+           (org-super-agenda-groups '((:auto-outline-path t)))
+           (org-agenda-files '(,(concat slang/org-agenda-directory "gtd.org")))))
+
+
 
          ;; Missed items
          (org-ql-block

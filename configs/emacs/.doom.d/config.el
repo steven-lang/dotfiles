@@ -29,8 +29,8 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "Hack" :size 19))
-(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 19))
+(setq doom-font (font-spec :family "Hack" :size 19))
+;; (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 19))
 ;; (setq doom-font (font-spec :family "IBM Plex Mono" :size 19 :weight 'semi-light))
 ;; (setq doom-font (font-spec :family "DroidSansMono Nerd Font" :size 20))
 ;; (setq doom-variable-pitch-font (font-spec :family "DejaVu Serif" :size 25 :weight 'semi-light))
@@ -175,7 +175,7 @@
   :init
   ;; Add all your customizations prior to loading the themes
   (setq modus-themes-slanted-constructs t
-        modus-themes-syntax 'faint
+        modus-themes-syntax 'green-strings
         modus-themes-bold-constructs nil)
 
   ;; Load the theme files before enabling a theme

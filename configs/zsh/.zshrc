@@ -9,10 +9,6 @@
 
 export ZSH=$HOME/.oh-my-zsh
 
-# Download antigen if not present
-if [[ ! -f $HOME/antigen.zsh ]]; then
-    curl -L git.io/antigen > $HOME/antigen.zsh
-fi
 
 # Download and install fzf
 if [[ ! -d $HOME/.fzf ]]; then
@@ -20,25 +16,42 @@ if [[ ! -d $HOME/.fzf ]]; then
   ~/.fzf/install
 fi
 
+# Download and install zgen
+if [[ ! -d $HOME/.zplug ]]; then
+  curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+fi
 
-# Source antigen
-source ~/antigen.zsh
-antigen use oh-my-zsh
-antigen bundle git
-# antigen bundle git-flow-avh
-# antigen bundle git-flow-mvn
-# antigen bundle gradle
-antigen bundle z 
-antigen bundle fzf
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle zsh-users/zsh-history-substring-search
-antigen bundle zsh-users/zsh-completions
-antigen bundle kutsan/zsh-system-clipboard
-antigen bundle mafredri/zsh-async
-antigen bundle sindresorhus/pure
-antigen bundle esc/conda-zsh-completion
-antigen apply
+source ~/.zplug/init.zsh
+
+# ZPLUG plugin loading
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+zplug "zsh-users/zsh-history-substring-search"
+zplug "plugins/git",   from:oh-my-zsh
+
+zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
+# zplug "sindresorhus/pure"
+zplug "junegunn/fzf", use:"shell/*.zsh"
+zplug "hlissner/zsh-autopair", defer:2
+zplug "zsh-users/zsh-autosuggestions", defer:2
+# zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zdharma/fast-syntax-highlighting", defer:2
+zplug "softmoth/zsh-vim-mode"
+zplug "zsh-users/zsh-completions"
+zplug "kutsan/zsh-system-clipboard"
+zplug "mafredri/zsh-async", defer:3
+zplug "agkozak/zsh-z"
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+
+# Then, source plugins and add commands to $PATH
+zplug load
+
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -47,6 +60,7 @@ antigen apply
 # ZSH_THEME="gnzh"
 # ZSH_THEME="bureau"
 # ZSH_THEME="amuse"
+ZSH_THEME=""
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -94,254 +108,26 @@ HYPHEN_INSENSITIVE="true"
 
 # User configuration
 
-# export MANPATH="/usr/local/man:$MANPATH"
-# EXPORTS #
-# source $ZSH/oh-my-zsh.sh
-
-export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/bin:$HOME/bin/:$HOME/.cargo/bin/:/opt/android-sdk/platform-tools/"
-export TERM="xterm-256color"
-
-# Use colored cat if available
-if hash ccat 2>/dev/null; then
-  alias cat='ccat'
-fi
 
 
-# Check if nvim is available
-if hash nvim 2>/dev/null; then
-  # Always use neovim instead of vim
-  alias vim=nvim
-  # Use nvim for manpages
-  export MANPAGER="nvim -c 'set ft=man' -"
-fi
-
-# Set the proper editor
-# if [[ $(ps aux | grep "emacs --[d]aemon") ]]; then
-#   export EDITOR=emacsclient
-#   export VISUAL=emacsclient
-if hash nvim 2>/dev/null; then
-  export EDITOR=nvim
-  export VISUAL=nvim
-else
-  export EDITOR=vim
-  export VISUAL=vim
-fi
-
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk # ARCH
-# export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-11.0.7.10-1.fc32.x86_64 # FEDORA
-# Variable for i3-sensible-terminal
-# export TERMINAL=kitty
-export WEKA_HOME=$HOME/wekafiles
-export DOT=$HOME/dotfiles
-# export LD_LIBRARY_PATH="/usr/local/cuda-10.1/lib64"
-
-# fzf
-export FZF_DEFAULT_OPTS='--height 40% --border'
-export FZF_DEFAULT_COMMAND='ag -g .'
-
-# Maven java server debugging
-#export MAVEN_OPTS=-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
-
-if hash ruby 2>/dev/null; then
-  PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
-fi
-PATH="$HOME/bin:$PATH"
-PATH="$PATH:/usr/bin/julia"
-PATH="$PATH:$HOME/.emacs.d/bin"
-LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/"
-
-# Eval keychain only locally
-if [[ -z $SSH_CONNECTION ]]; then
-  eval $(keychain --eval --quiet id_rsa)
-fi
-
-# Aliases
-alias df='df -h'                          # human-readable sizes
-alias free='free -m'                      # show sizes in MB
-alias np='nano -w PKGBUILD'
-alias more=less
-
-# Emacs client
-# function emacsclient() {
-#     /usr/bin/emacsclient -c -a '' "$@" &
-#     disown
-# }
-# alias ec="/usr/bin/emacsclient -c -a '' "$@""
-# alias ec="emacsclient -n"
-alias emacsclient-restart="systemctl --user restart emacs"
-
-# Better ls
-if hash exa 2>/dev/null; then
-  alias ls='exa -l --group-directories-first --git --color auto'
-else
-  alias ls='ls -lh --color=auto --group-directories-first'
-fi
-
-# Fedora dnf aliases
-alias dnfi='sudo dnf install'
-alias dnfs='dnf search'
-alias dnfr='sudo dnf remove'
-alias dnfu='sudo dnf update && flatpak update'
-
-alias grep='grep --color=auto'
-alias pacs='sudo pacman -S'
-alias yay='yay --noconfirm'
-alias eZ='$EDITOR ~/.zshrc'
-alias rZ='source ~/.zshrc'
-alias reboot='sudo systemctl reboot'
-alias poweroff='sudo systemctl poweroff'
-alias i3config='$EDITOR ~/.config/i3/config'
-alias i3statusconfig='$EDITOR ~/.config/i3status/config'
-alias xclip='xclip -selection c'
-alias clone='termite -e "bash" 2>&1 >/dev/null & disown %1'
-alias PWD='echo $(pwd) | xclip && pwd && echo "path copied"'
-alias CD='echo "cd $(xclip -o)" && cd $(xclip -o)'
-alias :q='exit'
-alias vimconfig='$EDITOR ~/.vimrc'
-alias vimupdate='vim +PlugClean +PlugUpdate +UpdateRemoteRepositories +qa'
-alias zshconfig='$EDITOR ~/.zshrc'
-alias zshreload='source ~/.zshrc'
-alias i3config='$EDITOR ~/.config/i3/config'
-alias xresourcesconfig='$EDITOR ~/.Xresources'
-alias xresourcesreload='xrdb -merge ~/.Xresources'
-alias gnome-screenshot='gnome-screenshot -a'
-alias envactivate='source ./env/bin/activate'
-alias rsync='rsync --archive --compress-level=3 --copy-links --partial --inplace --progress --rsh=ssh -r'
-alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
-alias sync-thesis="~/master-thesis/sync.sh"
-
-# Update all pip packages
-alias pipupdate="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
 
 # vi mode
 bindkey -v
 export KEYTIMEOUT=1
 
-# Emacs bindings
-# bindkey '^w' backward-kill-word
-# bindkey '^a' beginning-of-line
-# bindkey '^e' end-of-line
-
-# # Make CTRL-P/N behave like UP/DOWN arrows
-bindkey '^P' up-line-or-beginning-search
-bindkey '^N' down-line-or-beginning-search
-
-bindkey '^r' history-incremental-search-backward
-
-zmodload -i zsh/complist
-# Use vim keys in tab complete menu:
-bindkey -M menuselect 'h' vi-backward-char
-bindkey -M menuselect 'k' vi-up-line-or-history
-bindkey -M menuselect 'l' vi-forward-char
-bindkey -M menuselect 'j' vi-down-line-or-history
-bindkey -v '^?' backward-delete-char
-bindkey -M vicmd "k" up-line-or-beginning-search
-bindkey -M vicmd "j" down-line-or-beginning-search
+# Load widgets for ctrl-P, ctrl-N
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
 
 
-
-# Change cursor shape for different vi modes.
-function zle-keymap-select {
-  if [[ ${KEYMAP} == vicmd ]] ||
-     [[ $1 = 'block' ]]; then
-    echo -ne '\e[1 q'
-  elif [[ ${KEYMAP} == main ]] ||
-       [[ ${KEYMAP} == viins ]] ||
-       [[ ${KEYMAP} = '' ]] ||
-       [[ $1 = 'beam' ]]; then
-    echo -ne '\e[5 q'
-  fi
-}
-zle -N zle-keymap-select
-zle-line-init() {
-    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
-    echo -ne "\e[5 q"
-}
-zle -N zle-line-init
-echo -ne '\e[5 q' # Use beam shape cursor on startup.
-preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
-
-
-function pacu() {
-  sudo pacman -Syu
-  yay -Syua --noconfirm
-}
-
-# # Open pdfs in background by default
-compdef pdf=okular
-function pdf() {
-  okular "$@" &
-  disown
-  # zathura --fork "$@" &
-  # emacsclient -c -a '' "$@" &
-}
-
-function ssh-gpustat() {
-  ssh -t $1 "gpustat -cp --interval 5"
-}
-
-
-# # Open images in background by default
-# function img() {
-#   eog "$@" &
-#   disown
-# }
-
-# Check for virtual environments when cd'ing into directories
-# function cd() {
-#   builtin cd "$@"
-
-#   if [[ -z "$VIRTUAL_ENV" ]] ; then
-#     ## If env folder is found then activate the vitualenv
-#       if [[ -d ./env ]] ; then
-# # source ./env/bin/activate  # commented out by conda initialize
-#         echo -e "Python virtual environment activated!"
-#       fi
-#       if [[ -d ./venv ]] ; then
-# # source ./venv/bin/activate  # commented out by conda initialize
-#         echo -e "Python virtual environment activated!"
-#       fi
-#   else
-#     ## check the current folder belong to earlier VIRTUAL_ENV folder
-#     # if yes then do nothing
-#     # else deactivate
-#       parentdir="$(dirname "$VIRTUAL_ENV")"
-#       if [[ "$PWD"/ != "$parentdir"/* ]] ; then
-#         deactivate
-#       fi
-#   fi
-# }
-
-
-# Check if direnv is installed
-if [ ! -f $HOME/bin/direnv ]; then
-  echo "Direnv not found. Installing now ..."
-  mkdir -p $HOME/bin
-  wget -O $HOME/bin/direnv https://github.com/direnv/direnv/releases/download/v2.20.0/direnv.linux-amd64 > /dev/null
-  chmod +x $HOME/bin/direnv
-fi
-
-# Check if direnv is installed
-if [ ! -d $HOME/.tmux/plugins/tpm ]; then
-  echo "Tmux plugin manager not found. Installing now ..."
-  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-fi
-
-
-
-
-
-# Enable direnv
-eval "$(direnv hook zsh)"
-
-# Ensure pip is installed
-if ! hash pip 2>/dev/null; then
-  curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
-  python3 /tmp/get-pip.py
-fi
 
 # Remove history duplicates
 setopt HIST_IGNORE_ALL_DUPS
+
+# Set history file
+export HISTFILE=$HOME/.zsh_history
 
 
 # Enable edit- in commandline
@@ -355,3 +141,14 @@ bindkey "^X^E" edit-command-line
 
 # test -r "~/.dir_colors" && eval $(dircolors ~/.dir_colors)
 [ -f ~/.conda/etc/profile.d/conda.sh ] && source ~/.conda/etc/profile.d/conda.sh
+
+MODE_CURSOR_VICMD="green block"
+MODE_CURSOR_VIINS="#20d08a blinking bar"
+MODE_CURSOR_SEARCH="#ff00ff blinking underline"
+
+autoload -Uz compinit
+compinit
+zstyle ':completion:*' menu select
+
+# Enable direnv
+eval "$(direnv hook zsh)"
