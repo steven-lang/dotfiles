@@ -5,6 +5,8 @@ alias dnfr="sudo dnf remove"
 alias dnfu="sudo dnf update && flatpak update"
 
 alias grep="grep --color=auto"
+alias eF="$EDITOR ~/.config/fish/config.fish"
+alias rF=". ~/.config/fish/config.fish"
 alias eZ="$EDITOR ~/.zshrc"
 alias rZ="source ~/.zshrc"
 alias reboot="sudo systemctl reboot"
@@ -27,6 +29,8 @@ alias pipupdate="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d =
 
 # ALIASES
 alias emacsclient-restart="systemctl --user restart emacs"
+alias ec="emacsclient -nw"
+alias vim="ec"
 
 # Better ls
 if type -q exa

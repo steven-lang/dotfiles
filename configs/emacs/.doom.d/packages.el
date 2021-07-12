@@ -55,13 +55,13 @@
 ;; Misc
 (package! s)
 
-;; If you want to replace it with yasnippet's default snippets
 (package! yasnippet-snippets)
 (package! lorem-ipsum)
 (package! ssh-agency)
 (package! cuda-mode)
 (package! dockerfile-mode)
 (package! yaml-mode)
+(package! fish-mode)
 
 ;; Julia LSP
 (package! lsp-julia :recipe (:host github :repo "non-jedi/lsp-julia"))

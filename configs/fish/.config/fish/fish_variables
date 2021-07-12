@@ -5,6 +5,7 @@ SETUVAR Z_CMD:z
 SETUVAR Z_DATA:/home/tak/\x2elocal/share/z/data
 SETUVAR Z_DATA_DIR:/home/tak/\x2elocal/share/z
 SETUVAR Z_EXCLUDE:\x5e/home/tak\x24
+SETUVAR __done_min_cmd_duration:30000
 SETUVAR __fish_initialized:3100
 SETUVAR _fisher_PatrickF1_2F_fzf_2E_fish_files:/home/tak/\x2econfig/fish/functions/_fzf_configure_bindings_help\x2efish\x1e/home/tak/\x2econfig/fish/functions/_fzf_extract_var_info\x2efish\x1e/home/tak/\x2econfig/fish/functions/_fzf_preview_file\x2efish\x1e/home/tak/\x2econfig/fish/functions/_fzf_report_file_type\x2efish\x1e/home/tak/\x2econfig/fish/functions/_fzf_search_directory\x2efish\x1e/home/tak/\x2econfig/fish/functions/_fzf_search_git_log\x2efish\x1e/home/tak/\x2econfig/fish/functions/_fzf_search_git_status\x2efish\x1e/home/tak/\x2econfig/fish/functions/_fzf_search_history\x2efish\x1e/home/tak/\x2econfig/fish/functions/_fzf_search_variables\x2efish\x1e/home/tak/\x2econfig/fish/functions/fzf_configure_bindings\x2efish\x1e/home/tak/\x2econfig/fish/conf\x2ed/fzf\x2efish\x1e/home/tak/\x2econfig/fish/completions/fzf_configure_bindings\x2efish
 SETUVAR _fisher_franciscolourenco_2F_done_files:/home/tak/\x2econfig/fish/conf\x2ed/done\x2efish
@@ -31,7 +32,7 @@ SETUVAR fish_color_operator:7cafc2
 SETUVAR fish_color_param:d8d8d8
 SETUVAR fish_color_quote:f7ca88
 SETUVAR fish_color_redirection:d8d8d8
-SETUVAR fish_color_search_match:ffff00
+SETUVAR fish_color_search_match:\x2d\x2dbackground\x3dblue
 SETUVAR fish_color_selection:c0c0c0
 SETUVAR fish_color_status:red
 SETUVAR fish_color_user:00ff00

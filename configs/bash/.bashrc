@@ -39,13 +39,15 @@ if hash nvim 2>/dev/null; then
 fi
 
 # Set the proper editor
-if hash nvim 2>/dev/null; then
-  export EDITOR=nvim
-  export VISUAL=nvim
-else
-  export EDITOR=vim
-  export VISUAL=vim
-fi
+# if hash nvim 2>/dev/null; then
+#   export EDITOR=nvim
+#   export VISUAL=nvim
+# else
+#   export EDITOR=vim
+#   export VISUAL=vim
+# fi
+export EDITOR="emacsclient -nw"
+export SUDO_EDITOR="emacsclient -nw"
 
 # fzf
 export FZF_DEFAULT_OPTS='--height 40% --border'
@@ -62,21 +64,22 @@ export PATH="$PATH:$HOME/.emacs.d/bin"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/"
 
+export PATH="$PATH:$HOME/.conda/bin/"
+[ -f ~/.conda/etc/profile.d/conda.sh ] && source ~/.conda/etc/profile.d/conda.sh
+
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
 
 # Eval keychain only locally
+# NOTE: This needs to be done after the interactive if-statement
 if [[ -z $SSH_CONNECTION ]]; then
   eval $(keychain --eval --quiet id_rsa)
 fi
 
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-if [[ "$TERM" == *xterm* ]]; then
-   exec fish 
+if [[ $(ps --no-header --pid=$PPID --format=cmd) != "fish" ]]; then
+  exec fish
 fi
-
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
-
-
-
