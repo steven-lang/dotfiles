@@ -32,8 +32,6 @@ export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/
 
 # Check if nvim is available
 if hash nvim 2>/dev/null; then
-  # Always use neovim instead of vim
-  alias vim=nvim
   # Use nvim for manpages
   export MANPAGER="nvim -c 'set ft=man' -"
 fi
@@ -80,8 +78,8 @@ if [[ -z $SSH_CONNECTION ]]; then
 fi
 
 
-if [[ $(ps --no-header --pid=$PPID --format=cmd) != "fish" ]]; then
-  exec fish
+if [[ $(ps --no-header --pid=$PPID --format=cmd) != "zsh" ]]; then
+  exec zsh
 fi
 
 # >>> conda initialize >>>

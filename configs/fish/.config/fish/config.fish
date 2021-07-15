@@ -10,9 +10,11 @@ set fish_color_error red --bold
 # Make menu selection background blue
 set fish_color_search_match --background=blue
 
-# Enable vim mode
-fish_vi_key_bindings
-
 # Set fish done to 30s
 set -U __done_min_cmd_duration 30000  # default: 5000 ms
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+eval /home/tak/.conda/bin/conda "shell.fish" "hook" $argv | source
+# <<< conda initialize <<<
 

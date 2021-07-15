@@ -27,14 +27,19 @@ alias tlmgr="/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode"
 # Update all pip packages
 alias pipupdate="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
 
-# ALIASES
 alias emacsclient-restart="systemctl --user restart emacs"
 alias ec="emacsclient -nw"
-alias vim="ec"
 
 # Better ls
 if type -q exa
   alias ls='exa -l --group-directories-first --git --color auto'
 else
   alias ls='ls -lh --color=auto --group-directories-first'
+end
+
+if type -q nvim
+  # Always use neovim instead of vim
+  alias vim=nvim
+  # Use nvim for manpages
+  export MANPAGER="nvim -c 'set ft=man' -"
 end

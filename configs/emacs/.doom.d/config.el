@@ -93,7 +93,8 @@
 (setq which-key-idle-secondary-delay 0.5)
 
 ;; Doom modeline
-(setq doom-modeline-major-mode-icon t)
+;; NOTE: Issues with emacsclient
+ ;; (setq doom-modeline-major-mode-icon t)
 
 ;; Keybindings
 (load!  "+keybindings")
@@ -171,7 +172,6 @@
 
 
 (use-package! modus-themes
-  :ensure
   :init
   ;; Add all your customizations prior to loading the themes
   (setq modus-themes-slanted-constructs t

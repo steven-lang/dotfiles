@@ -2,8 +2,14 @@
 (load! "+org-gcal-credentials")
 (load! "+agenda")
 
-;; Hide emphasis markes like /foo/ and *bar*
-(setq org-hide-emphasis-markers t)
+;; Hide emphasis markers like /foo/ and *bar*
+(setq org-hide-emphasis-markers nil)
+;; Show emphasis markers at point
+(use-package! org-appear
+  :after org
+  :config
+  (add-hook 'org-mode-hook 'org-appear-mode)
+  (setq org-appear-autolinks t))
 
 
 ;; (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
@@ -204,6 +210,7 @@
                 ("[-]" . "❍" )
                 ("[ ]" . "☐")
                 ("[X]" . "☑")))
+(add-hook 'org-mode-hook 'prettify-symbols-mode)
 
 ;; (add-to-list 'org-emphasis-alist '("!" (:foreground "red")))
 

@@ -8,15 +8,11 @@
 (map! "<f2>"
       #'org-agenda)
 
-;; FIXED: Why is 'C-u' overwritte by default?
-;; (map! "C-u"  #'evil-scroll-up)
-
 (map! "C-S-h" #'evil-window-left
       "C-S-j" #'evil-window-down
       "C-S-k" #'evil-window-up
       "C-S-l" #'evil-window-right)
 
-;; Use helm for M-x
 (map! :leader
       ;; unmap first
       "SPC" nil 
@@ -24,9 +20,6 @@
 
       :leader
       "SPC" #'counsel-M-x
-      ;; "SPC" #'helm-M-x
-      "."   #'+ivy/projectile-find-file
-
 
       "x"  nil
       (:prefix ("x" . "font")
@@ -34,8 +27,8 @@
        "+"  #'doom/increase-font-size))
 
 ;; Expand region with "SPC v"
-(map! :leader
-      "v"   #'er/expand-region)
+;; (map! :leader
+;;       "v"   #'er/expand-region)
 
 ;; More sophisticated "paste"
 (map! "M-p" #'helm-show-kill-ring)
@@ -51,15 +44,16 @@
        :desc "kill-ring" "y" #'helm-show-kill-ring))
 
 ;; Buffers
-(map! :leader (:prefix "b" "m" nil)
+(map!
+ ;; :leader (:prefix "b" "m" nil)
       :leader (:prefix "b" :desc "Messages" "m" #'(lambda () (interactive) (switch-to-buffer "*Messages*")))
 
       :leader (:prefix "b" "s" nil)
-      :leader (:prefix "b" :desc "Messages" "s" #'(lambda () (interactive) (switch-to-buffer "*scratch*")))
+      :leader (:prefix "b" :desc "Messages" "s" #'(lambda () (interactive) (switch-to-buffer "*scratch*"))))
 
-      :leader (:prefix "b" "b" nil)
-      :leader (:prefix "b" :desc "Workspace Buffers" "b" #'+ivy/switch-workspace-buffer)
-      :leader (:prefix "b" :desc "All Buffers" "a" #'+ivy/switch-buffer))
+;;       :leader (:prefix "b" "b" nil)
+;;       :leader (:prefix "b" :desc "Workspace Buffers" "b" #'+ivy/switch-workspace-buffer)
+;;       :leader (:prefix "b" :desc "All Buffers" "a" #'+ivy/switch-buffer))
 
 
 ;; Windows

@@ -7,3 +7,6 @@ tags
 configs/emacs/.doom.d/+modules/lang/org/org-gcal-credentials.el
 
 .mypy_cache
+
+# Fish
+fish_variables
