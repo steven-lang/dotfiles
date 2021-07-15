@@ -167,6 +167,7 @@ if hash ruby 2>/dev/null; then
 fi
 
 # Extend $PATH
+export PATH="$PATH:$HOME/dotbin"  # scripts from dotfiles
 export PATH="$HOME/bin:$PATH"  # local binaries
 export PATH="$PATH:$HOME/.emacs.d/bin" # doom binaries
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"  # yarn
