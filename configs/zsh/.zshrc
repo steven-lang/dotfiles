@@ -87,7 +87,6 @@ fi
 # Then, source plugins and add commands to $PATH
 zplug load
 
-
 # Auto-notify settings
 export AUTO_NOTIFY_THRESHOLD=30
 AUTO_NOTIFY_IGNORE+=("eog" "docker")
