@@ -3,12 +3,11 @@
 import os
 import sys
 from pathlib import Path
+import logging
 
 import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--remove-symlinks", action="store_true", help="Remove all symlinks.")
-args = parser.parse_args()
+
 
 
 def symlink_dir(entry: os.DirEntry):
@@ -16,6 +15,7 @@ def symlink_dir(entry: os.DirEntry):
 
     for f in os.scandir(entry):
         link_config(f)
+
 
 def create_link(entry: os.DirEntry, dotconfig: bool):
     src = entry.path
@@ -28,31 +28,30 @@ def create_link(entry: os.DirEntry, dotconfig: bool):
     if os.path.islink(dst):
 
         # Remove symlinks if arg is set
-        if args.remove_symlinks:
-            print(f"Removing {dst}")
+        if ARGS.remove_symlinks:
+            LOGGER.info(f"Removing {dst}")
             os.remove(dst)
             return
 
         # If dst links to src, all is good
         if Path(os.readlink(dst)) == Path(src):
-            print(f"{dst} already linked correctly, skipping ...")
+            LOGGER.debug(f"{dst} already linked correctly, skipping ...")
             return
 
     if os.path.exists(dst):
 
         if os.path.isdir(dst):
-            print(f"Destination: {dst} already exists (dir)")
+            LOGGER.info(f"Destination: {dst} already exists (dir)")
             return
         elif os.path.isfile(dst):
-            print(f"Destination: {dst} already exists (file)")
+            LOGGER.info(f"Destination: {dst} already exists (file)")
             return
         else:
             raise Exception(f"Destination: {dst} exists but is not a symlink!")
 
-
-
+    # No case catched -> create symlink
     os.symlink(src, dst, target_is_directory=entry.is_dir())
-    print(f"{src} -> {dst}, is_dir={entry.is_dir()}")
+    LOGGER.info(f"{src} -> {dst}")
 
 
 def link_config(entry: os.DirEntry):
@@ -62,12 +61,30 @@ def link_config(entry: os.DirEntry):
     else:
         create_link(entry, False)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--remove-symlinks", "-r", action="store_true", help="Remove all symlinks."
+    )
+    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output.")
+    ARGS = parser.parse_args()
+
+
+    # Setup logging
+    if ARGS.verbose:
+        log_level = logging.DEBUG
+    else:
+        log_level = logging.INFO
+
+    logging.basicConfig(encoding='utf-8', level=log_level)
+    LOGGER = logging.getLogger(__name__)
 
     # Home path
     HOME = os.getenv("HOME")
     DOT_CONFIG = os.path.join(HOME, ".config")
-
     CONFIG_DIR = os.path.join(os.getcwd(), "configs")
+
+    # Scan all dirs in "./configs/"
     for entry in os.scandir(CONFIG_DIR):
         symlink_dir(entry)
