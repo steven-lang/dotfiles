@@ -1,6 +1,9 @@
-# if [ "$TMUX" = "" ]; then
-#   tmux
-# fi
+# Start tmux in ssh connections
+if [[ $SSH_CONNECTION ]]; then
+  if [ "$TMUX" = "" ]; then
+    tmux
+  fi
+fi
 
 source ~/.bash_aliases
 
