@@ -1,18 +1,32 @@
-# echo "Commands:"
-# echo "- Edit in vim : <C-x><C-e>"
-# echo "- Correct last command in editor: fc"
-# Path to your oh-my-zsh installation.
-
 # if [ "$TMUX" = "" ]; then
 #   tmux
 # fi
 
 source ~/.bash_aliases
 
-autoload -U select-word-style
-select-word-style bash
+##################################
+#  INSTALL BINARIES begin        #
+##################################
 
-export ZSH=$HOME/.oh-my-zsh
+# Ensure pip is installed
+if ! hash pip 2>/dev/null; then
+  curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
+  python3 /tmp/get-pip.py
+fi
+
+# Check if direnv is installed
+if [ ! -f $HOME/bin/direnv ]; then
+  echo "Direnv not found. Installing now ..."
+  mkdir -p $HOME/bin
+  wget -O $HOME/bin/direnv https://github.com/direnv/direnv/releases/download/v2.20.0/direnv.linux-amd64 > /dev/null
+  chmod +x $HOME/bin/direnv
+fi
+
+# Check if tpm is installed
+if [ ! -d $HOME/.tmux/plugins/tpm ]; then
+  echo "Tmux plugin manager not found. Installing now ..."
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
 
 
 # Download and install fzf
@@ -21,7 +35,16 @@ if [[ ! -d $HOME/.fzf ]]; then
   ~/.fzf/install
 fi
 
-# Download and install zgen
+##################################
+#  INSTALL BINARIES end          #
+##################################
+
+
+##################################
+#  ZPLUG begin                   #
+##################################
+
+# Download and install zplug
 if [[ ! -d $HOME/.zplug ]]; then
   curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 fi
@@ -61,8 +84,24 @@ fi
 # Then, source plugins and add commands to $PATH
 zplug load
 
-export AUTO_NOTIFY_THRESHOLD=30
 
+# Auto-notify settings
+export AUTO_NOTIFY_THRESHOLD=30
+AUTO_NOTIFY_IGNORE+=("eog" "docker")
+
+# Vim mode cursor settings
+MODE_CURSOR_VICMD="green block"
+MODE_CURSOR_VIINS="#20d08a blinking bar"
+MODE_CURSOR_SEARCH="#ff00ff blinking underline"
+
+##################################
+#  ZPLUG end                     #
+##################################
+
+
+##################################
+#  ZSH INTERNAL SETTINGS begin   #
+##################################
 
 # vi mode
 bindkey -v
@@ -74,25 +113,82 @@ autoload -U down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 
+# Set word style
+autoload -U select-word-style
+select-word-style bash
+
+# Make completion selection as menu and match case insensitive
+autoload -Uz compinit
+compinit
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
 # Remove history duplicates
 setopt HIST_IGNORE_ALL_DUPS
 
+
 # Set history file
 export HISTFILE=$HOME/.zsh_history
+
+
+##################################
+#  ZSH INTERNAL SETTINGS end   #
+##################################
+
+
+##################################
+#  EXPORTS begin                 #
+##################################
+
+# Check if nvim is available
+if hash nvim 2>/dev/null; then
+  # Use nvim for manpages
+  export MANPAGER="nvim -c 'set ft=man' -"
+fi
+
+
+##################################
+#  EXPORTS end                   #
+##################################
+
+# Emacsclient as (sudo-)editor
+export EDITOR="emacsclient -nw"
+export SUDO_EDITOR="emacsclient -nw"
+
+# FZF options
+export FZF_DEFAULT_OPTS='--height 40% --border'
+export FZF_DEFAULT_COMMAND='ag -g .'
+
+# Add ruby binaries to path if available
+if hash ruby 2>/dev/null; then
+  PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+fi
+
+# Extend $PATH
+export PATH="$HOME/bin:$PATH"  # local binaries
+export PATH="$PATH:$HOME/.emacs.d/bin" # doom binaries
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"  # yarn
+
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/"
+
+# Fixes some terminal application colors
+export TERM="xterm-256color"
+
+# ???
+# export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/bin:$HOME/bin/:$HOME/.cargo/bin/:/opt/android-sdk/platform-tools/"
+
+##################################
+#  MISC begin                    #
+##################################
 
 # Enable fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 [ -f ~/.conda/etc/profile.d/conda.sh ] && source ~/.conda/etc/profile.d/conda.sh
 
-MODE_CURSOR_VICMD="green block"
-MODE_CURSOR_VIINS="#20d08a blinking bar"
-MODE_CURSOR_SEARCH="#ff00ff blinking underline"
-
-autoload -Uz compinit
-compinit
-zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
 # Enable direnv
 eval "$(direnv hook zsh)"
+
+##################################
+#  MISC end                      #
+##################################
