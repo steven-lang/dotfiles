@@ -1,3 +1,50 @@
+
+##################################
+#  EXPORTS begin                 #
+##################################
+
+# Check if nvim is available
+if hash nvim 2>/dev/null; then
+  # Use nvim for manpages
+  export MANPAGER="nvim -c 'set ft=man' -"
+fi
+
+
+# Emacsclient as (sudo-)editor
+export EDITOR="emacsclient -nw"
+export SUDO_EDITOR="emacsclient -nw"
+
+# FZF options
+export FZF_DEFAULT_OPTS='--height 40% --border'
+export FZF_DEFAULT_COMMAND='ag -g .'
+
+# Add ruby binaries to path if available
+if hash ruby 2>/dev/null; then
+  PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+fi
+
+# Extend $PATH
+export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:$HOME/dotbin"  # scripts from dotfiles
+export PATH="$HOME/bin:$PATH"  # local binaries
+export PATH="$PATH:$HOME/.emacs.d/bin" # doom binaries
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"  # yarn
+
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/"
+
+# Fixes some terminal application colors
+export TERM="xterm-256color"
+
+# ???
+# export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/bin:$HOME/bin/:$HOME/.cargo/bin/:/opt/android-sdk/platform-tools/"
+
+##################################
+#  EXPORTS end                   #
+##################################
+
+
+source ~/.bash_aliases
+
 # Start tmux in ssh connections
 if [[ $SSH_CONNECTION ]]; then
   if [ "$TMUX" = "" ]; then
@@ -5,7 +52,8 @@ if [[ $SSH_CONNECTION ]]; then
   fi
 fi
 
-source ~/.bash_aliases
+
+
 
 ##################################
 #  INSTALL BINARIES begin        #
@@ -138,48 +186,6 @@ export HISTFILE=$HOME/.zsh_history
 ##################################
 
 
-##################################
-#  EXPORTS begin                 #
-##################################
-
-# Check if nvim is available
-if hash nvim 2>/dev/null; then
-  # Use nvim for manpages
-  export MANPAGER="nvim -c 'set ft=man' -"
-fi
-
-
-##################################
-#  EXPORTS end                   #
-##################################
-
-# Emacsclient as (sudo-)editor
-export EDITOR="emacsclient -nw"
-export SUDO_EDITOR="emacsclient -nw"
-
-# FZF options
-export FZF_DEFAULT_OPTS='--height 40% --border'
-export FZF_DEFAULT_COMMAND='ag -g .'
-
-# Add ruby binaries to path if available
-if hash ruby 2>/dev/null; then
-  PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
-fi
-
-# Extend $PATH
-export PATH="$PATH:$HOME/.local/bin"
-export PATH="$PATH:$HOME/dotbin"  # scripts from dotfiles
-export PATH="$HOME/bin:$PATH"  # local binaries
-export PATH="$PATH:$HOME/.emacs.d/bin" # doom binaries
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"  # yarn
-
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/"
-
-# Fixes some terminal application colors
-export TERM="xterm-256color"
-
-# ???
-# export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/bin:$HOME/bin/:$HOME/.cargo/bin/:/opt/android-sdk/platform-tools/"
 
 ##################################
 #  MISC begin                    #
