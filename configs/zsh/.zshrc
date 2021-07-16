@@ -60,7 +60,7 @@ fi
 ##################################
 
 # Ensure pip is installed
-if ! hash pip 2>/dev/null; then
+if ! command -v pip; then
   curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
   python3 /tmp/get-pip.py
 fi

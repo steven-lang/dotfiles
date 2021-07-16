@@ -21,13 +21,14 @@ def create_link(entry: os.DirEntry, dotconfig: bool):
         # If dst links to src, all is good
         if Path(os.readlink(dst)) == Path(src):
             logger.debug(f"{dst} already linked correctly, skipping ...")
+            return
         elif ARGS.remove_symlinks:
             # Remove symlinks if arg is set
             logger.info(f"Removing {dst}")
             os.remove(dst)
 
-
     elif os.path.exists(dst):
+        # Not a symlink, but file exists
         logger.warn(f"Destination: {dst} already exists (dir)")
         logger.warn(f"Moving {dst} to {dst}.backup")
         shutil.move(dst, dst + ".backup")
