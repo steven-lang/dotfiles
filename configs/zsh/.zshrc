@@ -1,5 +1,3 @@
-
-
 ##################################
 #  EXPORTS begin                 #
 ##################################
@@ -36,24 +34,11 @@ export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/"
 # Fixes some terminal application colors
 export TERM="xterm-256color"
 
-# Set history file
-export HISTFILE=$HOME/.zsh_history
-# number of lines kept in history
-export HISTSIZE=10000
-# number of lines saved in the history after logout
-export SAVEHIST=10000
-
-
-
-# ???
-# export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/bin:$HOME/bin/:$HOME/.cargo/bin/:/opt/android-sdk/platform-tools/"
 
 ##################################
 #  EXPORTS end                   #
 ##################################
 
-
-source ~/.bash_aliases
 
 # Start tmux in ssh connections
 if [[ $SSH_CONNECTION ]]; then
@@ -100,87 +85,77 @@ fi
 #  INSTALL BINARIES end          #
 ##################################
 
+##################################
+#  PREZTO begin                  #
+##################################
+
+# if [[ ! -d $HOME/.zprezto ]]; then
+#   git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+# fi
 
 ##################################
-#  ZPLUG begin                   #
+#  PREZTO end                    #
 ##################################
 
-# Download and install zplug
-if [[ ! -d $HOME/.zplug ]]; then
-  curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+
+##################################
+#  ZGEN begin                    #
+##################################
+
+if [[ ! -d "${HOME}/.zgen" ]]; then
+  git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
 fi
 
-source ~/.zplug/init.zsh
+# load zgen
+source "${HOME}/.zgen/zgen.zsh"
 
-# ZPLUG plugin loading
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-zplug "plugins/git",   from:oh-my-zsh
+AUTOPAIR_INHIBIT_INIT=1
 
-zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
-zplug "junegunn/fzf", use:"shell/*.zsh"
-zplug "hlissner/zsh-autopair", defer:2
-# zplug "marlonrichert/zsh-autocomplete"
-# zplug "zdharma/fast-syntax-highlighting", defer:2
-zplug "softmoth/zsh-vim-mode"
-zplug "kutsan/zsh-system-clipboard"
-zplug "agkozak/zsh-z"
-zplug "esc/conda-zsh-completion"
+# if the init script doesn't exist
+if ! zgen saved; then
 
+  # specify plugins here
+  # prezto options
+  zgen prezto editor key-bindings 'emacs'
+  zgen prezto prompt theme 'pure'
 
-# Prezto
-# zplug "modules/git",       from:prezto
-# # zplug "modules/tmux",       from:prezto
-# zplug "modules/history",    from:prezto
-# zplug "modules/utility",    from:prezto
-# zplug "modules/ssh",        from:prezto
-# zplug "modules/terminal",   from:prezto
-# # zplug "modules/editor",     from:prezto
-# zplug "modules/directory",  from:prezto
-# zplug "modules/completion", from:prezto
-# zplug "modules/syntax-highlighting", from:prezto
-# zplug "modules/history-substring-search", from:prezto, defer:2, on:"modules/syntax-highlighting"
-# zplug "modules/autosuggestions", from:prezto, defer:2, on:"modules/history-substring-search"
+  # Load general plugins
+  zgen load hlissner/zsh-autopair
+  zgen load agkozak/zsh-z
+  zgen load mafredri/zsh-async
+  zgen load junegunn/fzf shell
 
-# zsh-users
-zplug "zsh-users/zsh-completions",              defer:0
-zplug "zsh-users/zsh-autosuggestions",          defer:2, on:"zsh-users/zsh-completions"
-zplug "zsh-users/zsh-syntax-highlighting",      defer:3, on:"zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-history-substring-search", defer:3, on:"zsh-users/zsh-syntax-highlighting"
+  zgen load zsh-users/zsh-autosuggestions
+  zgen load zsh-users/zsh-syntax-highlighting
 
+  # Load Prezto
+  zgen prezto
 
-if command -v notify-send &> /dev/null; then
-  zplug "MichaelAquilina/zsh-auto-notify"
-fi
+  # Load Prezto Modules
+  zgen prezto git
+  zgen prezto environment
+  zgen prezto terminal
+  zgen prezto editor
+  zgen prezto history
+  zgen prezto directory
+  zgen prezto spectrum
+  zgen prezto utility
+  zgen prezto completion
+  zgen prezto syntax-highlighting
+  zgen prezto history-substring-search
+  # zgen prezto autosuggestions
+  zgen prezto prompt
 
-# NOTE: needs to come last
-zplug "mafredri/zsh-async", from:"github", use:"async.zsh"
-
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
+  # generate the init script from plugins above
+  zgen save
 fi
 
 
-# Auto-notify settings
-export AUTO_NOTIFY_THRESHOLD=30
-AUTO_NOTIFY_IGNORE+=("eog" "docker")
-
-# Vim mode cursor settings
-MODE_CURSOR_VICMD="green block"
-MODE_CURSOR_VIINS="#20d08a blinking bar"
-MODE_CURSOR_SEARCH="#ff00ff blinking underline"
-
-# Then, source plugins and add commands to $PATH
-zplug load
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 ##################################
-#  ZPLUG end                     #
+#  ZGEN end                      #
 ##################################
-
-
 
 
 ##################################
@@ -191,30 +166,9 @@ zplug load
 bindkey -v
 export KEYTIMEOUT=1
 
-# Load widgets for ctrl-P, ctrl-N
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
-
-# Set word style
-autoload -U select-word-style
-select-word-style bash
-
-# Make completion selection as menu and match case insensitive
-autoload -Uz compinit
-compinit
-zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
-# Remove history duplicates
-setopt HIST_IGNORE_ALL_DUPS
-
-# append command to history file once executed
-setopt inc_append_history
-# Automatically use cd when paths are entered without cd
-setopt autocd
-
+bindkey "^P" up-line-or-search
+bindkey "^N" down-line-or-search
+bindkey "^F" forward-char
 
 
 ##################################
@@ -235,6 +189,11 @@ setopt autocd
 # Enable direnv
 eval "$(direnv hook zsh)"
 
+
+source ~/.bash_aliases
+
 ##################################
 #  MISC end                      #
 ##################################
+
+autopair-init
