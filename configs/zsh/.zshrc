@@ -122,12 +122,26 @@ zplug "hlissner/zsh-autopair", defer:2
 # zplug "marlonrichert/zsh-autocomplete"
 # zplug "zdharma/fast-syntax-highlighting", defer:2
 zplug "softmoth/zsh-vim-mode"
-zplug "zsh-users/zsh-completions"
 zplug "kutsan/zsh-system-clipboard"
 zplug "agkozak/zsh-z"
 zplug "esc/conda-zsh-completion"
 
-# zsh users
+
+# Prezto
+zplug "modules/git",       from:prezto
+# zplug "modules/tmux",       from:prezto
+zplug "modules/history",    from:prezto
+zplug "modules/utility",    from:prezto
+zplug "modules/ssh",        from:prezto
+zplug "modules/terminal",   from:prezto
+# zplug "modules/editor",     from:prezto
+zplug "modules/directory",  from:prezto
+zplug "modules/completion", from:prezto
+zplug "modules/syntax-highlighting", from:prezto
+# zplug "modules/history-substring-search", from:prezto, defer:2, on:"modules/syntax-highlighting"
+zplug "modules/autosuggestions", from:prezto, defer:2, on:"modules/history-substring-search"
+
+# zsh-users
 zplug "zsh-users/zsh-completions",              defer:0
 zplug "zsh-users/zsh-autosuggestions",          defer:2, on:"zsh-users/zsh-completions"
 zplug "zsh-users/zsh-syntax-highlighting",      defer:3, on:"zsh-users/zsh-autosuggestions"
