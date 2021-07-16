@@ -18,16 +18,14 @@ def create_link(entry: os.DirEntry, dotconfig: bool):
 
     # If dst is a symlink
     if os.path.islink(dst):
-
-        # Remove symlinks if arg is set
-        if ARGS.remove_symlinks:
-            logger.info(f"Removing {dst}")
-            os.remove(dst)
-
         # If dst links to src, all is good
         if Path(os.readlink(dst)) == Path(src):
             logger.debug(f"{dst} already linked correctly, skipping ...")
-            return
+        elif ARGS.remove_symlinks:
+            # Remove symlinks if arg is set
+            logger.info(f"Removing {dst}")
+            os.remove(dst)
+
 
     elif os.path.exists(dst):
         logger.warn(f"Destination: {dst} already exists (dir)")
@@ -61,7 +59,7 @@ if __name__ == "__main__":
     else:
         log_level = logging.INFO
 
-    logging.basicConfig(level=log_level)
+    logging.basicConfig(level=log_level, format='%(levelname)s: %(message)s')
     logger = logging.getLogger(__name__)
 
     # Home path
