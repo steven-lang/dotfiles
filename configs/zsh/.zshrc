@@ -1,4 +1,5 @@
 
+
 ##################################
 #  EXPORTS begin                 #
 ##################################
@@ -34,6 +35,15 @@ export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib/"
 
 # Fixes some terminal application colors
 export TERM="xterm-256color"
+
+# Set history file
+export HISTFILE=$HOME/.zsh_history
+# number of lines kept in history
+export HISTSIZE=10000
+# number of lines saved in the history after logout
+export SAVEHIST=10000
+
+
 
 # ???
 # export PATH="$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/bin:$HOME/bin/:$HOME/.cargo/bin/:/opt/android-sdk/platform-tools/"
@@ -152,6 +162,8 @@ MODE_CURSOR_SEARCH="#ff00ff blinking underline"
 ##################################
 
 
+
+
 ##################################
 #  ZSH INTERNAL SETTINGS begin   #
 ##################################
@@ -179,9 +191,11 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 # Remove history duplicates
 setopt HIST_IGNORE_ALL_DUPS
 
+# append command to history file once executed
+setopt inc_append_history
+# Automatically use cd when paths are entered without cd
+setopt autocd
 
-# Set history file
-export HISTFILE=$HOME/.zsh_history
 
 
 ##################################
