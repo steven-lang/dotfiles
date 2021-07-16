@@ -4,7 +4,7 @@
 ##################################
 
 # Check if nvim is available
-if hash nvim 2>/dev/null; then
+if command -v nvim &>/dev/null; then
   # Use nvim for manpages
   export MANPAGER="nvim -c 'set ft=man' -"
 fi
@@ -19,7 +19,7 @@ export FZF_DEFAULT_OPTS='--height 40% --border'
 export FZF_DEFAULT_COMMAND='ag -g .'
 
 # Add ruby binaries to path if available
-if hash ruby 2>/dev/null; then
+if command -v ruby &> /dev/null; then
   PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 fi
 
@@ -60,7 +60,7 @@ fi
 ##################################
 
 # Ensure pip is installed
-if ! command -v pip 2> /dev/null; then
+if ! command -v pip &> /dev/null; then
   curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
   python3 /tmp/get-pip.py
 fi
@@ -120,7 +120,7 @@ zplug "kutsan/zsh-system-clipboard"
 zplug "agkozak/zsh-z"
 zplug "esc/conda-zsh-completion"
 
-if command -v notify-send 2> /dev/null; then
+if command -v notify-send &> /dev/null; then
   zplug "MichaelAquilina/zsh-auto-notify"
 fi
 
