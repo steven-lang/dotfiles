@@ -114,21 +114,25 @@ source ~/.zplug/init.zsh
 
 # ZPLUG plugin loading
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-zplug "zsh-users/zsh-history-substring-search"
 zplug "plugins/git",   from:oh-my-zsh
 
 zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 zplug "junegunn/fzf", use:"shell/*.zsh"
 zplug "hlissner/zsh-autopair", defer:2
 # zplug "marlonrichert/zsh-autocomplete"
-zplug "zsh-users/zsh-autosuggestions", defer:2
-zplug "zsh-users/zsh-syntax-highlighting"
 # zplug "zdharma/fast-syntax-highlighting", defer:2
 zplug "softmoth/zsh-vim-mode"
 zplug "zsh-users/zsh-completions"
 zplug "kutsan/zsh-system-clipboard"
 zplug "agkozak/zsh-z"
 zplug "esc/conda-zsh-completion"
+
+# zsh users
+zplug "zsh-users/zsh-completions",              defer:0
+zplug "zsh-users/zsh-autosuggestions",          defer:2, on:"zsh-users/zsh-completions"
+zplug "zsh-users/zsh-syntax-highlighting",      defer:3, on:"zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-history-substring-search", defer:3, on:"zsh-users/zsh-syntax-highlighting"
+
 
 if command -v notify-send &> /dev/null; then
   zplug "MichaelAquilina/zsh-auto-notify"
