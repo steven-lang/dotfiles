@@ -128,18 +128,18 @@ zplug "esc/conda-zsh-completion"
 
 
 # Prezto
-zplug "modules/git",       from:prezto
-# zplug "modules/tmux",       from:prezto
-zplug "modules/history",    from:prezto
-zplug "modules/utility",    from:prezto
-zplug "modules/ssh",        from:prezto
-zplug "modules/terminal",   from:prezto
-# zplug "modules/editor",     from:prezto
-zplug "modules/directory",  from:prezto
-zplug "modules/completion", from:prezto
-zplug "modules/syntax-highlighting", from:prezto
+# zplug "modules/git",       from:prezto
+# # zplug "modules/tmux",       from:prezto
+# zplug "modules/history",    from:prezto
+# zplug "modules/utility",    from:prezto
+# zplug "modules/ssh",        from:prezto
+# zplug "modules/terminal",   from:prezto
+# # zplug "modules/editor",     from:prezto
+# zplug "modules/directory",  from:prezto
+# zplug "modules/completion", from:prezto
+# zplug "modules/syntax-highlighting", from:prezto
 # zplug "modules/history-substring-search", from:prezto, defer:2, on:"modules/syntax-highlighting"
-zplug "modules/autosuggestions", from:prezto, defer:2, on:"modules/history-substring-search"
+# zplug "modules/autosuggestions", from:prezto, defer:2, on:"modules/history-substring-search"
 
 # zsh-users
 zplug "zsh-users/zsh-completions",              defer:0
@@ -163,8 +163,6 @@ if ! zplug check --verbose; then
     fi
 fi
 
-# Then, source plugins and add commands to $PATH
-zplug load
 
 # Auto-notify settings
 export AUTO_NOTIFY_THRESHOLD=30
@@ -174,6 +172,9 @@ AUTO_NOTIFY_IGNORE+=("eog" "docker")
 MODE_CURSOR_VICMD="green block"
 MODE_CURSOR_VIINS="#20d08a blinking bar"
 MODE_CURSOR_SEARCH="#ff00ff blinking underline"
+
+# Then, source plugins and add commands to $PATH
+zplug load
 
 ##################################
 #  ZPLUG end                     #
