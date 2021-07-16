@@ -60,7 +60,7 @@ fi
 ##################################
 
 # Ensure pip is installed
-if ! command -v pip; then
+if ! command -v pip 2> /dev/null; then
   curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
   python3 /tmp/get-pip.py
 fi
@@ -118,8 +118,11 @@ zplug "softmoth/zsh-vim-mode"
 zplug "zsh-users/zsh-completions"
 zplug "kutsan/zsh-system-clipboard"
 zplug "agkozak/zsh-z"
-zplug "MichaelAquilina/zsh-auto-notify"
 zplug "esc/conda-zsh-completion"
+
+if command -v notify-send 2> /dev/null; then
+  zplug "MichaelAquilina/zsh-auto-notify"
+fi
 
 # NOTE: needs to come last
 zplug "mafredri/zsh-async", from:"github", use:"async.zsh"
