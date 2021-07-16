@@ -2,6 +2,7 @@
 
 import os
 import sys
+import shutil
 from pathlib import Path
 import logging
 
@@ -20,29 +21,22 @@ def create_link(entry: os.DirEntry, dotconfig: bool):
 
         # Remove symlinks if arg is set
         if ARGS.remove_symlinks:
-            LOGGER.info(f"Removing {dst}")
+            logger.info(f"Removing {dst}")
             os.remove(dst)
-            return
 
         # If dst links to src, all is good
         if Path(os.readlink(dst)) == Path(src):
-            LOGGER.debug(f"{dst} already linked correctly, skipping ...")
+            logger.debug(f"{dst} already linked correctly, skipping ...")
             return
 
-    if os.path.exists(dst):
-
-        if os.path.isdir(dst):
-            LOGGER.info(f"Destination: {dst} already exists (dir)")
-            return
-        elif os.path.isfile(dst):
-            LOGGER.info(f"Destination: {dst} already exists (file)")
-            return
-        else:
-            raise Exception(f"Destination: {dst} exists but is not a symlink!")
+    elif os.path.exists(dst):
+        logger.warn(f"Destination: {dst} already exists (dir)")
+        logger.warn(f"Moving {dst} to {dst}.backup")
+        shutil.move(dst, dst + ".backup")
 
     # No case catched -> create symlink
     os.symlink(src, dst, target_is_directory=entry.is_dir())
-    LOGGER.info(f"{src} -> {dst}")
+    logger.info(f"{src} -> {dst}")
 
 
 def link_config(entry: os.DirEntry):
@@ -68,7 +62,7 @@ if __name__ == "__main__":
         log_level = logging.INFO
 
     logging.basicConfig(level=log_level)
-    LOGGER = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
 
     # Home path
     HOME = os.getenv("HOME")
