@@ -8,15 +8,6 @@ import logging
 import argparse
 
 
-
-
-def symlink_dir(entry: os.DirEntry):
-    assert entry.is_dir(), f"'{entry.path}' is not a directory!"
-
-    for f in os.scandir(entry):
-        link_config(f)
-
-
 def create_link(entry: os.DirEntry, dotconfig: bool):
     src = entry.path
     if dotconfig:
@@ -70,14 +61,13 @@ if __name__ == "__main__":
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output.")
     ARGS = parser.parse_args()
 
-
     # Setup logging
     if ARGS.verbose:
         log_level = logging.DEBUG
     else:
         log_level = logging.INFO
 
-    logging.basicConfig(encoding='utf-8', level=log_level)
+    logging.basicConfig(level=log_level)
     LOGGER = logging.getLogger(__name__)
 
     # Home path
@@ -87,4 +77,6 @@ if __name__ == "__main__":
 
     # Scan all dirs in "./configs/"
     for entry in os.scandir(CONFIG_DIR):
-        symlink_dir(entry)
+        assert entry.is_dir(), f"'{entry.path}' is not a directory!"
+        for f in os.scandir(entry):
+            link_config(f)
